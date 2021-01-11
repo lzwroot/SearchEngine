@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <title>班级管理系统</title>
+</head>
+<body>
+    <div class="container">
+        <div class="panel panel-danger">
+        <div class="panel-heading">
+            Spring boot 班级管理系统 &nbsp;&nbsp;&nbsp;&nbsp;
+            （<a href="/stu/list" style="color:rebeccapurple">进入学生管理系统</a>）
+        </div>
+
+        <div class="panel-body">
+
+            <div class="alert alert-success" role="alert">
+                班级信息管理系统，您可以对班级信息进行添加/修改/删除！
+                <a href="add">点击添加班级</a>
+            </div>
+
+
+            <!--显示-->
+            <table class="table table-hover table-striped">
+                <tr>
+                    <th>班级编号</th>
+                    <th>班级名称</th>
+                    <th>人数</th>
+                    <th>班主任</th>
+                    <th>操作</th>
+                </tr>
+                <tr th:each="Class:${cls}">
+                    <td th:text="${Class.clsid}">2001</td>
+                    <td th:text="${Class.clsName}">软硕2001班</td>
+                    <td>
+                        <span class="badge" th:text="${Class.clsStuNum}"></span>
+                    </td>
+                    <td th:text="${Class.clsTeacher}">区士颀</td>
+                    <td><a th:href="@{'list/delete/'+${Class.clsid}}">删除</a> | <a th:href="@{'update/'+${Class.clsid}}">修改</a>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        </div>
+    </div>
+</body>
+</html>
