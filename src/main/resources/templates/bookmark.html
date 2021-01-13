@@ -1,47 +1,62 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>我的书签 - Loogle学术搜索</title>
 
 		<meta name="description" content="" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<style>
+			.img1{
+				margin-top:20px;
+			}
+			.a1 {
+				border-bottom: 2px solid salmon;
 		
-		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
+			}
+		
+			/* .b1 {
+				vertical-align: middle;
+				text-align: center;
+			} */
+			
+		</style>
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+		
+		<link rel="icon" type="image/x-icon" href="assets/images/Google-one-01.png" />
 
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
-		<link rel="stylesheet" href="/css/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
 
 		<!-- ace styles -->
-		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 
 		<!--[if lte IE 9]>
-			<link rel="stylesheet" href="/css/ace-part2.min.css" class="ace-main-stylesheet" />
+			<link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
 		<![endif]-->
-		<link rel="stylesheet" href="/css/ace-skins.min.css" />
-		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
 
 		<!--[if lte IE 9]>
-		  <link rel="stylesheet" href="/css/ace-ie.min.css" />
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
 
 		<!-- ace settings handler -->
-		<script src="/js/ace-extra.min.js"></script>
+		<script src="assets/js/ace-extra.min.js"></script>
 
 		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
 		<!--[if lte IE 8]>
-		<script src="/js/html5shiv.min.js"></script>
-		<script src="/js/respond.min.js"></script>
+		<script src="assets/js/html5shiv.min.js"></script>
+		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
 	</head>
 
@@ -59,7 +74,7 @@
 				</button>
 
 				<div class="navbar-header pull-left">
-					<a href="main" class="navbar-brand">
+					<a href="main.html" class="navbar-brand">
 						<small>
 							<i class="fa fa-leaf"></i>
 							<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
@@ -73,7 +88,7 @@
 						
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
+								<img class="nav-user-photo" src="assets/images/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
 									<small>Welcome,</small>
 									guojingxing123
@@ -84,14 +99,14 @@
 
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
-									<a href="settings">
+									<a href="settings.html">
 										<i class="ace-icon fa fa-cog"></i>
 										设置
 									</a>
 								</li>
 
 								<li>
-									<a href="profile">
+									<a href="profile.html">
 										<i class="ace-icon fa fa-user"></i>
 										个人资料
 									</a>
@@ -125,41 +140,41 @@
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<!-- 查看热搜 -->
-						<button class="btn btn-success" onclick="window.location.href='trends'">
+						<button class="btn btn-success" onclick="window.location.href='trends.html'">
 							<i class="ace-icon fa fa-signal"></i>
 						</button>
 
 						<!-- 订阅 -->
-						<button class="btn btn-info" onclick="window.location.href='subscription'">
+						<button class="btn btn-info" onclick="window.location.href='subscription.html'">
 							<i class="ace-icon fa fa-bell"></i>
 						</button>
 
 						<!-- 书签 -->
-						<button class="btn btn-warning" onclick="window.location.href='bookmark'">
+						<button class="btn btn-warning" onclick="window.location.href='bookmark.html'">
 							<i class="ace-icon glyphicon glyphicon-tags"></i>
 						</button>
 
 						<!-- 设置 -->
-						<button class="btn btn-danger" onclick="window.location.href='settings'">
+						<button class="btn btn-danger" onclick="window.location.href='settings.html'">
 							<i class="ace-icon fa fa-cogs"></i>
 						</button>
 					</div>
 
 					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success" onclick="window.location.href='trends'"></span>
+						<span class="btn btn-success" onclick="window.location.href='trends.html'"></span>
 
-						<span class="btn btn-info" onclick="window.location.href='subscription'"></span>
+						<span class="btn btn-info" onclick="window.location.href='subscription.html'"></span>
 
-						<span class="btn btn-warning" onclick="window.location.href='bookmark'"></span>
+						<span class="btn btn-warning" onclick="window.location.href='bookmark.html'"></span>
 
-						<span class="btn btn-danger" onclick="window.location.href='settings'"></span>
+						<span class="btn btn-danger" onclick="window.location.href='settings.html'"></span>
 					</div>
 				</div><!-- /.sidebar-shortcuts -->
 
 				<ul class="nav nav-list">
 					
 					<li class="">
-						<a href="subscription">
+						<a href="subscription.html">
 							<i class="menu-icon fa fa-bell"></i>
 							<span class="menu-text"> 订阅 </span>
 						</a>
@@ -168,7 +183,7 @@
 					</li>
 
 					<li class="active">
-						<a href="bookmark">
+						<a href="bookmark.html">
 							<i class="menu-icon fa fa-bookmark"></i>
 							<span class="menu-text"> 书签 </span>
 						</a>
@@ -177,7 +192,7 @@
 					</li>
 
 					<li class="">
-						<a href="mine">
+						<a href="mine.html">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> 我的 </span>
 						</a>
@@ -209,7 +224,7 @@
 							</li>
 
 							<li class="">
-								<a href="profile">
+								<a href="profile.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									个人信息
 								</a>
@@ -218,57 +233,13 @@
 							</li>
 
 							<li class="">
-								<a href="logout">
+								<a href="logout.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									退出登录
 								</a>
 
 								<b class="arrow"></b>
 							</li>
-
-							<!-- <li class="">
-								<a href="deleteaccount.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									注销账户
-								</a>
-
-								<b class="arrow"></b>
-							</li> -->
-
-							
-
-							<!-- <li class="">
-								<a href="timeline.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Timeline
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="search">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Search Results
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="email.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Email Templates
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="login.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Login &amp; Register
-								</a> -->
 
 								<b class="arrow"></b>
 							</li>
@@ -350,7 +321,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="main">主页</a>
+								<a href="main.html">主页</a>
 							</li>
 							
 							<li class="active">书签</li>
@@ -437,7 +408,98 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="row">
+												<div class="col-md-3">
+													<img src="./assets/images/googleg_standard.png" class="img-responsive img1">
+												</div>
+												<div class="col-md-9">
+													<div>
+														<h2>guojingxing123</h2>
+													</div>
+													<span>华中科技大学</span>
+												</div>
+								
+											</div>
+										</div>
+										<div class="col-md-5"></div>
+										<div class="col-md-3">
+											<br>
+											
+											<div class="row">
+												<a href="#">返回主页</a>
+											</div>
+											<br>
+											<br>
+											<div class="row">
+												<button type="button" class="btn btn-warning btn-xs" id="btn1">修改个人信息</button>
+											</div>
+								
+										</div>
+								
+								
+									</div>
+									<br>
+									<br>
+									<div class="container">
+										<div class="row a1">
+											<p><h3>个人书签</h3></p>
+										</div>
+										<br>
+									
 
+										
+
+									
+										<div class="row">
+									
+											<table class="table table-bordered b1">
+												<thead>
+													<tr>
+														<th>论文题目</th>
+														<th>作者</th>
+														<th>来源</th>
+														<th>发表时间</th>
+														<th>数据库</th>
+														<th>操作</th>
+									
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<p><span>京津冀绿色金融发展综合评价及影响因素研究——基于DEA-Tobit模型的实证分析</span></p>
+														</td>
+														<td>
+															<p><span>王文静; 何泰屹; 武慧敏; 史娅婷</span></p>
+														</td>
+														<td>
+															<p><span>华北金融</span></p>
+														</td>
+														<td>
+															<p><span>2021-01-06 15:06</span></p>
+														</td>
+														<td>
+															<p><span>期刊</span></p>
+														</td>
+														<td>
+															<p><span>下载 / 查看 / 引用</span></p>
+														</td>
+									
+									
+									
+									
+													</tr>
+													<tr></tr>
+													<tr></tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								
+								</div>
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->
@@ -479,23 +541,23 @@
 		<!-- basic scripts -->
 
 		<!--[if !IE]> -->
-		<script src="/js/jquery-2.1.4.min.js"></script>
+		<script src="assets/js/jquery-2.1.4.min.js"></script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-<script src="/js/jquery-1.11.3.min.js"></script>
+<script src="assets/js/jquery-1.11.3.min.js"></script>
 <![endif]-->
 		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
-		<script src="/js/bootstrap.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
 
 		<!-- page specific plugin scripts -->
 
 		<!-- ace scripts -->
-		<script src="/js/ace-elements.min.js"></script>
-		<script src="/js/ace.min.js"></script>
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
 	</body>
