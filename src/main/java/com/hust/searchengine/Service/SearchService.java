@@ -2,8 +2,11 @@ package com.hust.searchengine.Service;
 
 import com.hust.searchengine.Entity.Student;
 import com.github.pagehelper.PageInfo;
+import com.hust.searchengine.Entity.User;
 
-public interface StudentService {
+public interface SearchService {
+    User UserLogin(String username, String password);
+
     PageInfo<Student> findAllStudent(Integer pageIndex, Integer pageSize);
 
     Integer addStudentInfo(Student student);

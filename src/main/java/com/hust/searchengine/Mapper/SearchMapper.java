@@ -1,12 +1,17 @@
 package com.hust.searchengine.Mapper;
 
 import com.hust.searchengine.Entity.Student;
+import com.hust.searchengine.Entity.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
-public interface StudentMapper {
+public interface SearchMapper {
+
+    @Select("select * from user where username=#{username} and password=#{password}")
+    User UserLogin(String username, String password);
+
 
     @Select("select stu.*, cls.clsName from classinfo cls join student_info stu on cls.clsid=stu.clsid")
     List<Student> findAllStudent();
