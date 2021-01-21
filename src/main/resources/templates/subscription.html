@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
 
 		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="/css/jquery-ui.min.css" />
 
 		<!-- text fonts -->
 		<link rel="stylesheet" href="/css/fonts.googleapis.com.css" />
@@ -29,7 +30,7 @@
 		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
 
 		<!--[if lte IE 9]>
-		  <link rel="stylesheet" href="/css/ace-ie.min.css" />
+		 	 <link rel="stylesheet" href="/css/ace-ie.min.css" />
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
@@ -70,260 +71,6 @@
 
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 					<ul class="nav ace-nav">
-						<!-- <li class="grey dropdown-modal">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="ace-icon fa fa-tasks"></i>
-								<span class="badge badge-grey">4</span>
-							</a>
-
-							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header">
-									<i class="ace-icon fa fa-check"></i>
-									4 Tasks to complete
-								</li>
-
-								<li class="dropdown-content">
-									<ul class="dropdown-menu dropdown-navbar">
-										<li>
-											<a href="#">
-												<div class="clearfix">
-													<span class="pull-left">Software Update</span>
-													<span class="pull-right">65%</span>
-												</div>
-
-												<div class="progress progress-mini">
-													<div style="width:65%" class="progress-bar"></div>
-												</div>
-											</a>
-										</li>
-
-										<li>
-											<a href="#">
-												<div class="clearfix">
-													<span class="pull-left">Hardware Upgrade</span>
-													<span class="pull-right">35%</span>
-												</div>
-
-												<div class="progress progress-mini">
-													<div style="width:35%" class="progress-bar progress-bar-danger"></div>
-												</div>
-											</a>
-										</li>
-
-										<li>
-											<a href="#">
-												<div class="clearfix">
-													<span class="pull-left">Unit Testing</span>
-													<span class="pull-right">15%</span>
-												</div>
-
-												<div class="progress progress-mini">
-													<div style="width:15%" class="progress-bar progress-bar-warning"></div>
-												</div>
-											</a>
-										</li>
-
-										<li>
-											<a href="#">
-												<div class="clearfix">
-													<span class="pull-left">Bug Fixes</span>
-													<span class="pull-right">90%</span>
-												</div>
-
-												<div class="progress progress-mini progress-striped active">
-													<div style="width:90%" class="progress-bar progress-bar-success"></div>
-												</div>
-											</a>
-										</li>
-									</ul>
-								</li>
-
-								<li class="dropdown-footer">
-									<a href="#">
-										See tasks with details
-										<i class="ace-icon fa fa-arrow-right"></i>
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li class="purple dropdown-modal">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="ace-icon fa fa-bell icon-animated-bell"></i>
-								<span class="badge badge-important">8</span>
-							</a>
-
-							<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header">
-									<i class="ace-icon fa fa-exclamation-triangle"></i>
-									8 Notifications
-								</li>
-
-								<li class="dropdown-content">
-									<ul class="dropdown-menu dropdown-navbar navbar-pink">
-										<li>
-											<a href="#">
-												<div class="clearfix">
-													<span class="pull-left">
-														<i class="btn btn-xs no-hover btn-pink fa fa-comment"></i>
-														New Comments
-													</span>
-													<span class="pull-right badge badge-info">+12</span>
-												</div>
-											</a>
-										</li>
-
-										<li>
-											<a href="#">
-												<i class="btn btn-xs btn-primary fa fa-user"></i>
-												Bob just signed up as an editor ...
-											</a>
-										</li>
-
-										<li>
-											<a href="#">
-												<div class="clearfix">
-													<span class="pull-left">
-														<i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
-														New Orders
-													</span>
-													<span class="pull-right badge badge-success">+8</span>
-												</div>
-											</a>
-										</li>
-
-										<li>
-											<a href="#">
-												<div class="clearfix">
-													<span class="pull-left">
-														<i class="btn btn-xs no-hover btn-info fa fa-twitter"></i>
-														Followers
-													</span>
-													<span class="pull-right badge badge-info">+11</span>
-												</div>
-											</a>
-										</li>
-									</ul>
-								</li>
-
-								<li class="dropdown-footer">
-									<a href="#">
-										See all notifications
-										<i class="ace-icon fa fa-arrow-right"></i>
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li class="green dropdown-modal">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
-								<span class="badge badge-success">5</span>
-							</a>
-
-							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header">
-									<i class="ace-icon fa fa-envelope-o"></i>
-									5 Messages
-								</li>
-
-								<li class="dropdown-content">
-									<ul class="dropdown-menu dropdown-navbar">
-										<li>
-											<a href="#" class="clearfix">
-												<img src="/images/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Alex:</span>
-														Ciao sociis natoque penatibus et auctor ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>a moment ago</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="/images/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Susan:</span>
-														Vestibulum id ligula porta felis euismod ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>20 minutes ago</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="/images/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Bob:</span>
-														Nullam quis risus eget urna mollis ornare ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>3:15 pm</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="/images/avatars/avatar2.png" class="msg-photo" alt="Kate's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Kate:</span>
-														Ciao sociis natoque eget urna mollis ornare ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>1:33 pm</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="/images/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Fred:</span>
-														Vestibulum id penatibus et auctor  ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>10:09 am</span>
-													</span>
-												</span>
-											</a>
-										</li>
-									</ul>
-								</li>
-
-								<li class="dropdown-footer">
-									<a href="inbox.html">
-										See all messages
-										<i class="ace-icon fa fa-arrow-right"></i>
-									</a>
-								</li>
-							</ul>
-						</li> -->
 
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
@@ -371,7 +118,7 @@
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
 
-			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+			<div id="sidebar" class="sidebar responsive ace-save-state">
 				<script type="text/javascript">
 					try{ace.settings.loadState('sidebar')}catch(e){}
 				</script>
@@ -439,336 +186,6 @@
 						<b class="arrow"></b>
 					</li>
 
-					<!-- <li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-desktop"></i>
-							<span class="menu-text">
-								UI &amp; Elements
-							</span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a href="#" class="dropdown-toggle">
-									<i class="menu-icon fa fa-caret-right"></i>
-
-									Layouts
-									<b class="arrow fa fa-angle-down"></b>
-								</a>
-
-								<b class="arrow"></b>
-
-								<ul class="submenu">
-									<li class="">
-										<a href="top-menu.html">
-											<i class="menu-icon fa fa-caret-right"></i>
-											Top Menu
-										</a>
-
-										<b class="arrow"></b>
-									</li>
-
-									<li class="">
-										<a href="two-menu-1.html">
-											<i class="menu-icon fa fa-caret-right"></i>
-											Two Menus 1
-										</a>
-
-										<b class="arrow"></b>
-									</li>
-
-									<li class="">
-										<a href="two-menu-2.html">
-											<i class="menu-icon fa fa-caret-right"></i>
-											Two Menus 2
-										</a>
-
-										<b class="arrow"></b>
-									</li>
-
-									<li class="">
-										<a href="mobile-menu-1.html">
-											<i class="menu-icon fa fa-caret-right"></i>
-											Default Mobile Menu
-										</a>
-
-										<b class="arrow"></b>
-									</li>
-
-									<li class="">
-										<a href="mobile-menu-2.html">
-											<i class="menu-icon fa fa-caret-right"></i>
-											Mobile Menu 2
-										</a>
-
-										<b class="arrow"></b>
-									</li>
-
-									<li class="">
-										<a href="mobile-menu-3.html">
-											<i class="menu-icon fa fa-caret-right"></i>
-											Mobile Menu 3
-										</a>
-
-										<b class="arrow"></b>
-									</li>
-								</ul>
-							</li>
-
-							<li class="">
-								<a href="typography.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Typography
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="elements.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Elements
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="buttons.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Buttons &amp; Icons
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="content-slider.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Content Sliders
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="treeview.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Treeview
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="jquery-ui.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									jQuery UI
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="nestable-list.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Nestable Lists
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="#" class="dropdown-toggle">
-									<i class="menu-icon fa fa-caret-right"></i>
-
-									Three Level Menu
-									<b class="arrow fa fa-angle-down"></b>
-								</a>
-
-								<b class="arrow"></b>
-
-								<ul class="submenu">
-									<li class="">
-										<a href="#">
-											<i class="menu-icon fa fa-leaf green"></i>
-											Item #1
-										</a>
-
-										<b class="arrow"></b>
-									</li>
-
-									<li class="">
-										<a href="#" class="dropdown-toggle">
-											<i class="menu-icon fa fa-pencil orange"></i>
-
-											4th level
-											<b class="arrow fa fa-angle-down"></b>
-										</a>
-
-										<b class="arrow"></b>
-
-										<ul class="submenu">
-											<li class="">
-												<a href="#">
-													<i class="menu-icon fa fa-plus purple"></i>
-													Add Product
-												</a>
-
-												<b class="arrow"></b>
-											</li>
-
-											<li class="">
-												<a href="#">
-													<i class="menu-icon fa fa-eye pink"></i>
-													View Products
-												</a>
-
-												<b class="arrow"></b>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li> -->
-
-					<!-- <li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-list"></i>
-							<span class="menu-text"> 个人信息 </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a href="subscription">
-									<i class="menu-icon fa fa-caret-right"></i>
-									订阅
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="bookmark">
-									<i class="menu-icon fa fa-caret-right"></i>
-									书签
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="mine">
-									<i class="menu-icon fa fa-caret-right"></i>
-									我的
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li> -->
-
-					<!-- <li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-pencil-square-o"></i>
-							<span class="menu-text"> Forms </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a href="form-elements.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Form Elements
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="form-elements-2.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Form Elements 2
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="form-wizard.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Wizard &amp; Validation
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="wysiwyg.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Wysiwyg &amp; Markdown
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="dropzone.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Dropzone File Upload
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li>
-
-					<li class="">
-						<a href="widgets.html">
-							<i class="menu-icon fa fa-list-alt"></i>
-							<span class="menu-text"> Widgets </span>
-						</a>
-
-						<b class="arrow"></b>
-					</li>
-
-					<li class="">
-						<a href="calendar.html">
-							<i class="menu-icon fa fa-calendar"></i>
-
-							<span class="menu-text">
-								Calendar
-
-								<span class="badge badge-transparent tooltip-error" title="2 Important Events">
-									<i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i>
-								</span>
-							</span>
-						</a>
-
-						<b class="arrow"></b>
-					</li>
-
-					<li class="">
-						<a href="gallery.html">
-							<i class="menu-icon fa fa-picture-o"></i>
-							<span class="menu-text"> Gallery </span>
-						</a>
-
-						<b class="arrow"></b>
-					</li> -->
-
 					<li class="">
 						<a href="#" class="dropdown-toggle">
 							<!-- <i class="menu-icon fa fa-tag"></i> -->
@@ -781,12 +198,6 @@
 						<b class="arrow"></b>
 
 						<ul class="submenu">
-							
-							<!-- <li class="">
-								<a href="signup.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									注册账号
-								</a> -->
 
 								<b class="arrow"></b>
 							</li>
@@ -801,7 +212,7 @@
 							</li>
 
 							<li class="">
-								<a href="logout">
+								<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
 									<i class="menu-icon fa fa-caret-right"></i>
 									退出登录
 								</a>
@@ -809,117 +220,11 @@
 								<b class="arrow"></b>
 							</li>
 
-							<!-- <li class="">
-								<a href="deleteaccount.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									注销账户
-								</a>
-
-								<b class="arrow"></b>
-							</li> -->
-
-							
-
-							<!-- <li class="">
-								<a href="timeline.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Timeline
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="search">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Search Results
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="email.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Email Templates
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="login.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Login &amp; Register
-								</a> -->
-
 								<b class="arrow"></b>
 							</li>
 						</ul>
 					</li>
 
-					<!-- <li class="active open">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-file-o"></i>
-
-							<span class="menu-text">
-								Other Pages
-
-								<span class="badge badge-primary">5</span>
-							</span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a href="faq.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									FAQ
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="error-404.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Error 404
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="error-500.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Error 500
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="grid.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Grid
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="active">
-								<a href="blank.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Blank Page
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li> -->
 				</ul><!-- /.nav-list -->
 
 				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -938,14 +243,7 @@
 							<li class="active">订阅</li>
 						</ul><!-- /.breadcrumb -->
 
-						<div class="nav-search" id="nav-search">
-							<form class="form-search">
-								<span class="input-icon">
-									<input type="text" placeholder="搜索 ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
-									<i class="ace-icon fa fa-search nav-search-icon"></i>
-								</span>
-							</form>
-						</div><!-- /.nav-search -->
+
 					</div>
 
 					<div class="page-content">
@@ -1020,6 +318,103 @@
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 
+								<!--页面开头-->
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="page-header">
+											<h1>
+												我的订阅
+												<small>
+													<i class="ace-icon fa fa-angle-double-right"></i>
+													具体的订阅内容会显示在这里
+												</small>
+											</h1>
+										</div>
+									</div>
+								</div>
+
+								<!--页面上方订阅期刊表-->
+								<div id="tabs">
+									<ul>
+										<li th:each="sub_art, index : ${subs_arts}">
+											<a th:href="@{'#'+${#strings.replace(sub_art.key.journal,' ','_')}}" style="font-size: medium" th:text="${#strings.replace(sub_art.key.journal,' ','_')}">Nature</a>
+										</li>
+									</ul>
+
+									<div th:each="sub_art, index : ${subs_arts}" th:id="${#strings.replace(sub_art.key.journal,' ','_')}">
+										<!--选中的期刊对应的文章表-->
+										<table class="table table-hover table-bordered b1">
+											<thead>
+											<tr style="font-size: medium">
+												<th>论文题目</th>
+												<th>作者</th>
+												<th>发表时间</th>
+												<th>操作</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr style="font-size: medium" th:each="art:${sub_art.value.list}">
+												<td th:text="${art.articlename}">京津冀绿色金融发展综合评价及影响因素研究</td>
+												<td th:text="${art.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
+												<td th:text="${art.time}">2021-01-06 15:06</td>
+												<td>
+												<span>
+													<a th:href="${art.link}">下载</a>/
+													<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${art.doi}}">引用</a>/
+													<form th:action="@{/search/bookmark(doi=${art.doi})}" method="post">
+														<button type="submit" class="btn btn-pink btn-sm">书签</button>
+													</form>
+												</span>
+												</td>
+												<!--引用模块框-->
+												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${art.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
+													<div class="modal-dialog modal-lg" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
+															</div>
+															<div class="modal-body">
+																<span th:text="@{${art.articlename}+', '+${art.author}+', '+${art.journal}+', '+${#dates.format(art.time, 'yyyy')}+'.'}"></span>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+																<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+															</div>
+														</div>
+													</div>
+												</th:div>
+											</tr>
+											<tr></tr>
+											<tr></tr>
+											</tbody>
+										</table>
+										<!--分页-->
+										<nav aria-label="Page navigation">
+											<ul class="pagination">
+												<li th:class="${sub_art.value.hasPreviousPage}?'':'disabled'">
+													<a th:href="${sub_art.value.hasPreviousPage}?@{/search/subscription(pageIndex=${sub_art.value.prePage})}:'#'" aria-label="Previous">
+														<span aria-hidden="true">&laquo;</span>
+													</a>
+												</li>
+
+												<th:block th:each="nav : ${sub_art.value.navigatepageNums}">
+													<li th:class="${nav==sub_art.value.pageNum}?'active':''">
+														<a th:href="@{/search/subscription(pageIndex=${nav})}" th:text="${nav}"></a>
+													</li>
+												</th:block>
+
+												<li th:class="${sub_art.value.hasNextPage}?'':'disabled'">
+													<a th:href="${sub_art.value.hasNextPage}?@{/search/subscription(pageIndex=${sub_art.value.nextPage})}:'#'" aria-label="Next">
+														<span aria-hidden="true">&raquo;</span>
+													</a>
+												</li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+
+
 								<!-- 登出模块框 -->
 								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
 									<div class="modal-dialog modal-sm" role="document">
@@ -1089,15 +484,280 @@
 <![endif]-->
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+
 		</script>
 		<script src="/js/bootstrap.min.js"></script>
 
 		<!-- page specific plugin scripts -->
+		<script src="/js/jquery-ui.min.js"></script>
+		<script src="/js/jquery.ui.touch-punch.min.js"></script>
 
 		<!-- ace scripts -->
 		<script src="/js/ace-elements.min.js"></script>
 		<script src="/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+
+				$( "#datepicker" ).datepicker({
+					showOtherMonths: true,
+					selectOtherMonths: false,
+					//isRTL:true,
+
+
+					/*
+					changeMonth: true,
+					changeYear: true,
+
+					showButtonPanel: true,
+					beforeShow: function() {
+						//change button colors
+						var datepicker = $(this).datepicker( "widget" );
+						setTimeout(function(){
+							var buttons = datepicker.find('.ui-datepicker-buttonpane')
+							.find('button');
+							buttons.eq(0).addClass('btn btn-xs');
+							buttons.eq(1).addClass('btn btn-xs btn-success');
+							buttons.wrapInner('<span class="bigger-110" />');
+						}, 0);
+					}
+			*/
+				});
+
+
+				//override dialog's title function to allow for HTML titles
+				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+					_title: function(title) {
+						var $title = this.options.title || '&nbsp;'
+						if( ("title_html" in this.options) && this.options.title_html == true )
+							title.html($title);
+						else title.text($title);
+					}
+				}));
+
+				$( "#id-btn-dialog1" ).on('click', function(e) {
+					e.preventDefault();
+
+					var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-check'></i> jQuery UI Dialog</h4></div>",
+						title_html: true,
+						buttons: [
+							{
+								text: "Cancel",
+								"class" : "btn btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							},
+							{
+								text: "OK",
+								"class" : "btn btn-primary btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						]
+					});
+
+					/**
+					 dialog.data( "uiDialog" )._title = function(title) {
+						title.html( this.options.title );
+					};
+					 **/
+				});
+
+
+				$( "#id-btn-dialog2" ).on('click', function(e) {
+					e.preventDefault();
+
+					$( "#dialog-confirm" ).removeClass('hide').dialog({
+						resizable: false,
+						width: '320',
+						modal: true,
+						title: "<div class='widget-header'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> Empty the recycle bin?</h4></div>",
+						title_html: true,
+						buttons: [
+							{
+								html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Delete all items",
+								"class" : "btn btn-danger btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+							,
+							{
+								html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancel",
+								"class" : "btn btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						]
+					});
+				});
+
+
+
+				//autocomplete
+				var availableTags = [
+					"ActionScript",
+					"AppleScript",
+					"Asp",
+					"BASIC",
+					"C",
+					"C++",
+					"Clojure",
+					"COBOL",
+					"ColdFusion",
+					"Erlang",
+					"Fortran",
+					"Groovy",
+					"Haskell",
+					"Java",
+					"JavaScript",
+					"Lisp",
+					"Perl",
+					"PHP",
+					"Python",
+					"Ruby",
+					"Scala",
+					"Scheme"
+				];
+				$( "#tags" ).autocomplete({
+					source: availableTags
+				});
+
+				//custom autocomplete (category selection)
+				$.widget( "custom.catcomplete", $.ui.autocomplete, {
+					_create: function() {
+						this._super();
+						this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+					},
+					_renderMenu: function( ul, items ) {
+						var that = this,
+								currentCategory = "";
+						$.each( items, function( index, item ) {
+							var li;
+							if ( item.category != currentCategory ) {
+								ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+								currentCategory = item.category;
+							}
+							li = that._renderItemData( ul, item );
+							if ( item.category ) {
+								li.attr( "aria-label", item.category + " : " + item.label );
+							}
+						});
+					}
+				});
+
+				var data = [
+					{ label: "anders", category: "" },
+					{ label: "andreas", category: "" },
+					{ label: "antal", category: "" },
+					{ label: "annhhx10", category: "Products" },
+					{ label: "annk K12", category: "Products" },
+					{ label: "annttop C13", category: "Products" },
+					{ label: "anders andersson", category: "People" },
+					{ label: "andreas andersson", category: "People" },
+					{ label: "andreas johnson", category: "People" }
+				];
+				$( "#search" ).catcomplete({
+					delay: 0,
+					source: data
+				});
+
+
+				//tooltips
+				$( "#show-option" ).tooltip({
+					show: {
+						effect: "slideDown",
+						delay: 250
+					}
+				});
+
+				$( "#hide-option" ).tooltip({
+					hide: {
+						effect: "explode",
+						delay: 250
+					}
+				});
+
+				$( "#open-event" ).tooltip({
+					show: null,
+					position: {
+						my: "left top",
+						at: "left bottom"
+					},
+					open: function( event, ui ) {
+						ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast" );
+					}
+				});
+
+
+				//Menu
+				$( "#menu" ).menu();
+
+
+				//spinner
+				var spinner = $( "#spinner" ).spinner({
+					create: function( event, ui ) {
+						//add custom classes and icons
+						$(this)
+								.next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>')
+								.next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
+
+						//larger buttons on touch devices
+						if('touchstart' in document.documentElement)
+							$(this).closest('.ui-spinner').addClass('ui-spinner-touch');
+					}
+				});
+
+				//slider example
+				$( "#slider" ).slider({
+					range: true,
+					min: 0,
+					max: 500,
+					values: [ 75, 300 ]
+				});
+
+
+
+				//jquery accordion
+				$( "#accordion" ).accordion({
+					collapsible: true ,
+					heightStyle: "content",
+					animate: 250,
+					header: ".accordion-header"
+				}).sortable({
+					axis: "y",
+					handle: ".accordion-header",
+					stop: function( event, ui ) {
+						// IE doesn't register the blur when sorting
+						// so trigger focusout handlers to remove .ui-state-focus
+						ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
+					}
+				});
+				//jquery tabs
+				$( "#tabs" ).tabs();
+
+
+				//progressbar
+				$( "#progressbar" ).progressbar({
+					value: 37,
+					create: function( event, ui ) {
+						$(this).addClass('progress progress-striped active')
+								.children(0).addClass('progress-bar progress-bar-success');
+					}
+				});
+
+
+				//selectmenu
+				$( "#number" ).css('width', '200px')
+						.selectmenu({ position: { my : "left bottom", at: "left top" } })
+
+			});
+		</script>
 	</body>
 </html>

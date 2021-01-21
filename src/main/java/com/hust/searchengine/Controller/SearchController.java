@@ -1,8 +1,6 @@
 package com.hust.searchengine.Controller;
 
-import com.hust.searchengine.Entity.ClassInfo;
-import com.hust.searchengine.Entity.Student;
-import com.hust.searchengine.Entity.User;
+import com.hust.searchengine.Entity.*;
 import com.hust.searchengine.Service.ClassInfoService;
 import com.hust.searchengine.Service.SearchService;
 import com.hust.searchengine.Utils.FileUtil;
@@ -13,8 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.http.HttpTimeoutException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.apache.tomcat.jni.Time.sleep;
 
 @Controller
 @RequestMapping("search")
@@ -26,6 +30,7 @@ public class SearchController {
     @Autowired
     private ClassInfoService classInfoService;
 
+    //主页
     @RequestMapping("main")
     public String MainPage(HttpSession session){
         User user = (User)session.getAttribute("user");
@@ -35,6 +40,16 @@ public class SearchController {
             return "redirect:/search/login";
     }
 
+    @PostMapping("main")
+    public String MainSearch(HttpSession session, String keyword){
+        User user = (User)session.getAttribute("user");
+        if(user!=null)
+            return "main";
+        else
+            return "redirect:/search/login";
+    }
+
+    //高级搜索
     @RequestMapping("advancedsearch")
     public String AdvancedSearchPage(HttpSession session){
         User user = (User)session.getAttribute("user");
@@ -44,17 +59,71 @@ public class SearchController {
             return "redirect:/search/login";
     }
 
-    @RequestMapping("bookmark")
-    public String BookmarkPage(HttpSession session){
+    //书签（没有分页）
+    @GetMapping("bookmark")
+    public String BookmarkPage(Model model, HttpSession session){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
+        if(user!=null){
+            List<Article> bookmarks = searchService.findAllBookmarks(user.getUsername());
+            String message = "";
+            String color = "red";
+            model.addAttribute("bookmarks", bookmarks);
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
             return "bookmark";
+        }
         else
+            return "redirect:/search/login";
+
+    }
+
+    //插入书签
+    @PostMapping("bookmark")
+    public String InsertBookmark(@RequestParam("doi") String doi,
+                                 /*@RequestParam("keywords") String keywords,*/
+                                 HttpServletRequest request,
+                                 HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            String username = user.getUsername();
+            String reqUrl = request.getHeader("Referer");
+            String host = request.getRequestURL().toString().replaceAll(request.getRequestURI().toString(),"");
+            String resourceUrl = reqUrl.replaceAll(host, "");
+            //String page = "redirect:"+ resourceUrl; /*+ "?" + request.getQueryString()*/
+            String message;
+            String color;
+            boolean already_added = searchService.InsertBookmark(username, doi)==0;
+            if(already_added) {
+                message = "您已添加过该书签，添加书签失败！";
+                color = "red";
+            }else{
+                message = "添加书签成功！";
+                color = "green";
+            }
+            List<Article> bookmarks = searchService.findAllBookmarks(user.getUsername());
+            model.addAttribute("bookmarks", bookmarks);
+            model.addAttribute("color", color);
+            model.addAttribute("msg", message);
+            return "bookmark";
+        }else
             return "redirect:/search/login";
     }
 
+    //删除书签
+    @GetMapping("bookmark/delete/{doi}")
+    public String DeleteBookmark(@PathVariable("doi")String doi,
+                                 HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            String username = user.getUsername();
+            searchService.deleteBookMark(username, doi);
+            return "redirect:/search/bookmark";
+        }
+        return "redirect:/search/login";
+    }
+
     //登出
-    @RequestMapping("logout")
+    @GetMapping("logout")
     public String LogoutPage(HttpSession session){
         User user = (User)session.getAttribute("user");
         if(user!=null){
@@ -63,88 +132,257 @@ public class SearchController {
         return "redirect:/search/login";
     }
 
-    //我的
+    //我的(包括订阅的作者、领域、期刊)
     @RequestMapping("mine")
-    public String MinePage(HttpSession session){
+    public String MinePage(@RequestParam(value = "pageIndex1",defaultValue = "1") Integer pageIndex1,
+                           @RequestParam(value = "pageSize1",defaultValue = "5") Integer pageSize1,
+                           @RequestParam(value = "pageIndex2",defaultValue = "1") Integer pageIndex2,
+                           @RequestParam(value = "pageSize2",defaultValue = "5") Integer pageSize2,
+                           @RequestParam(value = "pageIndex3",defaultValue = "1") Integer pageIndex3,
+                           @RequestParam(value = "pageSize3",defaultValue = "5") Integer pageSize3,
+                           HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
+        if(user!=null) {
+            String username = user.getUsername();
+            PageInfo<Author> authorPageInfo = searchService.findAllSubAuthorsByUsername(pageIndex1,pageSize1,username);
+            PageInfo<Field> fieldPageInfo = searchService.findAllSubFieldsByUsername(pageIndex2,pageSize2,username);
+            PageInfo<Journal> journalPageInfo = searchService.findAllSubJournalsByUsername(pageIndex3,pageSize3,username);
+            model.addAttribute("authors",authorPageInfo);
+            model.addAttribute("fields",fieldPageInfo);
+            model.addAttribute("journals",journalPageInfo);
             return "mine";
+        }
         else
             return "redirect:/search/login";
     }
 
     //个人主页
     @RequestMapping("profile")
-    public String ProfilePage(HttpSession session){
+    public String ProfilePage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
+        if(user!=null) {
+            model.addAttribute("user",user);
             return "profile";
+        }
         else
             return "redirect:/search/login";
     }
 
-    //搜索
-    @RequestMapping("search")
-    public String SearchPage(HttpSession session){
+    //搜索结果
+    @PostMapping("search")
+    public String SearchPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                             @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                             @RequestParam(value = "keywords",defaultValue = "") String keywords,
+                             HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
-            return "search";
+        if(user!=null) {
+            String message = "";
+            String color = "red";
+            if(!keywords.isEmpty()) {
+                PageInfo<Article> results = searchService.findArticleByKeywords(pageIndex, pageSize, keywords);
+                model.addAttribute("results", results);
+                model.addAttribute("keywords", keywords);
+                model.addAttribute("msg", message);
+                model.addAttribute("color", color);
+                return "search";
+            }else {
+                return "redirect:/search/main";
+            }
+        }
         else
             return "redirect:/search/login";
     }
 
-    //设置
-    @RequestMapping("settings")
-    public String SettingsPage(HttpSession session){
+    //直接打开搜索结果页面将跳转至主页,带关键词则返回搜索页面
+//    @RequestMapping("search")
+//    public String SearchResultPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+//                                   @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+//                                   @RequestParam(value = "doi", defaultValue = "") String doi,
+//                                   @RequestParam(value = "keywords", defaultValue = "") String keywords,
+//                                   HttpServletRequest request,
+//                                   HttpSession session, Model model){
+//        User user = (User)session.getAttribute("user");
+//        if(user!=null) {
+//            //String reqUrl = request.getHeader("Referer");
+//            if(doi.isEmpty()&&keywords.isEmpty()) {
+//                return "redirect:/search/main";
+//            }
+//            return "redirect:/search/search?" + request.getQueryString();
+//        }
+//        else
+//            return "redirect:/search/login";
+//    }
+
+
+    //修改用户信息页面
+    @GetMapping("settings")
+    public String SettingsPage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
+        if(user!=null) {
+            String message = "";
+            model.addAttribute("user", user);
+            model.addAttribute("msg", message);
             return "settings";
+        }
         else
             return "redirect:/search/login";
+    }
+
+    // 修改用户信息提交
+    @PostMapping("settings")
+    public String updateUserinfo(HttpSession session,
+                                 @RequestParam("passwordconfirmed") String password,
+                                 User userupdated, Model model){
+
+        User user = (User)session.getAttribute("user");
+        if(user!=null) {
+            //判断输入的密码是否正确
+            if(user.getPassword().equals(password)){
+                String oldusername = user.getUsername();
+                String newu = userupdated.getUsername();
+                String newp = userupdated.getPassword();
+                boolean news = userupdated.isSex();
+                String newi = userupdated.getInstitution();
+                String newe = userupdated.getEmail();
+                String message = "";
+                //判断数据库内是否已存在相应用户名
+                if(!oldusername.equals(newu)&&newu.equals(searchService.FindIfUsernameAlreadyExists(newu))){
+                    message = "修改用户名失败，已存在此用户名！";
+                    model.addAttribute("msg", message);
+                    return "settings";
+                }
+                // 保存到数据库里
+                searchService.updateUserByUsername(oldusername, newu, newp, news, newi, newe);
+                //重新设置用户session，以新修改的username显示在右上角
+                session.removeAttribute("user");
+                session.setAttribute("user", userupdated);
+
+                model.addAttribute("msg", message);
+                return "redirect:/search/profile";
+            }else{
+                String message = "密码错误，请重新输入！";
+                model.addAttribute("msg", message);
+                return "settings";
+            }
+        }
+        return "redirect:/search/login";
     }
 
     //订阅
     @RequestMapping("subscription")
-    public String SubscriptionPage(HttpSession session){
+    public String SubscriptionPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                                   @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                                   @RequestParam(value = "activejournal", defaultValue = "Nature") String activeJournal,
+                                   HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
+        if(user!=null) {
+            String username = user.getUsername();
+            List<Journal> subs = searchService.findAllSubJournalsByUsernameNotPaged(username);
+            Map<Journal, PageInfo<Article>> subs_arts = new HashMap<>();
+            for (Journal sub : subs) {
+                String journal = sub.getJournal();
+                PageInfo<Article> articlesOnSub = searchService.findArticleByJournal(pageIndex, pageSize, journal);
+                subs_arts.put(sub, articlesOnSub);
+            }
+            model.addAttribute("subs", subs);
+            model.addAttribute("activejournal", activeJournal);
+            model.addAttribute("subs_arts", subs_arts);
             return "subscription";
+        }
         else
             return "redirect:/search/login";
     }
 
     //热搜
-    @RequestMapping("trends")
-    public String TrendsPage(HttpSession session){
+    @GetMapping("trends")
+    public String TrendsPage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
+        if(user!=null) {
+            List<Trends> trends = searchService.getAllTrends();
+            model.addAttribute("trends", trends);
             return "trends";
+        }
         else
             return "redirect:/search/login";
     }
 
     //登录界面
     @RequestMapping("login")
-    public String loginPage(HttpSession session){
+    public String loginPage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-
-        if(user!=null)
+        if(user!=null) {
             return "redirect:/search/main";
+        }
+        String message = "";
+        model.addAttribute("msg", message);
         return "login";
     }
 
-    //登录界面提交信息
+    //登录界面提交
     @PostMapping("login")
     public String loginInfo(@RequestParam("username") String uName,
                             @RequestParam("password") String password,
-                            HttpSession session){
+                            HttpSession session, Model model){
         User user = searchService.UserLogin(uName, password);
         session.setMaxInactiveInterval(3600); //括号内数字单位是秒，表示登录的持续时间
         if(user!=null){
             session.setAttribute("user", user );
             return "redirect:/search/main";
         }else{
-            return "redirect:/search/login";
+            String message = "用户名或者密码错误！";
+            model.addAttribute("msg", message);
+            return "login";
+        }
+    }
+
+    //注册界面
+    @RequestMapping("signup")
+    public String signupPage(HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null) {
+            return "redirect:/search/main";
+        }
+        model.getAttribute("msg");
+        model.getAttribute("color");
+        return "signup";
+    }
+
+    //注册界面提交
+    @PostMapping("signup")
+    public String signupInfo(@RequestParam("email") String email,
+                             @RequestParam("username") String uName,
+                             @RequestParam("password") String password,
+                             @RequestParam("password2") String password2,
+                             HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            return "redirect:/search/main";
+        }else{
+            String color = "red";
+            String message = "";
+            //判断两次密码是否相同
+            if(!password.equals(password2)){
+                //密码不相同
+                message = "两次密码不匹配！";//注册失败
+            }
+            else{
+                //密码相同
+                User newuser = searchService.newUserSignup(email, uName, password);
+                boolean userExists = newuser==null?true:false;
+                //判断用户名是否存在
+                if(userExists){
+                    message = "用户名已存在，请返回登录界面登录！";//注册失败
+                }else{
+                     //新用户信息写入数据库
+                    message = "注册成功！";
+                    color = "green";
+                    session.setAttribute("user", newuser);
+                    return "redirect:/search/main";//离开本页面
+                }
+            }
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+            return "signup"; //带着消息回到注册页面
         }
     }
 
@@ -206,45 +444,45 @@ public class SearchController {
         return "redirect:/stu/list";
     }
 
-    // 修改学生信息页面
-    @GetMapping("update/{id}")
-    public String updateStudent(@PathVariable("id") Integer stuid, Model model){
-        Student student = searchService.findStudentByID(stuid);
-        List<ClassInfo> classes = classInfoService.findAllClassInfo();
-        model.addAttribute("cls", classes);
-        model.addAttribute("stu",student);
-        return "updateinfo";
-    }
+//    // 修改学生信息页面
+//    @GetMapping("update/{id}")
+//    public String updateStudent(@PathVariable("id") Integer stuid, Model model){
+//        Student student = searchService.findStudentByID(stuid);
+//        List<ClassInfo> classes = classInfoService.findAllClassInfo();
+//        model.addAttribute("cls", classes);
+//        model.addAttribute("stu",student);
+//        return "updateinfo";
+//    }
 
-    // 修改学生信息提交
-    @PostMapping("update")
-    public String updateStudent(Student student, @RequestParam("filepic") MultipartFile file){
-        // 1.保存文件到硬盘上
-        String fileName = file.getOriginalFilename();
-        String filePath = FileUtil.getUpLoadFilePath();
-        fileName = System.currentTimeMillis()+fileName;
+//    // 修改学生信息提交
+//    @PostMapping("update")
+//    public String updateStudent(Student student, @RequestParam("filepic") MultipartFile file){
+//        // 1.保存文件到硬盘上
+//        String fileName = file.getOriginalFilename();
+//        String filePath = FileUtil.getUpLoadFilePath();
+//        fileName = System.currentTimeMillis()+fileName;
+//
+//        try {
+//            FileUtil.uploadFile(file.getBytes(),filePath,fileName);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        // 2.保存文件名到数据库里
+//        student.setStu_image_url(fileName);
+//        searchService.updateStudentByID(student);
+//        return "redirect:/stu/list";
+//    }
 
-        try {
-            FileUtil.uploadFile(file.getBytes(),filePath,fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // 2.保存文件名到数据库里
-        student.setStu_image_url(fileName);
-        searchService.updateStudentByID(student);
-        return "redirect:/stu/list";
-    }
-
-    // 删除学生信息
-    @GetMapping("list/delete/{id}")
-    public String deleteStudent(@PathVariable("id") Integer stuid,
-                                @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-                                @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                                Model model){
-        searchService.deleteStudentByID(stuid);
-        PageInfo<Student> stuLists = searchService.findAllStudent(pageIndex, pageSize);
-        model.addAttribute("stus",stuLists);
-        return "redirect:/stu/list";
-    }
+//    // 删除学生信息
+//    @GetMapping("list/delete/{id}")
+//    public String deleteStudent(@PathVariable("id") Integer stuid,
+//                                @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+//                                @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+//                                Model model){
+//        searchService.deleteStudentByID(stuid);
+//        PageInfo<Student> stuLists = searchService.findAllStudent(pageIndex, pageSize);
+//        model.addAttribute("stus",stuLists);
+//        return "redirect:/stu/list";
+//    }
 }

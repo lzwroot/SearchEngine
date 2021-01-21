@@ -1,8 +1,8 @@
 package com.hust.searchengine.Entity;
 
 public class Manager {
-    Integer managerid;
-    String password;
+    private Integer managerid;
+    private String password;
 
     public Integer getManagerid() {
         return managerid;
