@@ -241,14 +241,7 @@
 							</li>
 						</ul><!-- /.breadcrumb -->
 
-						<div class="nav-search" id="nav-search">
-							<form class="form-search">
-								<span class="input-icon">
-									<input type="text" placeholder="搜索 ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
-									<i class="ace-icon fa fa-search nav-search-icon"></i>
-								</span>
-							</form>
-						</div><!-- /.nav-search -->
+
 					</div>
 
 					<div class="page-content">
@@ -334,23 +327,23 @@
 								<img src="/images/scholar_logo.png" class="img-responsive center-block" alt="Loogle学术搜索"/>
 
 								<div class="space"></div>
-
-								<div class="input-group input-group-lg col-md-12">
-									<input type="text" class="form-control search-query" placeholder="请输入关键词">
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-info btn-sm" onclick="window.location.href='search'">
-											<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
-											搜索
-										</button>
-									</span>
-
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-purple btn-sm" onclick="window.location.href='advancedsearch'">
+								<form method="post" action="/search/search">
+									<div class="input-group input-group-lg col-md-12">
+										<input name="keywords" type="text" class="form-control search-query" placeholder="请输入关键词">
+										<span class="input-group-btn">
+											<button type="submit" class="btn btn-info btn-sm" onclick="window.location.href='search'">
+												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+												搜索
+											</button>
+										</span>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-purple btn-sm" onclick="window.location.href='advancedsearch'">
 											高级搜索
-										</button>
-									</span>
+											</button>
+										</span>
+									</div>
 
-								</div>
+								</form>
 
 								<div class="space"></div>
 								<div class="space"></div>

@@ -211,7 +211,7 @@
 							</li>
 
 							<li class="">
-								<a href="logout">
+								<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
 									<i class="menu-icon fa fa-caret-right"></i>
 									退出登录
 								</a>
@@ -243,14 +243,6 @@
 							<li class="active">搜索结果</li>
 						</ul><!-- /.breadcrumb -->
 
-						<div class="nav-search" id="nav-search">
-							<form class="form-search">
-								<span class="input-icon">
-									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
-									<i class="ace-icon fa fa-search nav-search-icon"></i>
-								</span>
-							</form>
-						</div><!-- /.nav-search -->
 					</div>
 
 					<div class="page-content">
@@ -324,6 +316,106 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
+
+								<form method="post" action="/search/search">
+									<div class="input-group input-group-lg col-md-12">
+										<input th:value="${keywords}" name="keywords" type="text" class="form-control search-query" placeholder="请输入关键词">
+										<span class="input-group-btn">
+											<button type="submit" class="btn btn-info btn-sm" onclick="window.location.href='search'">
+												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+												搜索
+											</button>
+										</span>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-purple btn-sm" onclick="window.location.href='advancedsearch'">
+											高级搜索
+											</button>
+										</span>
+									</div>
+								</form>
+
+								<div class="space"></div>
+								<div class="space"></div>
+								<div class="space"></div>
+								<div class="space"></div>
+
+								<!--<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>-->
+
+								<!--搜索结果表-->
+								<table class="table table-bordered b1">
+									<thead>
+									<tr>
+										<th>论文题目</th>
+										<th>作者</th>
+										<th>来源</th>
+										<th>发表时间</th>
+										<th>数据库</th>
+										<th>操作</th>
+
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="result:${results.list}">
+										<td th:text="${result.articlename}">基于DEA-Tobit模型的实证分析</td>
+										<td th:text="${result.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
+										<td th:text="${result.journal}">华北金融</td>
+										<td th:text="${result.time}">2021-01-06 15:06</td>
+										<td>期刊</td>
+										<td>
+											<span>
+												<a th:href="${result.link}">下载</a>/
+												<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${result.doi}}">引用</a>
+												<form th:action="@{/search/bookmark(doi=${result.doi})}" method="post">
+                                                    <button type="submit" class="btn btn-success btn-sm" name="bmk_button" >书签</button>
+												</form>
+											</span>
+										</td>
+										<!--引用模块框-->
+										<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${result.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
+											<div class="modal-dialog modal-lg" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+														<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
+													</div>
+													<div class="modal-body">
+														<span th:text="@{${result.articlename}+', '+${result.author}+', '+${result.journal}+', '+${#dates.format(result.time, 'yyyy')}+'.'}"></span>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+														<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+													</div>
+												</div>
+											</div>
+										</th:div>
+									</tr>
+									<tr></tr>
+									<tr></tr>
+									</tbody>
+								</table>
+
+								<!--分页-->
+								<nav aria-label="Page navigation">
+									<ul class="pagination">
+										<li th:class="${results.hasPreviousPage}?'':'disabled'">
+											<a th:href="${results.hasPreviousPage}?@{/search/search(pageIndex=${results.prePage}, keywords=${keywords})}:'#'" aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+
+										<th:block th:each="nav : ${results.navigatepageNums}">
+											<li th:class="${nav==results.pageNum}?'active':''">
+												<a th:href="@{/search/search(pageIndex=${nav}, keywords=${keywords})}" th:text="${nav}"></a>
+											</li>
+										</th:block>
+
+										<li th:class="${results.hasNextPage}?'':'disabled'">
+											<a th:href="${results.hasNextPage}?@{/search/search(pageIndex=${results.nextPage}, keywords=${keywords})}:'#'" aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
 
 								<!-- 登出模块框 -->
 								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
