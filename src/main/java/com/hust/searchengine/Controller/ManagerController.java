@@ -1,17 +1,67 @@
 package com.hust.searchengine.Controller;
 
-import com.hust.searchengine.Entity.ClassInfo;
-import com.hust.searchengine.Service.ClassInfoService;
+import com.hust.searchengine.Entity.Manager;
+import com.hust.searchengine.Entity.User;
+import com.hust.searchengine.Service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("cls")
-public class ClassInfoController {
+@RequestMapping("manager")
+public class ManagerController {
+    @Autowired
+    private ManagerService managerService;
+
+    @GetMapping("login")
+    public String ManagerLoginPage(HttpSession session, Model model){
+        Manager manager = (Manager) session.getAttribute("manager");
+        if(manager!=null) {
+            return "redirect:/manager/dashboard";
+        }
+        String message = "";
+        model.addAttribute("msg", message);
+        return "managerlogin";
+    }
+
+    @PostMapping("login")
+    public String ManagerLoginInfo(@RequestParam("managerid") Integer managerid,
+                                   @RequestParam("password") String password,
+                                   HttpSession session, Model model){
+        Manager manager = managerService.managerLogin(managerid, password);
+        session.setMaxInactiveInterval(3600); //括号内数字单位是秒，表示登录的持续时间
+        if(manager!=null){
+            session.setAttribute("manager", manager);
+            return "redirect:/manager/dashboard";
+        }else{
+            String message = "管理员号或者密码错误！";
+            model.addAttribute("msg", message);
+            return "managerlogin";
+        }
+    }
+
+    //登出
+    @GetMapping("logout")
+    public String LogoutPage(HttpSession session){
+        Manager manager = (Manager)session.getAttribute("manager");
+        if(manager!=null){
+            session.removeAttribute("manager");
+        }
+        return "redirect:/manager/login";
+    }
+
+    @GetMapping("dashboard")
+    public String DashboardPage(HttpSession session, Model model){
+        Manager manager = (Manager)session.getAttribute("manager");
+        if(manager!=null)
+            return "manager_dashboard";
+        else
+            return "redirect:/manager/login";
+    }
+
 
 //    @Autowired
 //    private ClassInfoService classInfoService;

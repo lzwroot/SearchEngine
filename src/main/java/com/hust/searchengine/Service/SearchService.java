@@ -33,6 +33,8 @@ public interface SearchService {
 
     PageInfo<Article> findArticleByJournal(Integer pageIndex, Integer pageSize, String journal);
 
+    Article findArticleByDoi(String doi);
+
     List<Journal> findAllSubJournalsByUsernameNotPaged(String username);
 
     List<Article> findArticleByJournalNotPaged(String journal);

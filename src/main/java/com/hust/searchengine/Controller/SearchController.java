@@ -1,7 +1,7 @@
 package com.hust.searchengine.Controller;
 
 import com.hust.searchengine.Entity.*;
-import com.hust.searchengine.Service.ClassInfoService;
+import com.hust.searchengine.Service.ManagerService;
 import com.hust.searchengine.Service.SearchService;
 import com.hust.searchengine.Utils.FileUtil;
 import com.github.pagehelper.PageInfo;
@@ -13,12 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.net.http.HttpTimeoutException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.apache.tomcat.jni.Time.sleep;
 
 @Controller
 @RequestMapping("search")
@@ -28,16 +26,19 @@ public class SearchController {
     private SearchService searchService;
 
     @Autowired
-    private ClassInfoService classInfoService;
+    private ManagerService managerService;
 
     //主页
     @RequestMapping("main")
     public String MainPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        if(user!=null)
+        if(user!=null) {
             return "main";
-        else
-            return "redirect:/search/login";
+        }
+        else {
+            return "main_beforelogin";
+           //return "redirect:/search/login";
+        }
     }
 
     @PostMapping("main")
@@ -56,10 +57,24 @@ public class SearchController {
         if(user!=null)
             return "advancedsearch";
         else
-            return "redirect:/search/login";
+            return "advancedsearch_beforelogin";
     }
 
-    //书签（没有分页）
+    @RequestMapping("article/{doi}")
+    public String ArticlePage(@PathVariable("doi") String doi,
+                              HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        Article article = searchService.findArticleByDoi(doi);
+        model.addAttribute("article", article);
+        if(user!=null){
+            return "article";
+        }else{
+            return "article_beforelogin";
+        }
+
+    }
+
+    //书签
     @GetMapping("bookmark")
     public String BookmarkPage(Model model, HttpSession session){
         User user = (User)session.getAttribute("user");
@@ -169,50 +184,32 @@ public class SearchController {
     }
 
     //搜索结果
-    @PostMapping("search")
+    @RequestMapping("search")
     public String SearchPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
                              @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
                              @RequestParam(value = "keywords",defaultValue = "") String keywords,
                              HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        if(user!=null) {
-            String message = "";
-            String color = "red";
-            if(!keywords.isEmpty()) {
-                PageInfo<Article> results = searchService.findArticleByKeywords(pageIndex, pageSize, keywords);
-                model.addAttribute("results", results);
-                model.addAttribute("keywords", keywords);
-                model.addAttribute("msg", message);
-                model.addAttribute("color", color);
+        String message = "";
+        String color = "red";
+        if(!keywords.isEmpty()) {
+            PageInfo<Article> results = searchService.findArticleByKeywords(pageIndex, pageSize, keywords);
+
+            model.addAttribute("results", results);
+            model.addAttribute("keywords", keywords);
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+
+            if(user!=null) {
                 return "search";
-            }else {
-                return "redirect:/search/main";
+            }else{
+                return "search_beforelogin";
             }
+        }else{
+            return "redirect:/search/main";
         }
-        else
-            return "redirect:/search/login";
     }
-
-    //直接打开搜索结果页面将跳转至主页,带关键词则返回搜索页面
-//    @RequestMapping("search")
-//    public String SearchResultPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-//                                   @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
-//                                   @RequestParam(value = "doi", defaultValue = "") String doi,
-//                                   @RequestParam(value = "keywords", defaultValue = "") String keywords,
-//                                   HttpServletRequest request,
-//                                   HttpSession session, Model model){
-//        User user = (User)session.getAttribute("user");
-//        if(user!=null) {
-//            //String reqUrl = request.getHeader("Referer");
-//            if(doi.isEmpty()&&keywords.isEmpty()) {
-//                return "redirect:/search/main";
-//            }
-//            return "redirect:/search/search?" + request.getQueryString();
-//        }
-//        else
-//            return "redirect:/search/login";
-//    }
-
+    
 
     //修改用户信息页面
     @GetMapping("settings")
@@ -326,7 +323,7 @@ public class SearchController {
         User user = searchService.UserLogin(uName, password);
         session.setMaxInactiveInterval(3600); //括号内数字单位是秒，表示登录的持续时间
         if(user!=null){
-            session.setAttribute("user", user );
+            session.setAttribute("user", user);
             return "redirect:/search/main";
         }else{
             String message = "用户名或者密码错误！";
@@ -406,7 +403,7 @@ public class SearchController {
             studentPageInfo = searchService.findStudentByClsIDStuName(pageIndex, pageSize, clsid, stu_name);
         }
 
-        List<ClassInfo> classes = classInfoService.findAllClassInfo();
+        List<ClassInfo> classes = managerService.findAllClassInfo();
 
         model.addAttribute("cls", classes);
         model.addAttribute("stus", studentPageInfo);
@@ -419,7 +416,7 @@ public class SearchController {
     // 添加学生信息页面
     @GetMapping("add")
     public String addStudentInfo(Model model){
-        List<ClassInfo> classes = classInfoService.findAllClassInfo();
+        List<ClassInfo> classes = managerService.findAllClassInfo();
         model.addAttribute("cls", classes);
         return "addinfo"; // addinfo.html
     }

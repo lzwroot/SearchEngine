@@ -63,7 +63,11 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public PageInfo<Article> findArticleByKeywords(Integer pageIndex, Integer pageSize, String keywords) {
-        PageHelper.startPage(pageIndex, pageSize);
+
+        //按照时间排序，最新的文章出现在最前面
+        String orderByDate = "time"+" desc"; //按照数据库的time字段排序，desc代表倒序
+
+        PageHelper.startPage(pageIndex, pageSize, orderByDate);
         List<Article> lists = searchMapper.findArticleByKeywords(keywords);
         PageInfo<Article> info = new PageInfo<>(lists);
         return info;
@@ -99,6 +103,11 @@ public class SearchServiceImpl implements SearchService {
         List<Article> lists = searchMapper.findArticleByJournal(journal);
         PageInfo<Article> info = new PageInfo<>(lists);
         return info;
+    }
+
+    @Override
+    public Article findArticleByDoi(String doi) {
+        return searchMapper.findArticleByDoi(doi);
     }
 
     @Override

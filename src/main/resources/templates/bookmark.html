@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>我的书签 - Loogle学术搜索</title>
+		<title>我的书签 - Loogle 学术搜索</title>
 
-		<meta name="description" content="" />
+		<meta name="description" content="My search bookmarks" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<!-- bootstrap & fontawesome -->
@@ -353,7 +353,7 @@
 												</th>
 												<th>论文题目</th>
 												<th>作者</th>
-												<th>来源</th>
+												<th>领域</th>
 												<th>
 													<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
 													发表时间
@@ -374,20 +374,20 @@
 
 												<td th:text="${bookmark.articlename}">京津冀绿色金融发展综合评价及影响因素研究——基于DEA-Tobit模型的实证分析</td>
 												<td th:text="${bookmark.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
-												<td th:text="${bookmark.journal}">华北金融</td>
+												<td th:text="${bookmark.field}">华北金融</td>
 												<td th:text="${bookmark.time}">2021-01-06 15:06</td>
 												<td>期刊</td>
 												<td>
 													<p>
 													<span>
 														<a th:href="${bookmark.link}">查看</a>/
-														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${bookmark.doi}}">引用</a>/
-														<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${bookmark.doi}}">删除</a>
+														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}">引用</a>/
+														<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}">删除</a>
 													</span>
 													</p>
 												</td>
 												<!--引用模块框-->
-												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${bookmark.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
+												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
 													<div class="modal-dialog modal-lg" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
@@ -395,7 +395,7 @@
 																<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
 															</div>
 															<div class="modal-body">
-																<span th:text="@{${bookmark.articlename}+', '+${bookmark.author}+', '+${bookmark.journal}+', '+${#dates.format(bookmark.time, 'yyyy')}+'.'}"></span>
+																<span th:text="@{${bookmark.articlename}+', '+${bookmark.author}+', '+${bookmark.field}+', '+${#dates.format(bookmark.time, 'yyyy')}+'.'}"></span>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
@@ -405,7 +405,7 @@
 													</div>
 												</th:div>
 												<!--删除模块框-->
-												<th:div class="modal fade bs-example-modal-sm" tabindex="-1" th:id="@{'delete_'+${bookmark.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
+												<th:div class="modal fade bs-example-modal-sm" tabindex="-1" th:id="@{'delete_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
 													<div class="modal-dialog modal-sm" role="document">
 														<div class="modal-content">
 															<div class="modal-header">

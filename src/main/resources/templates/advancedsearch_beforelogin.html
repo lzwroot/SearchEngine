@@ -3,17 +3,17 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>我的个人主页 - Loogle 学术搜索</title>
+		<title>高级搜索 - Loogle 学术搜索</title>
 
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
+		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
 
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
-		
-		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
-		
+
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
@@ -46,7 +46,7 @@
 	</head>
 
 	<body class="no-skin">
-		<div id="navbar" class="navbar navbar-default          ace-save-state">
+		<div id="navbar" class="navbar navbar-default ace-save-state">
 			<div class="navbar-container ace-save-state" id="navbar-container">
 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 					<span class="sr-only">Toggle sidebar</span>
@@ -69,45 +69,7 @@
 				</div>
 
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
-					<ul class="nav ace-nav">
-
-						<li class="light-blue dropdown-modal">
-							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
-								<span class="user-info">
-									<small>Welcome,</small>
-									<div th:text="${session['user'].username}"></div>
-								</span>
-
-								<i class="ace-icon fa fa-caret-down"></i>
-							</a>
-
-							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-								<li>
-									<a href="settings">
-										<i class="ace-icon fa fa-cog"></i>
-										设置
-									</a>
-								</li>
-
-								<li>
-									<a href="profile">
-										<i class="ace-icon fa fa-user"></i>
-										个人资料
-									</a>
-								</li>
-
-								<li class="divider"></li>
-
-								<li>
-									<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
-										<i class="ace-icon fa fa-power-off"></i>
-										登出
-									</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
+					<button class="btn btn-default btn-pink" onclick="window.location.href='login'">登录/注册</button>
 				</div>
 			</div><!-- /.navbar-container -->
 		</div>
@@ -117,7 +79,7 @@
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
 
-			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+			<div id="sidebar" class="sidebar responsive ace-save-state">
 				<script type="text/javascript">
 					try{ace.settings.loadState('sidebar')}catch(e){}
 				</script>
@@ -176,54 +138,6 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="active">
-						<a href="mine">
-							<i class="menu-icon fa fa-home"></i>
-							<span class="menu-text"> 我的 </span>
-						</a>
-
-						<b class="arrow"></b>
-					</li>
-
-					<li class="">
-						<a href="#" class="dropdown-toggle">
-							<!-- <i class="menu-icon fa fa-tag"></i> -->
-							<i class="menu-icon glyphicon glyphicon-cog"></i>
-							<span class="menu-text"> 设置 </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="profile">
-									<i class="menu-icon fa fa-caret-right"></i>
-									个人信息
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
-									<i class="menu-icon fa fa-caret-right"></i>
-									退出登录
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li>
-
 				</ul><!-- /.nav-list -->
 
 				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -240,7 +154,9 @@
 								<a href="main">主页</a>
 							</li>
 
-							<li class="active">我的</li>
+							<li>
+								高级搜索
+							</li>
 						</ul><!-- /.breadcrumb -->
 
 
@@ -315,131 +231,121 @@
 						</div><!-- /.ace-settings-container -->
 
 						<div class="row">
-							<div class="col-xs-12">
+							<div class="col-md-2">
+							</div><!-- /.col -->
+							<div class="col-md-8">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<h2 class="header smaller lighter blue">我订阅的作者、领域、期刊</h2>
-
-								<!--订阅-->
-								<div class="row">
-									<div class="col-md-4">
-										<table style="font-size: large" class="table table-bordered b1">
-											<thead>
-											<tr>
-												<th>订阅的作者</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr th:each="author:${authors.list}">
-												<td th:text="${author.author}"></td>
-											</tr>
-											<tr></tr>
-											<tr></tr>
-											</tbody>
-										</table>
-
-										<!--作者分页-->
-										<nav aria-label="Page navigation">
-											<ul class="pagination" id="author">
-												<li th:class="${authors.hasPreviousPage}?'':'disabled'">
-													<a th:href="${authors.hasPreviousPage}?@{/search/mine(pageIndex1=${authors.prePage})}:'#'" aria-label="Previous">
-														<span aria-hidden="true">&laquo;</span>
-													</a>
-												</li>
-
-												<th:block th:each="nav1 : ${authors.navigatepageNums}">
-													<li th:class="${nav1==authors.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav1}"></a>
-													</li>
-												</th:block>
-
-												<li th:class="${authors.hasNextPage}?'':'disabled'">
-													<a th:href="${authors.hasNextPage}?@{/search/mine(pageIndex1=${authors.nextPage})}:'#'" aria-label="Next">
-														<span aria-hidden="true">&raquo;</span>
-													</a>
-												</li>
-											</ul>
-										</nav>
+									<br>
+									<br>
+									<div class="row" style="text-align:center">
+										<img src="/images/scholar_logo.png">
 									</div>
-									<div class="col-md-4">
-										<table style="font-size: large" class="table table-bordered b1">
-											<thead>
-											<tr>
-												<th>订阅的领域</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr th:each="field:${fields.list}">
-												<td th:text="${field.field}"></td>
-											</tr>
-											<tr></tr>
-											<tr></tr>
-											</tbody>
-										</table>
+									<form class="form-horizontal" action="/search/search" method="post" enctype="multipart/form-data">
+										<div class="row">
+											<div class="col-md-10">
+												<br>
+												<br>
 
-										<!--领域分页-->
-										<nav aria-label="Page navigation">
-											<ul class="pagination" id="field">
-												<li th:class="${fields.hasPreviousPage}?'':'disabled'">
-													<a th:href="${fields.hasPreviousPage}?@{/search/mine(pageIndex2=${fields.prePage})}:'#'" aria-label="Previous">
-														<span aria-hidden="true">&laquo;</span>
-													</a>
-												</li>
+												<div class="row">
+													<div class="col-md-2"></div>
+													<div class="col-md-2">
+														<select name="keyword1" class="form-group btn btn-pink btn-xs" id="form-field-select-1">
+															<option value="主题" selected>主题</option>
+															<option value="关键字">关键字</option>
+															<option value="摘要">摘要</option>
+															<option value="作者">作者</option>
+															<option value="作者单位">作者单位</option>
+															<option value="文献来源">文献来源</option>
+														</select>
+													</div>
+													<div class="col-md-8">
+														<input type="text" name="keyword2" class="form-group form-control" id="inputKeyword1" placeholder="请输入关键词">
+													</div>
 
-												<th:block th:each="nav2 : ${fields.navigatepageNums}">
-													<li th:class="${nav2==fields.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav2}"></a>
-													</li>
-												</th:block>
+												</div>
+												<br>
+												<div class="row">
+													<div class="col-md-2">
+														<select name="keyword3" class="form-group btn btn-pink btn-xs" id="form-field-select-2">
+															<option value="AND" selected>AND</option>
+															<option value="OR">OR</option>
+															<option value="NOT">NOT</option>
+														</select>
+													</div>
+													<div class="col-md-2">
+														<select name="keyword4" class="form-group btn btn-pink btn-xs" id="form-field-select-3">
+															<option value="主题">主题</option>
+															<option value="关键字">关键字</option>
+															<option value="摘要">摘要</option>
+															<option value="作者" selected>作者</option>
+															<option value="作者单位">作者单位</option>
+															<option value="文献来源">文献来源</option>
+														</select>
+													</div>
+													<div class="col-md-8">
+														<input type="text" name="keyword5" class="form-group form-control" id="inputKeyword2" placeholder="请输入关键词">
+													</div>
+												</div>
+												<br>
+												<div class="row">
+													<div class="col-md-2">
+														<select name="keyword6" class="form-group btn btn-pink btn-xs" id="form-field-select-4">
+															<option value="AND" selected>AND</option>
+															<option value="OR">OR</option>
+															<option value="NOT">NOT</option>
+														</select>
+													</div>
+													<div class="col-md-2">
+														<select name="keyword7" class="form-group btn btn-pink btn-xs" id="form-field-select-5">
+															<option value="主题">主题</option>
+															<option value="关键字">关键字</option>
+															<option value="摘要">摘要</option>
+															<option value="作者">作者</option>
+															<option value="作者单位">作者单位</option>
+															<option value="文献来源" selected>文献来源</option>
+														</select>
+													</div>
+													<div class="col-md-8">
+														<input name="keyword8" type="text" class="form-group form-control" id="inputKeyword3" placeholder="请输入关键词">
+													</div>
+												</div>
+												<br>
+												<div class="row">
+													<label class="col-md-4" for="inputdate">时间范围:</label>
+													<div class="form-group col-md-8">
+														<div id="inputdate" class="input-daterange input-group">
+															<input type="date" class="input-sm form-control" name="startdate">
+															<span class="input-group-addon">
+																<i class="fa fa-exchange"></i>
+															</span>
 
-												<li th:class="${fields.hasNextPage}?'':'disabled'">
-													<a th:href="${fields.hasNextPage}?@{/search/mine(pageIndex2=${fields.nextPage})}:'#'" aria-label="Next">
-														<span aria-hidden="true">&raquo;</span>
-													</a>
-												</li>
-											</ul>
-										</nav>
-									</div>
-									<div class="col-md-4">
-										<table style="font-size: large" class="table table-bordered b1">
-											<thead>
-											<tr>
-												<th>订阅的期刊</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr th:each="journal:${journals.list}">
-												<td th:text="${journal.journal}"></td>
-											</tr>
-											<tr></tr>
-											<tr></tr>
-											</tbody>
-										</table>
+															<input type="date" class="input-sm form-control" name="enddate">
+														</div>
+													</div>
 
-										<!--期刊分页-->
-										<nav aria-label="Page navigation">
-											<ul class="pagination" id="journal">
-												<li th:class="${journals.hasPreviousPage}?'':'disabled'">
-													<a th:href="${journals.hasPreviousPage}?@{/search/mine(pageIndex3=${journals.prePage})}:'#'" aria-label="Previous">
-														<span aria-hidden="true">&laquo;</span>
-													</a>
-												</li>
-
-												<th:block th:each="nav3 : ${journals.navigatepageNums}">
-													<li th:class="${nav3==journals.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav3}"></a>
-													</li>
-												</th:block>
-
-												<li th:class="${journals.hasNextPage}?'':'disabled'">
-													<a th:href="${journals.hasNextPage}?@{/search/mine(pageIndex3=${journals.nextPage})}:'#'" aria-label="Next">
-														<span aria-hidden="true">&raquo;</span>
-													</a>
-												</li>
-											</ul>
-										</nav>
-									</div>
-								</div>
+												</div>
+												<br>
+												<div class="row">
+													<label class="col-md-4" for="id-input-file-2">上传文档搜索：</label>
+													<div class="form-group col-md-8">
+														<input name="file" type="file" id="id-input-file-2" />
+													</div>
+												</div>
+												<br>
+												<br>
+											</div>
+											<div class="col-md-2">
+												<a href="main">返回主页</a>
+											</div>
+										</div>
+										<div class="row" style="text-align:center">
+											<button type="submit" class="btn btn-purple btn-lg">
+												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+												高级搜索
+											</button>
+										</div>
+									</form>
 
 								<!-- 登出模块框 -->
 								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -461,6 +367,8 @@
 								</div>
 
 								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+							<div class="col-md-2">
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
@@ -520,5 +428,21 @@
 		<script src="/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
+	<script>
+		$('#id-input-file-2').ace_file_input({
+			no_file:'没有文件 ...',
+			btn_choose:'选择...',
+			btn_change:'更改...',
+			droppable:false,
+			onchange:null,
+			thumbnail:false //| true | large
+			//whitelist:'gif|png|jpg|jpeg'
+			//blacklist:'exe|php'
+			//onchange:''
+			//
+		});
+		//pre-show a file name, for example a previously selected file
+		//$('#id-input-file-1').ace_file_input('show_file_list', ['myfile.txt'])
+	</script>
 	</body>
 </html>
