@@ -11,7 +11,16 @@ public class Article {
     private String journal;
     private String link;
     private Date time;
+    private String field;
     private String username;
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
 
     public String getTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

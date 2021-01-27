@@ -45,7 +45,7 @@ public interface SearchMapper {
 
     //根据关键词在论文数据库中查找相应的文章，并显示在搜索结果页面
     //！！划重点：此处是调用后台算法接口的地方！！
-    @Select("select * from article where articlename like '%${keywords}%'")
+    @Select("select * from article where articlename like '%${keywords}%' or field like '%${keywords}%' or journal like '%${keywords}%' or author like '%${keywords}%'")
     List<Article> findArticleByKeywords(@Param("keywords") String keywords);
 
     //得到订阅作者表
@@ -63,6 +63,10 @@ public interface SearchMapper {
     //根据期刊找该期刊下的文章
     @Select("select * from article where journal=#{journal}")
     List<Article> findArticleByJournal(String journal);
+
+    //根据doi找到文章
+    @Select("select * from article where doi=#{doi}")
+    Article findArticleByDoi(String doi);
 
     //添加书签
     @Insert("insert into bookmark(username, doi, insert_time) select #{username}, #{doi}, #{insert_time} from dual where not exists (select username,doi from bookmark where username=#{username} and doi=#{doi})")

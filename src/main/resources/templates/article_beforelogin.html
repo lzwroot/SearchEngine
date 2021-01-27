@@ -3,17 +3,17 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>我的个人主页 - Loogle 学术搜索</title>
+		<title th:text="@{${article.articlename}+' - Loogle 学术搜索'}"></title>
 
-		<meta name="description" content="" />
+		<meta name="description" content="detailed information" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
+		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
 
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
-		
-		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
-		
+
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
@@ -33,6 +33,11 @@
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
+		<style>
+			p.article_show{
+				font-size: medium;
+			}
+		</style>
 
 		<!-- ace settings handler -->
 		<script src="/js/ace-extra.min.js"></script>
@@ -59,7 +64,7 @@
 				</button>
 
 				<div class="navbar-header pull-left">
-					<a href="main" class="navbar-brand">
+					<a href="/search/main" class="navbar-brand">
 						<small>
 							<i class="fa fa-leaf"></i>
 							<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
@@ -69,45 +74,7 @@
 				</div>
 
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
-					<ul class="nav ace-nav">
-
-						<li class="light-blue dropdown-modal">
-							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
-								<span class="user-info">
-									<small>Welcome,</small>
-									<div th:text="${session['user'].username}"></div>
-								</span>
-
-								<i class="ace-icon fa fa-caret-down"></i>
-							</a>
-
-							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-								<li>
-									<a href="settings">
-										<i class="ace-icon fa fa-cog"></i>
-										设置
-									</a>
-								</li>
-
-								<li>
-									<a href="profile">
-										<i class="ace-icon fa fa-user"></i>
-										个人资料
-									</a>
-								</li>
-
-								<li class="divider"></li>
-
-								<li>
-									<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
-										<i class="ace-icon fa fa-power-off"></i>
-										登出
-									</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
+					<button class="btn btn-default btn-pink" onclick="window.location.href='/search/login'">登录/注册</button>
 				</div>
 			</div><!-- /.navbar-container -->
 		</div>
@@ -117,7 +84,7 @@
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
 
-			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+			<div id="sidebar" class="sidebar responsive ace-save-state">
 				<script type="text/javascript">
 					try{ace.settings.loadState('sidebar')}catch(e){}
 				</script>
@@ -125,41 +92,41 @@
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<!-- 查看热搜 -->
-						<button class="btn btn-success" onclick="window.location.href='trends'">
+						<button class="btn btn-success" onclick="window.location.href='/search/trends'">
 							<i class="ace-icon fa fa-signal"></i>
 						</button>
 
 						<!-- 订阅 -->
-						<button class="btn btn-info" onclick="window.location.href='subscription'">
+						<button class="btn btn-info" onclick="window.location.href='/search/subscription'">
 							<i class="ace-icon fa fa-bell"></i>
 						</button>
 
 						<!-- 书签 -->
-						<button class="btn btn-warning" onclick="window.location.href='bookmark'">
+						<button class="btn btn-warning" onclick="window.location.href='/search/bookmark'">
 							<i class="ace-icon glyphicon glyphicon-tags"></i>
 						</button>
 
 						<!-- 设置 -->
-						<button class="btn btn-danger" onclick="window.location.href='settings'">
+						<button class="btn btn-danger" onclick="window.location.href='/search/settings'">
 							<i class="ace-icon fa fa-cogs"></i>
 						</button>
 					</div>
 
 					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success" onclick="window.location.href='trends'"></span>
+						<span class="btn btn-success" onclick="window.location.href='/search/trends'"></span>
 
-						<span class="btn btn-info" onclick="window.location.href='subscription'"></span>
+						<span class="btn btn-info" onclick="window.location.href='/search/subscription'"></span>
 
-						<span class="btn btn-warning" onclick="window.location.href='bookmark'"></span>
+						<span class="btn btn-warning" onclick="window.location.href='/search/bookmark'"></span>
 
-						<span class="btn btn-danger" onclick="window.location.href='settings'"></span>
+						<span class="btn btn-danger" onclick="window.location.href='/search/settings'"></span>
 					</div>
 				</div><!-- /.sidebar-shortcuts -->
 
 				<ul class="nav nav-list">
 					
 					<li class="">
-						<a href="subscription">
+						<a href="/search/subscription">
 							<i class="menu-icon fa fa-bell"></i>
 							<span class="menu-text"> 订阅 </span>
 						</a>
@@ -168,60 +135,12 @@
 					</li>
 
 					<li class="">
-						<a href="bookmark">
+						<a href="/search/bookmark">
 							<i class="menu-icon fa fa-bookmark"></i>
 							<span class="menu-text"> 书签 </span>
 						</a>
 
 						<b class="arrow"></b>
-					</li>
-
-					<li class="active">
-						<a href="mine">
-							<i class="menu-icon fa fa-home"></i>
-							<span class="menu-text"> 我的 </span>
-						</a>
-
-						<b class="arrow"></b>
-					</li>
-
-					<li class="">
-						<a href="#" class="dropdown-toggle">
-							<!-- <i class="menu-icon fa fa-tag"></i> -->
-							<i class="menu-icon glyphicon glyphicon-cog"></i>
-							<span class="menu-text"> 设置 </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="profile">
-									<i class="menu-icon fa fa-caret-right"></i>
-									个人信息
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
-									<i class="menu-icon fa fa-caret-right"></i>
-									退出登录
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
 					</li>
 
 				</ul><!-- /.nav-list -->
@@ -237,10 +156,9 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="main">主页</a>
+								<a href="/search/main">主页</a>
 							</li>
-
-							<li class="active">我的</li>
+							<li class="active">论文详细信息</li>
 						</ul><!-- /.breadcrumb -->
 
 
@@ -314,132 +232,49 @@
 							</div><!-- /.ace-settings-box -->
 						</div><!-- /.ace-settings-container -->
 
+						<!--页面开头-->
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="page-header">
+									<strong>
+										<h1 th:text="${article.articlename}"></h1>
+									</strong>
+								</div>
+							</div>
+						</div>
+
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<h2 class="header smaller lighter blue">我订阅的作者、领域、期刊</h2>
+								<h4>
+									<span th:text="${article.author}"></span>
+								</h4>
+								<br>
+								<p class="article_show">
+									<b>摘要：</b>
+									<span th:text="${article.article_abstract}"></span>
+								</p>
 
-								<!--订阅-->
-								<div class="row">
-									<div class="col-md-4">
-										<table style="font-size: large" class="table table-bordered b1">
-											<thead>
-											<tr>
-												<th>订阅的作者</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr th:each="author:${authors.list}">
-												<td th:text="${author.author}"></td>
-											</tr>
-											<tr></tr>
-											<tr></tr>
-											</tbody>
-										</table>
+								<p class="article_show">
+									<b>所属期刊：</b>
+									<span th:text="${article.journal}"></span>
+								</p>
 
-										<!--作者分页-->
-										<nav aria-label="Page navigation">
-											<ul class="pagination" id="author">
-												<li th:class="${authors.hasPreviousPage}?'':'disabled'">
-													<a th:href="${authors.hasPreviousPage}?@{/search/mine(pageIndex1=${authors.prePage})}:'#'" aria-label="Previous">
-														<span aria-hidden="true">&laquo;</span>
-													</a>
-												</li>
+								<p class="article_show">
+									<b>下载链接：</b>
+									<a th:href="${article.link}" th:text="${article.link}"></a>
+								</p>
 
-												<th:block th:each="nav1 : ${authors.navigatepageNums}">
-													<li th:class="${nav1==authors.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav1}"></a>
-													</li>
-												</th:block>
+								<p class="article_show">
+									<b>发布时间：</b>
+									<span th:text="${article.time}"></span>
+								</p>
 
-												<li th:class="${authors.hasNextPage}?'':'disabled'">
-													<a th:href="${authors.hasNextPage}?@{/search/mine(pageIndex1=${authors.nextPage})}:'#'" aria-label="Next">
-														<span aria-hidden="true">&raquo;</span>
-													</a>
-												</li>
-											</ul>
-										</nav>
-									</div>
-									<div class="col-md-4">
-										<table style="font-size: large" class="table table-bordered b1">
-											<thead>
-											<tr>
-												<th>订阅的领域</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr th:each="field:${fields.list}">
-												<td th:text="${field.field}"></td>
-											</tr>
-											<tr></tr>
-											<tr></tr>
-											</tbody>
-										</table>
-
-										<!--领域分页-->
-										<nav aria-label="Page navigation">
-											<ul class="pagination" id="field">
-												<li th:class="${fields.hasPreviousPage}?'':'disabled'">
-													<a th:href="${fields.hasPreviousPage}?@{/search/mine(pageIndex2=${fields.prePage})}:'#'" aria-label="Previous">
-														<span aria-hidden="true">&laquo;</span>
-													</a>
-												</li>
-
-												<th:block th:each="nav2 : ${fields.navigatepageNums}">
-													<li th:class="${nav2==fields.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav2}"></a>
-													</li>
-												</th:block>
-
-												<li th:class="${fields.hasNextPage}?'':'disabled'">
-													<a th:href="${fields.hasNextPage}?@{/search/mine(pageIndex2=${fields.nextPage})}:'#'" aria-label="Next">
-														<span aria-hidden="true">&raquo;</span>
-													</a>
-												</li>
-											</ul>
-										</nav>
-									</div>
-									<div class="col-md-4">
-										<table style="font-size: large" class="table table-bordered b1">
-											<thead>
-											<tr>
-												<th>订阅的期刊</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr th:each="journal:${journals.list}">
-												<td th:text="${journal.journal}"></td>
-											</tr>
-											<tr></tr>
-											<tr></tr>
-											</tbody>
-										</table>
-
-										<!--期刊分页-->
-										<nav aria-label="Page navigation">
-											<ul class="pagination" id="journal">
-												<li th:class="${journals.hasPreviousPage}?'':'disabled'">
-													<a th:href="${journals.hasPreviousPage}?@{/search/mine(pageIndex3=${journals.prePage})}:'#'" aria-label="Previous">
-														<span aria-hidden="true">&laquo;</span>
-													</a>
-												</li>
-
-												<th:block th:each="nav3 : ${journals.navigatepageNums}">
-													<li th:class="${nav3==journals.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav3}"></a>
-													</li>
-												</th:block>
-
-												<li th:class="${journals.hasNextPage}?'':'disabled'">
-													<a th:href="${journals.hasNextPage}?@{/search/mine(pageIndex3=${journals.nextPage})}:'#'" aria-label="Next">
-														<span aria-hidden="true">&raquo;</span>
-													</a>
-												</li>
-											</ul>
-										</nav>
-									</div>
-								</div>
+								<p class="article_show">
+									<b>所属领域：</b>
+									<span th:text="${article.field}"></span>
+								</p>
 
 								<!-- 登出模块框 -->
 								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -453,7 +288,7 @@
 												确定要退出登录吗？
 											</div>
 											<div class="modal-footer">
-												<button type="button" class="btn btn-primary" onclick="window.location.href='logout'">确定</button>
+												<button type="button" class="btn btn-primary" onclick="window.location.href='/search/logout'">确定</button>
 												<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 											</div>
 										</div>
@@ -506,7 +341,7 @@
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-<script src="/js/jquery-1.11.3.min.js"></script>
+		<script src="/js/jquery-1.11.3.min.js"></script>
 <![endif]-->
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
