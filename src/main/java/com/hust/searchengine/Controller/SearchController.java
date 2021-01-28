@@ -41,15 +41,6 @@ public class SearchController {
         }
     }
 
-    @PostMapping("main")
-    public String MainSearch(HttpSession session, String keyword){
-        User user = (User)session.getAttribute("user");
-        if(user!=null)
-            return "main";
-        else
-            return "redirect:/search/login";
-    }
-
     //高级搜索
     @RequestMapping("advancedsearch")
     public String AdvancedSearchPage(HttpSession session){
@@ -104,7 +95,6 @@ public class SearchController {
             String reqUrl = request.getHeader("Referer");
             String host = request.getRequestURL().toString().replaceAll(request.getRequestURI().toString(),"");
             String resourceUrl = reqUrl.replaceAll(host, "");
-            //String page = "redirect:"+ resourceUrl; /*+ "?" + request.getQueryString()*/
             String message;
             String color;
             boolean already_added = searchService.InsertBookmark(username, doi)==0;
@@ -144,7 +134,7 @@ public class SearchController {
         if(user!=null){
             session.removeAttribute("user");
         }
-        return "redirect:/search/login";
+        return "redirect:/search/main";
     }
 
     //我的(包括订阅的作者、领域、期刊)
@@ -384,62 +374,62 @@ public class SearchController {
     }
 
     // 学生管理系统
-    @RequestMapping("list")
-    public String getStudentByIDStuid(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-                                      @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                                      @RequestParam(value="clsid", defaultValue = "0") Integer clsid,
-                                      @RequestParam(value="stu_name", defaultValue = "") String stu_name,
-                                      Model model){
-        List<Student> studentList = null;
-        PageInfo<Student> studentPageInfo = null;
-
-        if(clsid == 0 && stu_name.isEmpty()){
-            studentPageInfo = searchService.findAllStudent(pageIndex, pageSize);
-        }
-        else if(clsid == 0 && !stu_name.isEmpty()){
-            studentPageInfo = searchService.findStudentByStuName(pageIndex, pageSize, stu_name);
-        }
-        else{
-            studentPageInfo = searchService.findStudentByClsIDStuName(pageIndex, pageSize, clsid, stu_name);
-        }
-
-        List<ClassInfo> classes = managerService.findAllClassInfo();
-
-        model.addAttribute("cls", classes);
-        model.addAttribute("stus", studentPageInfo);
-
-        model.addAttribute("clsid", clsid);
-        model.addAttribute("stu_name", stu_name);
-        return "system";
-    }
-
-    // 添加学生信息页面
-    @GetMapping("add")
-    public String addStudentInfo(Model model){
-        List<ClassInfo> classes = managerService.findAllClassInfo();
-        model.addAttribute("cls", classes);
-        return "addinfo"; // addinfo.html
-    }
-
-    // 添加学生信息提交
-    @PostMapping("add")
-    public String addStudentInfo(Student student, @RequestParam("filepic") MultipartFile file){
-        // 1.保存文件到硬盘上
-        String fileName = file.getOriginalFilename();
-        String filePath = FileUtil.getUpLoadFilePath();
-        fileName = System.currentTimeMillis()+fileName;
-
-        try {
-            FileUtil.uploadFile(file.getBytes(),filePath,fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // 2.保存文件名到数据库里
-        student.setStu_image_url(fileName);
-        searchService.addStudentInfo(student);
-        return "redirect:/stu/list";
-    }
+//    @RequestMapping("list")
+//    public String getStudentByIDStuid(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+//                                      @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+//                                      @RequestParam(value="clsid", defaultValue = "0") Integer clsid,
+//                                      @RequestParam(value="stu_name", defaultValue = "") String stu_name,
+//                                      Model model){
+//        List<Student> studentList = null;
+//        PageInfo<Student> studentPageInfo = null;
+//
+//        if(clsid == 0 && stu_name.isEmpty()){
+//            studentPageInfo = searchService.findAllStudent(pageIndex, pageSize);
+//        }
+//        else if(clsid == 0 && !stu_name.isEmpty()){
+//            studentPageInfo = searchService.findStudentByStuName(pageIndex, pageSize, stu_name);
+//        }
+//        else{
+//            studentPageInfo = searchService.findStudentByClsIDStuName(pageIndex, pageSize, clsid, stu_name);
+//        }
+//
+//        List<ClassInfo> classes = managerService.findAllClassInfo();
+//
+//        model.addAttribute("cls", classes);
+//        model.addAttribute("stus", studentPageInfo);
+//
+//        model.addAttribute("clsid", clsid);
+//        model.addAttribute("stu_name", stu_name);
+//        return "system";
+//    }
+//
+//    // 添加学生信息页面
+//    @GetMapping("add")
+//    public String addStudentInfo(Model model){
+//        List<ClassInfo> classes = managerService.findAllClassInfo();
+//        model.addAttribute("cls", classes);
+//        return "addinfo"; // addinfo.html
+//    }
+//
+//    // 添加学生信息提交
+//    @PostMapping("add")
+//    public String addStudentInfo(Student student, @RequestParam("filepic") MultipartFile file){
+//        // 1.保存文件到硬盘上
+//        String fileName = file.getOriginalFilename();
+//        String filePath = FileUtil.getUpLoadFilePath();
+//        fileName = System.currentTimeMillis()+fileName;
+//
+//        try {
+//            FileUtil.uploadFile(file.getBytes(),filePath,fileName);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        // 2.保存文件名到数据库里
+//        student.setStu_image_url(fileName);
+//        searchService.addStudentInfo(student);
+//        return "redirect:/stu/list";
+//    }
 
 //    // 修改学生信息页面
 //    @GetMapping("update/{id}")

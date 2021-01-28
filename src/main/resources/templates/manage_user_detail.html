@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Dashboard - Loogle 学术搜索管理端</title>
+		<title>查看用户详细信息 - Loogle 学术搜索管理端</title>
 
-		<meta name="description" content="" />
+		<meta name="description" content="detailed information of user" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
 		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
@@ -59,7 +59,7 @@
 				</button>
 
 				<div class="navbar-header pull-left">
-					<a href="main" class="navbar-brand">
+					<a href="/manager/manager_dashboard" class="navbar-brand">
 						<small>
 							<i class="fa fa-leaf"></i>
 							<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
@@ -105,7 +105,7 @@
 
 				<ul class="nav nav-list">
 					
-					<li class="active">
+					<li class="">
 						<a href="/manager/manager_dashboard">
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text"> Dashboard </span>
@@ -114,7 +114,7 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="">
+					<li class="active">
 						<a href="/manager/manage_user">
 							<i class="menu-icon fa fa-users"></i>
 							<span class="menu-text"> 用户管理 </span>
@@ -122,7 +122,6 @@
 
 						<b class="arrow"></b>
 					</li>
-
 					<li class="">
 						<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
 							<i class="menu-icon glyphicon glyphicon-off"></i>
@@ -144,9 +143,10 @@
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
-								<i class="ace-icon fa fa-tachometer"></i>
-								<a href="/manager/manager_dashboard">Dashboard</a>
+								<i class="ace-icon fa fa-users"></i>
+								<a href="/manager/manage_user">管理用户</a>
 							</li>
+							<li class="active">查看用户详细信息</li>
 						</ul><!-- /.breadcrumb -->
 
 
@@ -239,79 +239,78 @@
 							</div>
 						</div>
 
+						<!--页面开头-->
 						<div class="row">
-							<!-- /.col -->
 							<div class="col-xs-12">
+								<div class="page-header">
+									<h1>
+										用户详细信息
+										<small>
+											<i class="ace-icon fa fa-angle-double-right"></i>
+											查看用户数据
+										</small>
+										<a class="btn btn-pink" th:href="@{'/manager/update/'+${user.username}}">修改用户数据</a>
+									</h1>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+							</div><!-- /.col -->
+							<div class="col-md-8">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<!--页面开头-->
-								<div class="row">
-									<div class="col-xs-12">
-										<div class="page-header">
-											<h1>
-												仪表板
-												<small>
-													<i class="ace-icon fa fa-angle-double-right"></i>
-													查看、分析、修改用户各类数据
-												</small>
-											</h1>
+								<!--个人信息展示-->
+								<div class="profile-user-info profile-user-info-striped" style="font-size: large">
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>用户名</b> </div>
+
+										<div class="profile-info-value">
+											<span  th:text="${user.username}" id="username">alexdoe</span>
 										</div>
 									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>地点</b> </div>
+
+										<div class="profile-info-value">
+											<i class="fa fa-map-marker light-orange bigger-110"></i>
+											<span  id="country">Wuhan</span>
+											<span  id="city">China</span>
+										</div>
+									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>性别</b> </div>
+
+										<div class="profile-info-value">
+											<span  th:text="${user.sex}==true?'男':'女'" id="sex">男</span>
+										</div>
+									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>学校/机构</b> </div>
+
+										<div class="profile-info-value">
+											<span  th:text="${user.institution}" id="institution">华中科技大学</span>
+										</div>
+									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>邮件</b> </div>
+
+										<div class="profile-info-value">
+											<span  th:text="${user.email}" id="email">1234@qq.com</span>
+										</div>
+									</div>
+
 								</div>
 
-								<div class="space-5"></div>
-
-								<h3 class="header smaller lighter blue">
-									学术论文管理搜索总况概览
-								</h3>
-								<div class="infobox-container">
-									<!--总论文数量-->
-									<div class="infobox infobox-orange2">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-book"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_article_number}">6,251</span>
-											<div class="infobox-content">总论文数</div>
-										</div>
-									</div>
-
-									<!--注册用户总数-->
-									<div class="infobox infobox-green">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-bar-chart-o"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_user_number}">7</span>
-											<div class="infobox-content">注册用户数</div>
-										</div>
-									</div>
-
-									<!--在线用户总数-->
-									<div class="infobox infobox-red">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-users"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_online_user_number}">7</span>
-											<div class="infobox-content">在线用户数</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="space-18"></div>
-
-								<h3 class="header smaller lighter blue">
-									流量地理分布图
-								</h3>
-								<script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=0settggap27&amp;m=7&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script>
-
-								<div class="space-6"></div>
 
 								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+							<div class="col-md-2">
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->

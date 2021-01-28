@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Dashboard - Loogle 学术搜索管理端</title>
+		<title>用户管理 - Loogle 学术搜索管理端</title>
 
-		<meta name="description" content="" />
+		<meta name="description" content="manage user" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
 		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
@@ -59,7 +59,7 @@
 				</button>
 
 				<div class="navbar-header pull-left">
-					<a href="main" class="navbar-brand">
+					<a href="/manager/manager_dashboard" class="navbar-brand">
 						<small>
 							<i class="fa fa-leaf"></i>
 							<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
@@ -105,7 +105,7 @@
 
 				<ul class="nav nav-list">
 					
-					<li class="active">
+					<li class="">
 						<a href="/manager/manager_dashboard">
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text"> Dashboard </span>
@@ -114,7 +114,7 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="">
+					<li class="active">
 						<a href="/manager/manage_user">
 							<i class="menu-icon fa fa-users"></i>
 							<span class="menu-text"> 用户管理 </span>
@@ -144,8 +144,8 @@
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
-								<i class="ace-icon fa fa-tachometer"></i>
-								<a href="/manager/manager_dashboard">Dashboard</a>
+								<i class="ace-icon fa fa-users"></i>
+								<a href="/manager/manage_user">管理用户</a>
 							</li>
 						</ul><!-- /.breadcrumb -->
 
@@ -239,80 +239,103 @@
 							</div>
 						</div>
 
+
+						<!--页面开头-->
 						<div class="row">
-							<!-- /.col -->
 							<div class="col-xs-12">
+								<div class="page-header">
+									<h1>
+										用户管理
+										<small>
+											<i class="ace-icon fa fa-angle-double-right"></i>
+											您可以添加、查看、修改、删除用户数据！
+										</small>
+									</h1>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-1"></div>
+							<div class="col-xs-10">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<!--页面开头-->
-								<div class="row">
-									<div class="col-xs-12">
-										<div class="page-header">
-											<h1>
-												仪表板
-												<small>
-													<i class="ace-icon fa fa-angle-double-right"></i>
-													查看、分析、修改用户各类数据
-												</small>
-											</h1>
-										</div>
-									</div>
-								</div>
+								<span th:style="@{'color:'+${color}}" th:text="${msg}" ></span>
 
-								<div class="space-5"></div>
-
-								<h3 class="header smaller lighter blue">
-									学术论文管理搜索总况概览
-								</h3>
-								<div class="infobox-container">
-									<!--总论文数量-->
-									<div class="infobox infobox-orange2">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-book"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_article_number}">6,251</span>
-											<div class="infobox-content">总论文数</div>
-										</div>
-									</div>
-
-									<!--注册用户总数-->
-									<div class="infobox infobox-green">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-bar-chart-o"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_user_number}">7</span>
-											<div class="infobox-content">注册用户数</div>
-										</div>
-									</div>
-
-									<!--在线用户总数-->
-									<div class="infobox infobox-red">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-users"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_online_user_number}">7</span>
-											<div class="infobox-content">在线用户数</div>
-										</div>
-									</div>
-								</div>
+								<a href="/manager/new_user" class="pull-right btn btn-danger">添加新用户</a>
 
 								<div class="space-18"></div>
 
-								<h3 class="header smaller lighter blue">
-									流量地理分布图
-								</h3>
-								<script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=0settggap27&amp;m=7&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script>
+								<!--用户信息表格-->
+								<table class="table table-striped table-hover table-bordered">
+									<thead>
+									<tr>
+										<th>用户名</th>
+										<th>性别</th>
+										<th>学校</th>
+										<th>电子邮件地址</th>
+										<th>操作</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="user:${users.list}">
+										<td th:text="${user.username}"></td>
+										<td th:text="${user.sex}==true?'男':'女'"></td>
+										<td th:text="${user.institution}"></td>
+										<td th:text="${user.email}"></td>
+										<td>
+											<a th:href="@{'/manager/detail/'+${user.username}}">查看详细信息</a>/
+											<a th:href="@{'/manager/update/'+${user.username}}">修改</a>/
+											<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${#strings.replace(#strings.replace(user.username,':','_'),'.','_')}}">删除</a>
+										</td>
+										<!-- 删除该用户模块框 -->
+										<div class="modal fade bs-example-modal-sm" tabindex="-1" th:id="@{'delete_'+${#strings.replace(#strings.replace(user.username,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+											<div class="modal-dialog modal-sm" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+														<h4 class="modal-title" id="myModalLabel2">删除确认</h4>
+													</div>
+													<div class="modal-body">
+														确定要删除该用户吗？<span class="red">（该操作不可逆转）</span>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-primary" th:onclick="@{'window.location.href=\'/manager/delete/\'+\''+${user.username}+'\''}">确定</button>
+														<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</tr>
+									</tbody>
+								</table>
 
-								<div class="space-6"></div>
+								<!--分页-->
+								<nav aria-label="Page navigation">
+									<ul class="pagination">
+										<li th:class="${users.hasPreviousPage}?'':'disabled'">
+											<a th:href="${users.hasPreviousPage}?@{/manager/manage_user(pageIndex=${users.prePage})}:'#'" aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+
+										<th:block th:each="nav : ${users.navigatepageNums}">
+											<li th:class="${nav==users.pageNum}?'active':''">
+												<a th:href="@{/manager/manage_user(pageIndex=${nav})}" th:text="${nav}"></a>
+											</li>
+										</th:block>
+
+										<li th:class="${users.hasNextPage}?'':'disabled'">
+											<a th:href="${users.hasNextPage}?@{/manager/manage_user(pageIndex=${users.nextPage})}:'#'" aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
+							<div class="col-xs-1"></div>
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div>

@@ -19,6 +19,14 @@
 		<!-- ace styles -->
 		<link rel="stylesheet" href="/css/ace.min.css" />
 
+		<style>
+			a:focus{text-decoration:none;}
+			a:link{text-decoration:none;} /*指正常的未被访问过的链接*/
+			a:visited{text-decoration:none;} /*指已经访问过的链接*/
+			a:hover{text-decoration:none;} /*指鼠标在链接*/
+			a:active{text-decoration:none;} /*指正在点的链接*/
+		</style>
+
 		<!--[if lte IE 9]>
 			<link rel="stylesheet" href="/css/ace-part2.min.css" />
 		<![endif]-->
@@ -43,11 +51,13 @@
 					<div class="col-sm-10 col-sm-offset-1">
 						<div class="login-container">
 							<div class="center">
-								<h1 onclick="window.location.href='/search/main'">
-									<i class="ace-icon fa fa-leaf green"></i>
-									<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
-									<span class="white" id="id-text2">学术搜索</span>
-								</h1>
+								<a href="/search/main">
+									<h1>
+										<i class="ace-icon fa fa-leaf green"></i>
+										<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
+										<span class="white" id="id-text2">学术搜索</span>
+									</h1>
+								</a>
 								<h4 class="blue" id="id-company-text">&copy; HUST</h4>
 							</div>
 

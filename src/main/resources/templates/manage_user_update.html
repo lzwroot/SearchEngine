@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Dashboard - Loogle 学术搜索管理端</title>
+		<title>更新用户信息 - Loogle 学术搜索管理端</title>
 
-		<meta name="description" content="" />
+		<meta name="description" content="Update user information" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
 		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
@@ -105,8 +105,8 @@
 
 				<ul class="nav nav-list">
 					
-					<li class="active">
-						<a href="/manager/manager_dashboard">
+					<li class="">
+						<a href="manager_dashboard">
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text"> Dashboard </span>
 						</a>
@@ -114,8 +114,8 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="">
-						<a href="/manager/manage_user">
+					<li class="active">
+						<a href="manage_user">
 							<i class="menu-icon fa fa-users"></i>
 							<span class="menu-text"> 用户管理 </span>
 						</a>
@@ -144,9 +144,10 @@
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
-								<i class="ace-icon fa fa-tachometer"></i>
-								<a href="/manager/manager_dashboard">Dashboard</a>
+								<i class="ace-icon fa fa-users"></i>
+								<a href="/manager/manage_user">管理用户</a>
 							</li>
+							<li class="active">更新用户信息</li>
 						</ul><!-- /.breadcrumb -->
 
 
@@ -239,79 +240,95 @@
 							</div>
 						</div>
 
+						<!--页面开头-->
 						<div class="row">
-							<!-- /.col -->
 							<div class="col-xs-12">
+								<div class="page-header">
+									<h1>
+										修改用户信息
+										<small>
+											<i class="ace-icon fa fa-angle-double-right"></i>
+											修改用户的用户名、密码、所属机构、学校等信息
+										</small>
+									</h1>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+							</div><!-- /.col -->
+							<div class="col-md-8">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<!--页面开头-->
-								<div class="row">
-									<div class="col-xs-12">
-										<div class="page-header">
-											<h1>
-												仪表板
-												<small>
-													<i class="ace-icon fa fa-angle-double-right"></i>
-													查看、分析、修改用户各类数据
-												</small>
-											</h1>
+								<!--修改用户信息-->
+								<form class="form-horizontal" th:action="@{'/manager/update/'+${former_username}}" method="post" enctype="multipart/form-data">
+									<div class="container-fluid">
+										<div class="row">
+											<div class="col-md-8">
+												<div class="form-group">
+													<label for="inputUsername" class="col-sm-3 control-label">用户名</label>
+													<div class="col-sm-9">
+														<input type="name" name="username" class="form-control" th:value="${user.username}" id="inputUsername" placeholder="请填写用户名">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label for="inputPassword" class="col-sm-3 control-label">密码</label>
+													<div class="col-sm-9">
+														<input type="password" name="password" class="form-control" th:value="${user.password}" id="inputPassword" placeholder="请填写密码">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-sm-3 control-label">性别</label>
+													<div class="col-sm-9">
+														<label class="radio-inline">
+															<input type="radio" name="sex" id="inputSex1" value="true" th:checked="${user.sex}==true"> 男
+														</label>
+														<label class="radio-inline">
+															<input type="radio" name="sex" id="inputSex2" value="false" th:checked="${user.sex}==false"> 女
+														</label>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label for="inputInstitution" class="col-sm-3 control-label">学校/机构名称</label>
+													<div class="col-sm-9">
+														<input type="text" name="institution" class="form-control" th:value="${user.institution}" id="inputInstitution" placeholder="请输入学校/机构名称">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label for="inputEmail" class="col-sm-3 control-label">E-mail</label>
+													<div class="col-sm-9">
+														<input type="email" name="email" class="form-control" id="inputEmail" th:value="${user.email}" placeholder="请输入E-mail">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label for="inputPassword2" class="col-sm-3 control-label"><b>密码:</b></label>
+													<div class="col-sm-9">
+														<input type="password" name="confirming_password" class="form-control" id="inputPassword2" placeholder="请输入之前的密码确认">
+														<br>
+														<span th:text="${msg}" style="color: red;"></span>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-offset-3 col-sm-9">
+														<button type="submit" class="btn btn-info">确认修改</button>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4"></div>
 										</div>
 									</div>
-								</div>
-
-								<div class="space-5"></div>
-
-								<h3 class="header smaller lighter blue">
-									学术论文管理搜索总况概览
-								</h3>
-								<div class="infobox-container">
-									<!--总论文数量-->
-									<div class="infobox infobox-orange2">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-book"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_article_number}">6,251</span>
-											<div class="infobox-content">总论文数</div>
-										</div>
-									</div>
-
-									<!--注册用户总数-->
-									<div class="infobox infobox-green">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-bar-chart-o"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_user_number}">7</span>
-											<div class="infobox-content">注册用户数</div>
-										</div>
-									</div>
-
-									<!--在线用户总数-->
-									<div class="infobox infobox-red">
-										<div class="infobox-icon">
-											<i class="ace-icon fa fa-users"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_online_user_number}">7</span>
-											<div class="infobox-content">在线用户数</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="space-18"></div>
-
-								<h3 class="header smaller lighter blue">
-									流量地理分布图
-								</h3>
-								<script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=0settggap27&amp;m=7&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script>
-
-								<div class="space-6"></div>
+								</form>
 
 								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+							<div class="col-md-2">
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->

@@ -45,18 +45,19 @@ public interface SearchService {
 
     Integer deleteBookMark(String username, String doi);
 
+
     //此处以下的代码可忽略，但不要删除！
-    PageInfo<Student> findAllStudent(Integer pageIndex, Integer pageSize);
-
-    Integer addStudentInfo(Student student);
-
-    PageInfo<Student> findStudentByClsIDStuName(Integer pageIndex, Integer pageSize, Integer clsid, String stu_name);
-
-    PageInfo<Student> findStudentByStuName(Integer pageIndex, Integer pageSize, String stu_name);
-
-    Student findStudentByID(Integer stuid);
-
-    Integer updateStudentByID(Student student);
-
-    Integer deleteStudentByID(Integer stuid);
+//    PageInfo<Student> findAllStudent(Integer pageIndex, Integer pageSize);
+//
+//    Integer addStudentInfo(Student student);
+//
+//    PageInfo<Student> findStudentByClsIDStuName(Integer pageIndex, Integer pageSize, Integer clsid, String stu_name);
+//
+//    PageInfo<Student> findStudentByStuName(Integer pageIndex, Integer pageSize, String stu_name);
+//
+//    Student findStudentByID(Integer stuid);
+//
+//    Integer updateStudentByID(Student student);
+//
+//    Integer deleteStudentByID(Integer stuid);
 }
