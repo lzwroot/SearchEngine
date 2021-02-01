@@ -41,6 +41,18 @@ public class SearchController {
         }
     }
 
+    //404页面
+    @RequestMapping("*")
+    public String Page_404(HttpSession session){
+        User user = (User)session.getAttribute("user");
+        if(user!=null) {
+            return "404_page";
+        }
+        else {
+            return "404_page_beforelogin";
+        }
+    }
+
     //高级搜索
     @RequestMapping("advancedsearch")
     public String AdvancedSearchPage(HttpSession session){
