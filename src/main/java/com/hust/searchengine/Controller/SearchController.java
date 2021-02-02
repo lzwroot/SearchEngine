@@ -42,7 +42,7 @@ public class SearchController {
     }
 
     //404页面
-    @RequestMapping("*")
+    @RequestMapping("**")
     public String Page_404(HttpSession session){
         User user = (User)session.getAttribute("user");
         if(user!=null) {

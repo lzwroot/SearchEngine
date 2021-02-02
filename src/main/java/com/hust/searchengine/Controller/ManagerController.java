@@ -234,7 +234,7 @@ public class ManagerController {
     }
 
     //404页面
-    @RequestMapping("*")
+    @RequestMapping("**")
     public String Page_404(HttpSession session){
         Manager manager = (Manager) session.getAttribute("manager");
         if(manager!=null){
