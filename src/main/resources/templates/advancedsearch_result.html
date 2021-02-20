@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>高级搜索结果 - Loogle 学术搜索</title>
+
+		<meta name="description" content="advanced search results" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
+		
+		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="/css/fonts.googleapis.com.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
+		<link rel="stylesheet" href="/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+		<style>
+			a:focus{text-decoration:none; color:lightblue;}
+			a:link{text-decoration:none;} /*指正常的未被访问过的链接*/
+			a:visited{text-decoration:none;} /*指已经访问过的链接*/
+			a:hover{text-decoration:none;} /*指鼠标在链接*/
+			a:active{text-decoration:none;} /*指正在点的链接*/
+		</style>
+
+		<!-- ace settings handler -->
+		<script src="/js/ace-extra.min.js"></script>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/js/html5shiv.min.js"></script>
+		<script src="/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body class="no-skin">
+		<div id="navbar" class="navbar navbar-default          ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button>
+
+				<div class="navbar-header pull-left">
+					<a href="main" class="navbar-brand">
+						<small>
+							<i class="fa fa-leaf"></i>
+							<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
+							学术搜索
+						</small>
+					</a>
+				</div>
+
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+						
+						<li class="light-blue dropdown-modal">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
+								<span class="user-info">
+									<small>Welcome,</small>
+									<div th:text="${session['user'].username}"></div>
+								</span>
+
+								<i class="ace-icon fa fa-caret-down"></i>
+							</a>
+
+							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="settings">
+										<i class="ace-icon fa fa-cog"></i>
+										设置
+									</a>
+								</li>
+
+								<li>
+									<a href="profile">
+										<i class="ace-icon fa fa-user"></i>
+										个人资料
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
+										<i class="ace-icon fa fa-power-off"></i>
+										登出
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div><!-- /.navbar-container -->
+		</div>
+
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.loadState('main-container')}catch(e){}
+			</script>
+
+			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+				<script type="text/javascript">
+					try{ace.settings.loadState('sidebar')}catch(e){}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+						<!-- 查看热搜 -->
+						<button class="btn btn-success" onclick="window.location.href='trends'">
+							<i class="ace-icon fa fa-signal"></i>
+						</button>
+
+						<!-- 订阅 -->
+						<button class="btn btn-info" onclick="window.location.href='subscription'">
+							<i class="ace-icon fa fa-bell"></i>
+						</button>
+
+						<!-- 书签 -->
+						<button class="btn btn-warning" onclick="window.location.href='bookmark'">
+							<i class="ace-icon glyphicon glyphicon-tags"></i>
+						</button>
+
+						<!-- 设置 -->
+						<button class="btn btn-danger" onclick="window.location.href='settings'">
+							<i class="ace-icon fa fa-cogs"></i>
+						</button>
+					</div>
+
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success" onclick="window.location.href='trends'"></span>
+
+						<span class="btn btn-info" onclick="window.location.href='subscription'"></span>
+
+						<span class="btn btn-warning" onclick="window.location.href='bookmark'"></span>
+
+						<span class="btn btn-danger" onclick="window.location.href='settings'"></span>
+					</div>
+				</div><!-- /.sidebar-shortcuts -->
+
+				<ul class="nav nav-list">
+					
+					<li class="">
+						<a href="subscription">
+							<i class="menu-icon fa fa-bell"></i>
+							<span class="menu-text"> 订阅 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+					<li class="">
+						<a href="bookmark">
+							<i class="menu-icon fa fa-bookmark"></i>
+							<span class="menu-text"> 书签 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+					<li class="">
+						<a href="mine">
+							<i class="menu-icon fa fa-home"></i>
+							<span class="menu-text"> 我的 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<!-- <i class="menu-icon fa fa-tag"></i> -->
+							<i class="menu-icon glyphicon glyphicon-cog"></i>
+							<span class="menu-text"> 设置 </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="profile">
+									<i class="menu-icon fa fa-caret-right"></i>
+									个人信息
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="#" data-toggle="modal" data-target="#logoutconfirmation">
+									<i class="menu-icon fa fa-caret-right"></i>
+									退出登录
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+
+				</ul><!-- /.nav-list -->
+
+				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+					<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="main">主页</a>
+							</li>
+
+							<li class="active">搜索结果</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="page-content">
+						<div class="ace-settings-container" id="ace-settings-container">
+							<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+								<i class="ace-icon fa fa-cog bigger-130"></i>
+							</div>
+
+							<div class="ace-settings-box clearfix" id="ace-settings-box">
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<div class="pull-left">
+											<select id="skin-colorpicker" class="hide">
+												<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+												<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+												<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+												<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+											</select>
+										</div>
+										<span>&nbsp; Choose Skin</span>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-navbar" autocomplete="off" />
+										<label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-sidebar" autocomplete="off" />
+										<label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-breadcrumbs" autocomplete="off" />
+										<label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" autocomplete="off" />
+										<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-add-container" autocomplete="off" />
+										<label class="lbl" for="ace-settings-add-container">
+											Inside
+											<b>.container</b>
+										</label>
+									</div>
+								</div><!-- /.pull-left -->
+
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" autocomplete="off" />
+										<label class="lbl" for="ace-settings-hover"> Submenu on Hover</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" autocomplete="off" />
+										<label class="lbl" for="ace-settings-compact"> Compact Sidebar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" autocomplete="off" />
+										<label class="lbl" for="ace-settings-highlight"> Alt. Active Item</label>
+									</div>
+								</div><!-- /.pull-left -->
+							</div><!-- /.ace-settings-box -->
+						</div><!-- /.ace-settings-container -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<div class="row">
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8">
+										<form class="form-horizontal" action="/search/advancedsearch_result" method="post" enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-md-10">
+
+											<div class="row">
+												<div class="col-md-2"></div>
+												<div class="col-md-2">
+													<select name="type1" class="form-group btn btn-pink btn-xs" id="form-field-select-1">
+														<option value="articlename" th:selected="${type1=='articlename'}">主题</option>
+														<option value="doi" th:selected="${type1=='doi'}">DOI</option>
+														<option value="article_abstract" th:selected="${type1=='article_abstract'}">摘要</option>
+														<option value="author" th:selected="${type1=='author'}">作者</option>
+														<option value="field" th:selected="${type1=='field'}">领域</option>
+														<option value="journal" th:selected="${type1=='journal'}">文献来源</option>
+													</select>
+												</div>
+												<div class="col-md-8">
+													<input type="text" th:value="${keyword1}" name="keyword1" class="form-group form-control" id="inputKeyword1" placeholder="请输入关键词">
+												</div>
+
+											</div>
+											<div class="row">
+												<div class="col-md-2">
+													<select name="selector1" class="form-group btn btn-pink btn-xs" id="form-field-select-2">
+														<option value="and" th:selected="${selector1=='and'}">AND</option>
+														<option value="or" th:selected="${selector1=='or'}">OR</option>
+														<option value="and not" th:selected="${selector1=='and not'}">NOT</option>
+													</select>
+												</div>
+												<div class="col-md-2">
+													<select name="type2" class="form-group btn btn-pink btn-xs" id="form-field-select-3">
+														<option value="articlename" th:selected="${type2=='articlename'}">主题</option>
+														<option value="doi" th:selected="${type2=='doi'}">DOI</option>
+														<option value="article_abstract" th:selected="${type2=='article_abstract'}">摘要</option>
+														<option value="author" th:selected="${type2=='author'}">作者</option>
+														<option value="field" th:selected="${type2=='field'}">领域</option>
+														<option value="journal" th:selected="${type2=='journal'}">文献来源</option>
+													</select>
+												</div>
+												<div class="col-md-8">
+													<input type="text" th:value="${keyword2}" name="keyword2" class="form-group form-control" id="inputKeyword2" placeholder="请输入关键词">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-2">
+													<select name="selector2" class="form-group btn btn-pink btn-xs" id="form-field-select-4">
+														<option value="and" th:selected="${selector2=='and'}">AND</option>
+														<option value="or" th:selected="${selector2=='or'}">OR</option>
+														<option value="and not" th:selected="${selector2=='and not'}">NOT</option>
+													</select>
+												</div>
+												<div class="col-md-2">
+													<select name="type3" class="form-group btn btn-pink btn-xs" id="form-field-select-5">
+														<option value="articlename" th:selected="${type3=='articlename'}">主题</option>
+														<option value="doi" th:selected="${type3=='doi'}">DOI</option>
+														<option value="article_abstract" th:selected="${type3=='article_abstract'}">摘要</option>
+														<option value="author" th:selected="${type3=='author'}">作者</option>
+														<option value="field" th:selected="${type3=='field'}">领域</option>
+														<option value="journal" th:selected="${type3=='journal'}">文献来源</option>
+													</select>
+												</div>
+												<div class="col-md-8">
+													<input name="keyword3" th:value="${keyword3}" type="text" class="form-group form-control" id="inputKeyword3" placeholder="请输入关键词">
+												</div>
+											</div>
+											<div class="row">
+												<label class="col-md-4" for="input_date">时间范围:</label>
+												<div class="form-group col-md-8">
+													<div id="input_date" class="input-daterange input-group">
+														<input type="date" th:value="${start_date}" class="input-sm form-control" name="start_date">
+														<span class="input-group-addon">
+																<i class="fa fa-exchange"></i>
+															</span>
+
+														<input type="date" th:value="${end_date}" class="input-sm form-control" name="end_date">
+													</div>
+												</div>
+
+											</div>
+											<br>
+											<div class="row">
+												<label class="col-md-4" for="id-input-file-2">上传文档搜索：</label>
+												<div class="form-group col-md-8">
+													<input name="file" type="file" id="id-input-file-2" />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<a href="main">返回主页</a>
+										</div>
+									</div>
+									<div class="row" style="text-align:center">
+										<button type="submit" class="btn btn-purple btn-lg">
+											<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+											高级搜索
+										</button>
+									</div>
+								</form>
+									</div>
+									<div class="col-sm-2"></div>
+								</div>
+								<div class="space"></div>
+								<!--<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>-->
+
+								<!--搜索结果表-->
+								<table class="table table-bordered table-hover table-striped b1">
+									<thead>
+									<tr>
+										<th>论文题目</th>
+										<th>作者</th>
+										<th>领域</th>
+										<th>发表时间</th>
+										<th>数据库</th>
+										<th>操作</th>
+
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="result:${results.list}">
+										<td><a th:text="${result.articlename}" th:href="@{'/search/article/'+${result.doi}}">基于DEA-Tobit模型的实证分析</a></td>
+										<td th:text="${result.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
+										<td th:text="${result.field}">华北金融</td>
+										<td th:text="${result.time}">2021-01-06 15:06</td>
+										<td>期刊</td>
+										<td>
+											<span>
+												<a th:href="${result.link}">下载</a>/
+												<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(result.doi,':','_'),'.','_')}}">引用</a>
+											</span>
+											<form th:action="@{/search/bookmark(doi=${result.doi})}" method="post">
+												<button type="submit" class="btn btn-success btn-sm" name="bmk_button" >书签</button>
+											</form>
+										</td>
+										<!--引用模块框-->
+										<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(result.doi,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+											<div class="modal-dialog modal-lg" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+														<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
+													</div>
+													<div class="modal-body">
+														<span th:text="@{${result.articlename}+', '+${result.author}+', '+${result.field}+', '+${#dates.format(result.time, 'yyyy')}+'.'}"></span>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+														<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+													</div>
+												</div>
+											</div>
+										</th:div>
+									</tr>
+									<tr></tr>
+									<tr></tr>
+									</tbody>
+								</table>
+
+								<!--分页-->
+								<nav aria-label="Page navigation">
+									<ul class="pagination">
+										<li th:class="${results.hasPreviousPage}?'':'disabled'">
+											<a th:href="${results.hasPreviousPage}?@{/search/advancedsearch_result(pageIndex=${results.prePage}, keywords=${keywords})}:'#'" aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+
+										<th:block th:each="nav : ${results.navigatepageNums}">
+											<li th:class="${nav==results.pageNum}?'active':''">
+												<a th:href="@{/search/advancedsearch_result(pageIndex=${nav}, keywords=${keywords})}" th:text="${nav}"></a>
+											</li>
+										</th:block>
+
+										<li th:class="${results.hasNextPage}?'':'disabled'">
+											<a th:href="${results.hasNextPage}?@{/search/advancedsearch_result(pageIndex=${results.nextPage}, keywords=${keywords})}:'#'" aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
+
+								<!-- 登出模块框 -->
+								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
+									<div class="modal-dialog modal-sm" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<h4 class="modal-title" id="myModalLabel">登出确认</h4>
+											</div>
+											<div class="modal-body">
+												确定要退出登录吗？
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-primary" onclick="window.location.href='logout'">确定</button>
+												<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div>
+			</div><!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">Scholar</span>
+							Search and Management &copy; 2020-2021
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="/js/jquery-2.1.4.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+		<script src="/js/jquery.dataTables.min.js"></script>
+		<script src="/js/jquery.dataTables.bootstrap.min.js"></script>
+		<script src="/js/dataTables.buttons.min.js"></script>
+		<script src="/js/buttons.flash.min.js"></script>
+		<script src="/js/buttons.html5.min.js"></script>
+		<script src="/js/buttons.print.min.js"></script>
+		<script src="/js/buttons.colVis.min.js"></script>
+		<script src="/js/dataTables.select.min.js"></script>
+
+		<!-- ace scripts -->
+		<script src="/js/ace-elements.min.js"></script>
+		<script src="/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+				//initiate dataTables plugin
+				var myTable =
+						$('#dynamic-table')
+								//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+								.DataTable( {
+									bAutoWidth: false,
+									"aoColumns": [
+										{ "bSortable": false },
+										null, null,null, null, null,
+										{ "bSortable": false }
+									],
+									"aaSorting": [],
+
+
+									//"bProcessing": true,
+									//"bServerSide": true,
+									//"sAjaxSource": "http://127.0.0.1/table.php"	,
+
+									//,
+									//"sScrollY": "200px",
+									//"bPaginate": false,
+
+									//"sScrollX": "100%",
+									//"sScrollXInner": "120%",
+									//"bScrollCollapse": true,
+									//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+									//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+									//"iDisplayLength": 50
+
+
+									select: {
+										style: 'multi'
+									}
+								} );
+
+
+
+				$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+				new $.fn.dataTable.Buttons( myTable, {
+					buttons: [
+						{
+							"extend": "colvis",
+							"text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Show/hide columns</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							columns: ':not(:first):not(:last)'
+						},
+						{
+							"extend": "copy",
+							"text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copy to clipboard</span>",
+							"className": "btn btn-white btn-primary btn-bold"
+						},
+						{
+							"extend": "csv",
+							"text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Export to CSV</span>",
+							"className": "btn btn-white btn-primary btn-bold"
+						},
+						{
+							"extend": "excel",
+							"text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Export to Excel</span>",
+							"className": "btn btn-white btn-primary btn-bold"
+						},
+						{
+							"extend": "pdf",
+							"text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>Export to PDF</span>",
+							"className": "btn btn-white btn-primary btn-bold"
+						},
+						{
+							"extend": "print",
+							"text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Print</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							autoPrint: false,
+							message: 'This print was produced using the Print button for DataTables'
+						}
+					]
+				} );
+				myTable.buttons().container().appendTo( $('.tableTools-container') );
+
+				//style the message box
+				var defaultCopyAction = myTable.button(1).action();
+				myTable.button(1).action(function (e, dt, button, config) {
+					defaultCopyAction(e, dt, button, config);
+					$('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
+				});
+
+
+				var defaultColvisAction = myTable.button(0).action();
+				myTable.button(0).action(function (e, dt, button, config) {
+
+					defaultColvisAction(e, dt, button, config);
+
+
+					if($('.dt-button-collection > .dropdown-menu').length == 0) {
+						$('.dt-button-collection')
+								.wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+								.find('a').attr('href', '#').wrap("<li />")
+					}
+					$('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+				});
+
+				////
+
+				setTimeout(function() {
+					$($('.tableTools-container')).find('a.dt-button').each(function() {
+						var div = $(this).find(' > div').first();
+						if(div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
+						else $(this).tooltip({container: 'body', title: $(this).text()});
+					});
+				}, 500);
+
+
+
+
+
+				myTable.on( 'select', function ( e, dt, type, index ) {
+					if ( type === 'row' ) {
+						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', true);
+					}
+				} );
+				myTable.on( 'deselect', function ( e, dt, type, index ) {
+					if ( type === 'row' ) {
+						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', false);
+					}
+				} );
+
+
+
+
+				/////////////////////////////////
+				//table checkboxes
+				$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+				//select/deselect all rows according to table header checkbox
+				$('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
+					var th_checked = this.checked;//checkbox inside "TH" table header
+
+					$('#dynamic-table').find('tbody > tr').each(function(){
+						var row = this;
+						if(th_checked) myTable.row(row).select();
+						else  myTable.row(row).deselect();
+					});
+				});
+
+				//select/deselect a row when the checkbox is checked/unchecked
+				$('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
+					var row = $(this).closest('tr').get(0);
+					if(this.checked) myTable.row(row).deselect();
+					else myTable.row(row).select();
+				});
+
+
+
+				$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
+					e.stopImmediatePropagation();
+					e.stopPropagation();
+					e.preventDefault();
+				});
+
+
+
+				//And for the first simple table, which doesn't have TableTools or dataTables
+				//select/deselect all rows according to table header checkbox
+				var active_class = 'active';
+				$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
+					var th_checked = this.checked;//checkbox inside "TH" table header
+
+					$(this).closest('table').find('tbody > tr').each(function(){
+						var row = this;
+						if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+						else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+					});
+				});
+
+				//select/deselect a row when the checkbox is checked/unchecked
+				$('#simple-table').on('click', 'td input[type=checkbox]' , function(){
+					var $row = $(this).closest('tr');
+					if($row.is('.detail-row ')) return;
+					if(this.checked) $row.addClass(active_class);
+					else $row.removeClass(active_class);
+				});
+
+
+
+				/********************************/
+				//add tooltip for small view action buttons in dropdown menu
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+
+				//tooltip placement on right or left
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+
+					var off2 = $source.offset();
+					//var w2 = $source.width();
+
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+
+
+
+
+				/***************/
+				$('.show-details-btn').on('click', function(e) {
+					e.preventDefault();
+					$(this).closest('tr').next().toggleClass('open');
+					$(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+				});
+				/***************/
+
+
+
+
+
+				/**
+				 //add horizontal scrollbars to a simple table
+				 $('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
+				 {
+					horizontal: true,
+					styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
+					size: 2000,
+					mouseWheelLock: true
+				  }
+				 ).css('padding-top', '12px');
+				 */
+
+
+			})
+		</script>
+	</body>
+</html>

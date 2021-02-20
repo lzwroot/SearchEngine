@@ -33,19 +33,4 @@ public interface ManagerMapper {
     @Insert("insert into user(username,password,sex,institution,email) values(#{username},#{password},#{sex},#{institution},#{email})")
     Integer addNewUser(User user);
 
-    //忽略以下代码
-//    @Select("select * from classinfo")
-//    List<ClassInfo> findAllClassInfo();
-//
-//    @Insert("insert into classinfo(clsName,clsStuNum,clsTeacher,createDate) values(#{clsName},#{clsStuNum},#{clsTeacher},#{createDate})")
-//    Integer addClassInfo(ClassInfo classInfo);
-//
-//    @Select("select * from classinfo where clsid=#{clsid}")
-//    ClassInfo findClassByID(Integer clsid);
-//
-//    @Update("update classinfo set clsName=#{clsName}, clsStuNum=#{clsStuNum}, clsTeacher=#{clsTeacher},createDate=#{createDate} where clsid=#{clsid}")
-//    Integer updateClassByID(ClassInfo classInfo);
-//
-//    @Delete("delete from classinfo where clsid=#{clsid}")
-//    Integer deleteClassByID(Integer clsid);
 }

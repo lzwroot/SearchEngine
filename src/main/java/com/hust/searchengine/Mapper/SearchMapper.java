@@ -2,6 +2,7 @@ package com.hust.searchengine.Mapper;
 
 import com.hust.searchengine.Entity.*;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -80,25 +81,18 @@ public interface SearchMapper {
     @Delete("delete from bookmark where doi=#{doi} and username=#{username}")
     Integer deleteBookMark(String username, String doi);
 
-    //以下代码可以忽略，请暂时不要删除！
-//    @Select("select stu.*, cls.clsName from classinfo cls join student_info stu on cls.clsid=stu.clsid")
-//    List<Student> findAllStudent();
-//
-//    @Select("select stu.*, cls.clsName from classinfo cls join student_info stu on cls.clsid=stu.clsid where cls.clsid=#{clsid} and stu.stu_name like '%${stu_name}%'")
-//    List<Student> findStudentByClsIDStuName(@Param("clsid") Integer clsid, @Param("stu_name") String stu_name);
-//
-//    @Select("select stu.*, cls.clsName from classinfo cls join student_info stu on cls.clsid=stu.clsid where stu.stu_name like '%${stu_name}%'")
-//    List<Student> findStudentByStuName(@Param("stu_name") String stu_name);
-//
-//    @Insert("insert into student_info(stu_name,stu_image_url,stu_sex,password,stu_phone,stu_address,stu_birthday,stu_email,stu_education,stu_interest,my_color,lucky_number,re_mark,create_date,clsid) values(#{stu_name},#{stu_image_url},#{stu_sex},#{password},#{stu_phone},#{stu_address},#{stu_birthday},#{stu_email},#{stu_education},#{stu_interest},#{my_color},#{lucky_number},#{re_mark},#{create_date}, #{clsid})")
-//    Integer addStudentInfo(Student student);
-//
-//    @Select("select * from student_info where stuid=#{stuid}")
-//    Student findStudentByID(Integer stuid);
-//
-//    @Update("update student_info set stu_name=#{stu_name}, stu_image_url=#{stu_image_url}, stu_sex=#{stu_sex},password=#{password},stu_phone=#{stu_phone}, stu_address=#{stu_address}, stu_birthday=#{stu_birthday}, stu_email=#{stu_email}, stu_education=#{stu_education}, stu_interest=#{stu_interest}, my_color=#{my_color}, lucky_number=#{lucky_number}, re_mark=#{re_mark}, create_date=#{create_date}, clsid=#{clsid} where stuid=#{stuid}")
-//    Integer updateStudentByID(Student student);
-//
-//    @Delete("delete from student_info where stuid=#{stuid}")
-//    Integer deleteStudentByID(Integer stuid);
+    //根据时间查询
+    List<Article> findArticleByKeywordsAndTimeRange(@Param("keywords")String keywords, @Param("start_date")String start_date, @Param("end_date")String end_date);
+
+    //高级搜索
+    List<Article> advancedSearchByVariableConditions(@Param("type1") String type1,
+                                                     @Param("keyword1") String keyword1,
+                                                     @Param("selector1") String selector1,
+                                                     @Param("type2") String type2,
+                                                     @Param("keyword2") String keyword2,
+                                                     @Param("selector2") String selector2,
+                                                     @Param("type3") String type3,
+                                                     @Param("keyword3") String keyword3,
+                                                     @Param("start_date") String start_date,
+                                                     @Param("end_date") String end_date);
 }
