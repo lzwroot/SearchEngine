@@ -12,6 +12,9 @@ spring:
     servlet:
       content-type: text/html; charset=utf-8
 
+mybatis:
+  mapper-locations: classpath:**/*.xml
+
 pagehelper:
                     helper-dialect: mysql
                     reasonable: true

@@ -54,6 +54,12 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.9</version>
         </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -78,5 +84,7 @@
             <url>http://repo.spring.io/libs-snapshot</url>
         </pluginRepository>
     </pluginRepositories>
+
+
 
 </project>

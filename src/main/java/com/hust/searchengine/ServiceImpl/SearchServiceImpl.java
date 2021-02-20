@@ -18,7 +18,6 @@ public class SearchServiceImpl implements SearchService {
     private SearchMapper searchMapper;
 
 
-    //
     @Override
     public User UserLogin(String username, String password) {
         return searchMapper.UserLogin(username,password);
@@ -136,6 +135,13 @@ public class SearchServiceImpl implements SearchService {
         return searchMapper.deleteBookMark(username, doi);
     }
 
+    @Override
+    public PageInfo<Article> advancedSearchByVariableConditions(String type1, String keyword1, String selector1, String type2, String keyword2, String selector2, String type3, String keyword3, String start_date, String end_date, Integer pageIndex, Integer pageSize) {
+        PageHelper.startPage(pageIndex, pageSize);
+        List<Article> lists = searchMapper.advancedSearchByVariableConditions(type1, keyword1, selector1, type2, keyword2, selector2, type3, keyword3, start_date, end_date);
+        PageInfo<Article> info = new PageInfo<>(lists);
+        return info;
+    }
 
     //此处以下的代码可忽略，但不要删除！
 //    @Override

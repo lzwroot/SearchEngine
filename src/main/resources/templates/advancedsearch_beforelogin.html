@@ -241,7 +241,7 @@
 									<div class="row" style="text-align:center">
 										<img src="/images/scholar_logo.png">
 									</div>
-									<form class="form-horizontal" action="/search/search" method="post" enctype="multipart/form-data">
+									<form class="form-horizontal" action="/search/advancedsearch_result" method="post" enctype="multipart/form-data">
 										<div class="row">
 											<div class="col-md-10">
 												<br>
@@ -250,86 +250,85 @@
 												<div class="row">
 													<div class="col-md-2"></div>
 													<div class="col-md-2">
-														<select name="keyword1" class="form-group btn btn-pink btn-xs" id="form-field-select-1">
-															<option value="主题" selected>主题</option>
-															<option value="关键字">关键字</option>
-															<option value="摘要">摘要</option>
-															<option value="作者">作者</option>
-															<option value="作者单位">作者单位</option>
-															<option value="文献来源">文献来源</option>
+														<select name="type1" class="form-group btn btn-pink btn-xs" id="form-field-select-1">
+															<option value="articlename" selected>主题</option>
+															<option value="doi">DOI</option>
+															<option value="article_abstract">摘要</option>
+															<option value="author">作者</option>
+															<option value="field">领域</option>
+															<option value="journal">文献来源</option>
 														</select>
 													</div>
 													<div class="col-md-8">
-														<input type="text" name="keyword2" class="form-group form-control" id="inputKeyword1" placeholder="请输入关键词">
+														<input type="text" name="keyword1" class="form-group form-control" id="inputKeyword1" placeholder="请输入关键词">
 													</div>
 
 												</div>
 												<br>
 												<div class="row">
 													<div class="col-md-2">
-														<select name="keyword3" class="form-group btn btn-pink btn-xs" id="form-field-select-2">
-															<option value="AND" selected>AND</option>
-															<option value="OR">OR</option>
-															<option value="NOT">NOT</option>
+														<select name="selector1" class="form-group btn btn-pink btn-xs" id="form-field-select-2">
+															<option value="and" selected>AND</option>
+															<option value="or">OR</option>
+															<option value="and not">NOT</option>
 														</select>
 													</div>
 													<div class="col-md-2">
-														<select name="keyword4" class="form-group btn btn-pink btn-xs" id="form-field-select-3">
-															<option value="主题">主题</option>
-															<option value="关键字">关键字</option>
-															<option value="摘要">摘要</option>
-															<option value="作者" selected>作者</option>
-															<option value="作者单位">作者单位</option>
-															<option value="文献来源">文献来源</option>
+														<select name="type2" class="form-group btn btn-pink btn-xs" id="form-field-select-3">
+															<option value="articlename">主题</option>
+															<option value="doi">DOI</option>
+															<option value="article_abstract">摘要</option>
+															<option value="author" selected>作者</option>
+															<option value="field">领域</option>
+															<option value="journal">文献来源</option>
 														</select>
 													</div>
 													<div class="col-md-8">
-														<input type="text" name="keyword5" class="form-group form-control" id="inputKeyword2" placeholder="请输入关键词">
+														<input type="text" name="keyword2" class="form-group form-control" id="inputKeyword2" placeholder="请输入关键词">
 													</div>
 												</div>
 												<br>
 												<div class="row">
 													<div class="col-md-2">
-														<select name="keyword6" class="form-group btn btn-pink btn-xs" id="form-field-select-4">
-															<option value="AND" selected>AND</option>
-															<option value="OR">OR</option>
-															<option value="NOT">NOT</option>
+														<select name="selector2" class="form-group btn btn-pink btn-xs" id="form-field-select-4">
+															<option value="and" selected>AND</option>
+															<option value="or">OR</option>
+															<option value="and not">NOT</option>
 														</select>
 													</div>
 													<div class="col-md-2">
-														<select name="keyword7" class="form-group btn btn-pink btn-xs" id="form-field-select-5">
-															<option value="主题">主题</option>
-															<option value="关键字">关键字</option>
-															<option value="摘要">摘要</option>
-															<option value="作者">作者</option>
-															<option value="作者单位">作者单位</option>
-															<option value="文献来源" selected>文献来源</option>
+														<select name="type3" class="form-group btn btn-pink btn-xs" id="form-field-select-5">
+															<option value="articlename">主题</option>
+															<option value="doi">DOI</option>
+															<option value="article_abstract">摘要</option>
+															<option value="author">作者</option>
+															<option value="field">领域</option>
+															<option value="journal" selected>文献来源</option>
 														</select>
 													</div>
 													<div class="col-md-8">
-														<input name="keyword8" type="text" class="form-group form-control" id="inputKeyword3" placeholder="请输入关键词">
+														<input name="keyword3" type="text" class="form-group form-control" id="inputKeyword3" placeholder="请输入关键词">
 													</div>
 												</div>
 												<br>
 												<div class="row">
-													<label class="col-md-4" for="inputdate">时间范围:</label>
+													<label class="col-md-4" for="input_date">时间范围:</label>
 													<div class="form-group col-md-8">
-														<div id="inputdate" class="input-daterange input-group">
-															<input type="date" class="input-sm form-control" name="startdate">
+														<div id="input_date" class="input-daterange input-group">
+															<input type="date" class="input-sm form-control" name="start_date">
 															<span class="input-group-addon">
 																<i class="fa fa-exchange"></i>
 															</span>
 
-															<input type="date" class="input-sm form-control" name="enddate">
+															<input type="date" class="input-sm form-control" name="end_date">
 														</div>
 													</div>
 
 												</div>
-												<br>
 												<div class="row">
-													<label class="col-md-4" for="id-input-file-2">上传文档搜索：</label>
+													<label class="col-md-4" for="id-input-file-2"></label>
 													<div class="form-group col-md-8">
-														<input name="file" type="file" id="id-input-file-2" />
+														<input name="file" type="hidden" id="id-input-file-2" />
 													</div>
 												</div>
 												<br>

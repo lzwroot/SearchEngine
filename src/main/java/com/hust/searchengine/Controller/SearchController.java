@@ -13,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("search")
@@ -54,13 +51,121 @@ public class SearchController {
     }
 
     //高级搜索
-    @RequestMapping("advancedsearch")
+    @GetMapping("advancedsearch")
     public String AdvancedSearchPage(HttpSession session){
         User user = (User)session.getAttribute("user");
+
         if(user!=null)
             return "advancedsearch";
         else
             return "advancedsearch_beforelogin";
+    }
+
+    //高级搜索提交
+//    @PostMapping("advancedsearch")
+//    public String AdvancedSearchSubmit(@RequestParam(value = "type1", defaultValue = "") String type1,
+//                                       @RequestParam(value = "keyword1", defaultValue = "") String keyword1,
+//                                       @RequestParam(value = "selector1", defaultValue = "") String selector1,
+//                                       @RequestParam(value = "type2", defaultValue = "") String type2,
+//                                       @RequestParam(value = "keyword2", defaultValue = "") String keyword2,
+//                                       @RequestParam(value = "selector2", defaultValue = "") String selector2,
+//                                       @RequestParam(value = "type3", defaultValue = "") String type3,
+//                                       @RequestParam(value = "keyword3", defaultValue = "") String keyword3,
+//                                       @RequestParam(value = "start_date", required = false) String start_date,
+//                                       @RequestParam(value = "end_date", required = false) String end_date,
+//                                       @RequestParam(value = "file", required = false) MultipartFile file,
+//                                       @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+//                                       @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+//                                       HttpSession session, Model model){
+//        User user = (User)session.getAttribute("user");
+//
+//        Map<String, String> trans = Map.of("主题", "articlename",
+//                                           "doi","doi",
+//                                           "摘要","article_abstract",
+//                                           "作者", "author",
+//                                           "领域","field",
+//                                           "文献来源", "journal");
+//        PageInfo<Article> advancedList = searchService.advancedSearchByVariableConditions(trans.get(type1),keyword1,
+//                selector1,trans.get(type2),keyword2,selector2,trans.get(type3),keyword3,start_date,end_date, pageIndex, pageSize);
+//
+//        String message = "";
+//        String color = "red";
+//
+//        Map<String, String> attrs = Map.of("type1",type1,"keyword1",keyword1,"selector1",selector1,"type2",type2,"keyword2", keyword2, "selector2", selector2, "type3", type3, "keyword3", keyword3, "start_date", start_date, "end_date", end_date);
+//        model.addAllAttributes(attrs);
+//
+//        model.addAttribute("results", advancedList);
+//        model.addAttribute("msg", message);
+//        model.addAttribute("color", color);
+//        if(user!=null) {
+//            if(!file.isEmpty()){// 1.保存文件到硬盘上
+//                String fileName = file.getOriginalFilename();
+//                String filePath = FileUtil.getUpLoadFilePath();
+//                fileName = System.currentTimeMillis() + fileName; //文件名为fileName
+//
+//                try {
+//                    FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                // 2.根据文件名找到相应文件
+//                // 然后使用python脚本对文件进行分析操作
+//            }
+//
+//            return "advancedsearch_result";
+//        }
+//        else
+//            return "advancedsearch_result_beforelogin";
+//    }
+
+    @RequestMapping("advancedsearch_result")
+    public String AdvancedSearchResultPage(@RequestParam(value = "type1", defaultValue = "") String type1,
+                                           @RequestParam(value = "keyword1", defaultValue = "") String keyword1,
+                                           @RequestParam(value = "selector1", defaultValue = "") String selector1,
+                                           @RequestParam(value = "type2", defaultValue = "") String type2,
+                                           @RequestParam(value = "keyword2", defaultValue = "") String keyword2,
+                                           @RequestParam(value = "selector2", defaultValue = "") String selector2,
+                                           @RequestParam(value = "type3", defaultValue = "") String type3,
+                                           @RequestParam(value = "keyword3", defaultValue = "") String keyword3,
+                                           @RequestParam(value = "start_date", required = false) String start_date,
+                                           @RequestParam(value = "end_date", required = false) String end_date,
+                                           @RequestParam(value = "file", required = false) MultipartFile file,
+                                           @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                                           @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                                           HttpSession session, Model model){
+
+        //Map<String, String> trans = Map.of("主题", "articlename", "doi","doi", "摘要","article_abstract", "作者", "author", "领域","field", "文献来源", "journal");
+
+        PageInfo<Article> advancedList = searchService.advancedSearchByVariableConditions(type1,keyword1,
+                selector1,type2,keyword2,selector2,type3,keyword3,start_date,end_date, pageIndex, pageSize);
+
+        model.addAttribute("results", advancedList);
+
+        Map<String, String> attrs = Map.of("type1",type1,"keyword1",keyword1,"selector1",selector1,"type2",type2,"keyword2", keyword2, "selector2", selector2, "type3", type3, "keyword3", keyword3, "start_date", start_date, "end_date", end_date);
+        model.addAllAttributes(attrs);
+
+        User user = (User)session.getAttribute("user");
+        if(user!=null) {
+            if(!file.isEmpty()){// 1.保存文件到硬盘上
+                String fileName = file.getOriginalFilename();
+                String filePath = FileUtil.getUpLoadFilePath();
+                fileName = System.currentTimeMillis() + fileName; //文件名为fileName
+
+                try {
+                    FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // 2.根据文件名找到相应文件
+                // 然后使用python脚本对文件进行分析操作
+            }
+
+            return "advancedsearch_result";
+        }
+        else
+            return "advancedsearch_result_beforelogin";
     }
 
     @RequestMapping("article/{doi}")

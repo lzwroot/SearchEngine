@@ -45,6 +45,7 @@ public interface SearchService {
 
     Integer deleteBookMark(String username, String doi);
 
+    PageInfo<Article> advancedSearchByVariableConditions(String type1, String keyword1, String selector1, String type2, String keyword2, String selector2, String type3, String keyword3, String start_date, String end_date, Integer pageIndex, Integer pageSize);
 
     //此处以下的代码可忽略，但不要删除！
 //    PageInfo<Student> findAllStudent(Integer pageIndex, Integer pageSize);

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hust.searchengine.Mapper.SearchMapper" >
+    <select id="findArticleByKeywordsAndTimeRange" resultType="com.hust.searchengine.Entity.Article">
+        select * from article where (articlename like '%${keywords}%' or field like '%${keywords}%' or journal like '%${keywords}%' or author like '%${keywords}%')
+        <if test="start_date != null and start_date != ''">
+            AND DATE_FORMAT(create_date,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{start_date},'%Y-%m-%d')
+        </if>
+        <if test="end_date != null and end_date != ''">
+            AND DATE_FORMAT(create_date,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{end_date},'%Y-%m-%d')
+        </if>
+    </select>
+
+    <select id="advancedSearchByVariableConditions" resultType="com.hust.searchengine.Entity.Article">
+        select * from article where (${type1} like '%${keyword1}%'
+        ${selector1} ${type2} like '%${keyword2}%'
+        ${selector2} ${type3} like '%${keyword3}%')
+        <if test="start_date != null and start_date != ''">
+            AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{start_date},'%Y-%m-%d')
+        </if>
+        <if test="end_date != null and end_date != ''">
+            AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{end_date},'%Y-%m-%d')
+        </if>
+    </select>
+</mapper>
