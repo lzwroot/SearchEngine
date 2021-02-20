@@ -488,19 +488,19 @@
 								<nav aria-label="Page navigation">
 									<ul class="pagination">
 										<li th:class="${results.hasPreviousPage}?'':'disabled'">
-											<a th:href="${results.hasPreviousPage}?@{/search/advancedsearch_result(pageIndex=${results.prePage}, keywords=${keywords})}:'#'" aria-label="Previous">
+											<a th:href="${results.hasPreviousPage}?@{/search/advancedsearch_result(pageIndex=${results.prePage}, type1=${type1}, keyword1=${keyword1}, selector1=${selector1}, type2=${type2}, keyword2=${keyword2}, selector2=${selector2}, type3=${type3}, keyword3=${keyword3}, start_date=${start_date}, end_date=${end_date})}:'#'" aria-label="Previous">
 												<span aria-hidden="true">&laquo;</span>
 											</a>
 										</li>
 
 										<th:block th:each="nav : ${results.navigatepageNums}">
 											<li th:class="${nav==results.pageNum}?'active':''">
-												<a th:href="@{/search/advancedsearch_result(pageIndex=${nav}, keywords=${keywords})}" th:text="${nav}"></a>
+												<a th:href="@{/search/advancedsearch_result(pageIndex=${nav}, type1=${type1}, keyword1=${keyword1}, selector1=${selector1}, type2=${type2}, keyword2=${keyword2}, selector2=${selector2}, type3=${type3}, keyword3=${keyword3}, start_date=${start_date}, end_date=${end_date})}" th:text="${nav}"></a>
 											</li>
 										</th:block>
 
 										<li th:class="${results.hasNextPage}?'':'disabled'">
-											<a th:href="${results.hasNextPage}?@{/search/advancedsearch_result(pageIndex=${results.nextPage}, keywords=${keywords})}:'#'" aria-label="Next">
+											<a th:href="${results.hasNextPage}?@{/search/advancedsearch_result(pageIndex=${results.nextPage}, type1=${type1}, keyword1=${keyword1}, selector1=${selector1}, type2=${type2}, keyword2=${keyword2}, selector2=${selector2}, type3=${type3}, keyword3=${keyword3}, start_date=${start_date}, end_date=${end_date})}:'#'" aria-label="Next">
 												<span aria-hidden="true">&raquo;</span>
 											</a>
 										</li>
