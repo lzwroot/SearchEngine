@@ -51,30 +51,4 @@ public class ManagerServiceImpl implements ManagerService {
     public Integer addNewUser(User user) {
         return managerMapper.addNewUser(user);
     }
-
-    //忽略以下代码
-//    @Override
-//    public List<ClassInfo> findAllClassInfo() {
-//        return managerMapper.findAllClassInfo();
-//    }
-//
-//    @Override
-//    public Integer addClassInfo(ClassInfo classInfo) {
-//        return managerMapper.addClassInfo(classInfo);
-//    }
-//
-//    @Override
-//    public ClassInfo findClassByID(Integer clsid) {
-//        return managerMapper.findClassByID(clsid);
-//    }
-//
-//    @Override
-//    public Integer updateClassByID(ClassInfo classInfo) {
-//        return managerMapper.updateClassByID(classInfo);
-//    }
-//
-//    @Override
-//    public Integer deleteClassByID(Integer clsid) {
-//        return managerMapper.deleteClassByID(clsid);
-//    }
 }
