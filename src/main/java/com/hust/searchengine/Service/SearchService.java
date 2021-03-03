@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,10 @@ public interface SearchService {
 
     PageInfo<Article> findArticleByJournal(Integer pageIndex, Integer pageSize, String journal);
 
+    PageInfo<Article> findArticleByField(Integer pageIndex, Integer pageSize, String field);
+
+    Integer insertField(String username, String field);
+
     Article findArticleByDoi(String doi);
 
     List<Journal> findAllSubJournalsByUsernameNotPaged(String username);
@@ -47,18 +52,5 @@ public interface SearchService {
 
     PageInfo<Article> advancedSearchByVariableConditions(String type1, String keyword1, String selector1, String type2, String keyword2, String selector2, String type3, String keyword3, String start_date, String end_date, Integer pageIndex, Integer pageSize);
 
-    //此处以下的代码可忽略，但不要删除！
-//    PageInfo<Student> findAllStudent(Integer pageIndex, Integer pageSize);
-//
-//    Integer addStudentInfo(Student student);
-//
-//    PageInfo<Student> findStudentByClsIDStuName(Integer pageIndex, Integer pageSize, Integer clsid, String stu_name);
-//
-//    PageInfo<Student> findStudentByStuName(Integer pageIndex, Integer pageSize, String stu_name);
-//
-//    Student findStudentByID(Integer stuid);
-//
-//    Integer updateStudentByID(Student student);
-//
-//    Integer deleteStudentByID(Integer stuid);
+    PageInfo<Article> deepSearchByKeywords(Integer pageIndex, Integer pageSize, String keywords) throws IOException;
 }

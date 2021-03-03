@@ -45,7 +45,6 @@ public interface SearchMapper {
     List<Trends> getAllTrends();
 
     //根据关键词在论文数据库中查找相应的文章，并显示在搜索结果页面
-    //！！划重点：此处是调用后台算法接口的地方！！
     @Select("select * from article where articlename like '%${keywords}%' or field like '%${keywords}%' or journal like '%${keywords}%' or author like '%${keywords}%'")
     List<Article> findArticleByKeywords(@Param("keywords") String keywords);
 
@@ -57,6 +56,10 @@ public interface SearchMapper {
     @Select("select field from subscribefield where username=#{username}")
     List<Field> findAllSubFieldsByUsername(String username);
 
+    //插入订阅的领域
+    @Insert("insert into subscribefield(username, field) select #{username}, #{field} from dual where not exists (select username,field from subscribefield where username=#{username} and field=#{field})")
+    Integer insertField(@Param("username")String username, @Param("field")String field);
+
     //得到订阅期刊表
     @Select("select journal from subscribejournal where username=#{username}")
     List<Journal> findAllSubJournalsByUsername(String username);
@@ -64,6 +67,10 @@ public interface SearchMapper {
     //根据期刊找该期刊下的文章
     @Select("select * from article where journal=#{journal}")
     List<Article> findArticleByJournal(String journal);
+
+    //根据领域找到该领域下的文章
+    @Select("select * from article where field=#{field}")
+    List<Article> findArticleByField(String field);
 
     //根据doi找到文章
     @Select("select * from article where doi=#{doi}")
@@ -95,4 +102,5 @@ public interface SearchMapper {
                                                      @Param("keyword3") String keyword3,
                                                      @Param("start_date") String start_date,
                                                      @Param("end_date") String end_date);
+
 }

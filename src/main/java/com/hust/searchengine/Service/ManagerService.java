@@ -15,11 +15,4 @@ public interface ManagerService {
     PageInfo<User> findAllUsers(Integer pageIndex, Integer pageSize);
     Integer deleteUserByUsername(String username);
     Integer addNewUser(User user);
-
-    //忽略以下代码
-//    List<ClassInfo> findAllClassInfo();
-//    Integer addClassInfo(ClassInfo classInfo);
-//    ClassInfo findClassByID(Integer clsid);
-//    Integer updateClassByID(ClassInfo classInfo);
-//    Integer deleteClassByID(Integer clsid);
 }

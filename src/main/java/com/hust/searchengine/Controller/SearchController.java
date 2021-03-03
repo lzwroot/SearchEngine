@@ -153,8 +153,7 @@ public class SearchController {
             String reqUrl = request.getHeader("Referer");
             String host = request.getRequestURL().toString().replaceAll(request.getRequestURI().toString(),"");
             String resourceUrl = reqUrl.replaceAll(host, "");
-            String message;
-            String color;
+            String message, color;
             boolean already_added = searchService.InsertBookmark(username, doi)==0;
             if(already_added) {
                 message = "您已添加过该书签，添加书签失败！";
@@ -181,6 +180,51 @@ public class SearchController {
             String username = user.getUsername();
             searchService.deleteBookMark(username, doi);
             return "redirect:/search/bookmark";
+        }
+        return "redirect:/search/login";
+    }
+
+    //查找该领域下所有文章（登陆后才有的功能）
+    @GetMapping("field/{field}")
+    public String FieldPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                                 @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                                 @PathVariable("field")String field,
+                                 HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            String message = "", color = "";
+            PageInfo<Article> articles = searchService.findArticleByField(pageIndex, pageSize, field);
+            model.addAttribute("field", field);
+            model.addAttribute("results", articles);
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+            return "field";
+        }
+        return "redirect:/search/login";
+    }
+
+    @PostMapping("field/{field}")
+    public String AddFieldPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                            @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                            @PathVariable("field")String field,
+                            HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            String message, color;
+            String username = user.getUsername();
+            if(searchService.insertField(username, field) > 0){
+                message = "成功添加订阅！";
+                color = "green";
+            }else{
+                message = "添加订阅失败，已添加过订阅！";
+                color = "red";
+            }
+            PageInfo<Article> articles = searchService.findArticleByField(pageIndex, pageSize, field);
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+            model.addAttribute("field", field);
+            model.addAttribute("results", articles);
+            return "field";
         }
         return "redirect:/search/login";
     }
@@ -244,6 +288,40 @@ public class SearchController {
             PageInfo<Article> results = searchService.findArticleByKeywords(pageIndex, pageSize, keywords);
 
             model.addAttribute("results", results);
+            model.addAttribute("keywords", keywords);
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+
+            if(user!=null) {
+                return "search";
+            }else{
+                return "search_beforelogin";
+            }
+        }else{
+            return "redirect:/search/main";
+        }
+    }
+
+    @RequestMapping("search2")
+    public String DeepSearchPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                                 @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                                 @RequestParam(value = "keywords",defaultValue = "") String keywords,
+                                 HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+
+        if(!keywords.isEmpty()) {
+
+            //接收关键词给后台search.py
+            //将后台返回的json数据转化成list，进而转化成pageinfo
+            try {
+                PageInfo<Article> results = searchService.deepSearchByKeywords(pageIndex, pageSize, keywords);
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            String message = "";
+            String color = "red";
+
+            //model.addAttribute("results", results);
             model.addAttribute("keywords", keywords);
             model.addAttribute("msg", message);
             model.addAttribute("color", color);
@@ -413,7 +491,7 @@ public class SearchController {
             else{
                 //密码相同
                 User newuser = searchService.newUserSignup(email, uName, password);
-                boolean userExists = newuser==null?true:false;
+                boolean userExists = newuser == null;
                 //判断用户名是否存在
                 if(userExists){
                     message = "用户名已存在，请返回登录界面登录！";//注册失败

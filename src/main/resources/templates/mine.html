@@ -33,6 +33,13 @@
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
+		<style>
+			a:focus{text-decoration:none; color:lightblue;}
+			a:link{text-decoration:none;} /*指正常的未被访问过的链接*/
+			a:visited{text-decoration:none;} /*指已经访问过的链接*/
+			a:hover{text-decoration:none;} /*指鼠标在链接*/
+			a:active{text-decoration:none;} /*指正在点的链接*/
+		</style>
 
 		<!-- ace settings handler -->
 		<script src="/js/ace-extra.min.js"></script>
@@ -331,7 +338,7 @@
 											</thead>
 											<tbody>
 											<tr th:each="author:${authors.list}">
-												<td th:text="${author.author}"></td>
+												<td><a th:text="${author.author}" th:href="@{'/search/author/'+${author.author}}"></a></td>
 											</tr>
 											<tr></tr>
 											<tr></tr>
@@ -370,7 +377,7 @@
 											</thead>
 											<tbody>
 											<tr th:each="field:${fields.list}">
-												<td th:text="${field.field}"></td>
+												<td><a th:text="${field.field}" th:href="@{'/search/field/'+${field.field}}"></a></td>
 											</tr>
 											<tr></tr>
 											<tr></tr>
@@ -409,7 +416,7 @@
 											</thead>
 											<tbody>
 											<tr th:each="journal:${journals.list}">
-												<td th:text="${journal.journal}"></td>
+												<td><a th:text="${journal.journal}" th:href="@{'/search/journal/'+${journal.journal}}"></a></td>
 											</tr>
 											<tr></tr>
 											<tr></tr>

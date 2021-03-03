@@ -3,17 +3,17 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title th:text="@{${article.articlename}+' - Loogle 学术搜索'}"></title>
+		<title th:text="@{${field}+' - Loogle 学术搜索'}"></title>
 
-		<meta name="description" content="detailed information" />
+		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
-		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
 
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
-
+		
+		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
+		
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
@@ -34,9 +34,11 @@
 
 		<!-- inline styles related to this page -->
 		<style>
-			p.article_show{
-				font-size: medium;
-			}
+			a:focus{text-decoration:none; color:lightblue;}
+			a:link{text-decoration:none;} /*指正常的未被访问过的链接*/
+			a:visited{text-decoration:none;} /*指已经访问过的链接*/
+			a:hover{text-decoration:none;} /*指鼠标在链接*/
+			a:active{text-decoration:none;} /*指正在点的链接*/
 		</style>
 
 		<!-- ace settings handler -->
@@ -75,9 +77,10 @@
 
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 					<ul class="nav ace-nav">
+
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="User's Photo" />
+								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
 									<small>Welcome,</small>
 									<div th:text="${session['user'].username}"></div>
@@ -121,7 +124,7 @@
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
 
-			<div id="sidebar" class="sidebar responsive ace-save-state">
+			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
 				<script type="text/javascript">
 					try{ace.settings.loadState('sidebar')}catch(e){}
 				</script>
@@ -129,34 +132,34 @@
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<!-- 查看热搜 -->
-						<button class="btn btn-success" onclick="window.location.href='trends'">
+						<button class="btn btn-success" onclick="window.location.href='/search/trends'">
 							<i class="ace-icon fa fa-signal"></i>
 						</button>
 
 						<!-- 订阅 -->
-						<button class="btn btn-info" onclick="window.location.href='subscription'">
+						<button class="btn btn-info" onclick="window.location.href='/search/subscription'">
 							<i class="ace-icon fa fa-bell"></i>
 						</button>
 
 						<!-- 书签 -->
-						<button class="btn btn-warning" onclick="window.location.href='bookmark'">
+						<button class="btn btn-warning" onclick="window.location.href='/search/bookmark'">
 							<i class="ace-icon glyphicon glyphicon-tags"></i>
 						</button>
 
 						<!-- 设置 -->
-						<button class="btn btn-danger" onclick="window.location.href='settings'">
+						<button class="btn btn-danger" onclick="window.location.href='/search/settings'">
 							<i class="ace-icon fa fa-cogs"></i>
 						</button>
 					</div>
 
 					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success" onclick="window.location.href='trends'"></span>
+						<span class="btn btn-success" onclick="window.location.href='/search/trends'"></span>
 
-						<span class="btn btn-info" onclick="window.location.href='subscription'"></span>
+						<span class="btn btn-info" onclick="window.location.href='/search/subscription'"></span>
 
-						<span class="btn btn-warning" onclick="window.location.href='bookmark'"></span>
+						<span class="btn btn-warning" onclick="window.location.href='/search/bookmark'"></span>
 
-						<span class="btn btn-danger" onclick="window.location.href='settings'"></span>
+						<span class="btn btn-danger" onclick="window.location.href='/search/settings'"></span>
 					</div>
 				</div><!-- /.sidebar-shortcuts -->
 
@@ -180,7 +183,7 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="">
+					<li class="active">
 						<a href="/search/mine">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> 我的 </span>
@@ -223,7 +226,6 @@
 								<b class="arrow"></b>
 							</li>
 
-
 								<b class="arrow"></b>
 							</li>
 						</ul>
@@ -244,7 +246,8 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="/search/main">主页</a>
 							</li>
-							<li class="active">论文详细信息</li>
+
+							<li class="active" th:text="@{${field}+'领域下的文章'}"></li>
 						</ul><!-- /.breadcrumb -->
 
 
@@ -318,75 +321,113 @@
 							</div><!-- /.ace-settings-box -->
 						</div><!-- /.ace-settings-container -->
 
-						<!--页面开头-->
-						<div class="row">
-							<div class="col-xs-12">
-								<div class="page-header">
-									<strong>
-										<h1 th:text="${article.articlename}"></h1>
-									</strong>
-									<form class="pull-right" th:action="@{/search/bookmark(doi=${article.doi})}" method="post">
-										<button type="submit" class="btn btn-success btn-sm" name="bmk_button" >添加书签</button>
-									</form>
-								</div>
-							</div>
-						</div>
-
-						<!-- 登出模块框 -->
-						<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
-							<div class="modal-dialog modal-sm" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<h4 class="modal-title" id="myModalLabel">登出确认</h4>
-									</div>
-									<div class="modal-body">
-										确定要退出登录吗？
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-primary" onclick="window.location.href='logout'">确定</button>
-										<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-									</div>
-								</div>
-							</div>
-						</div>
-
-
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<h4>
-									<span th:text="${article.author}"></span>
-								</h4>
-								<br>
-								<p class="article_show">
-									<b>摘要：</b>
-									<span th:text="${article.article_abstract}"></span>
-								</p>
+								<h2 class="header smaller lighter blue" th:text="@{${field}+' 领域下的所有文章'}"></h2>
+								<form method="post" th:action="@{'/search/field/'+${field}}">
+									<button class="btn btn-pink btn-lg" type="submit">订阅该领域</button>
+								</form>
+								<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>
 
-								<p class="article_show">
-									<b>所属期刊：</b>
-									<span th:text="${article.journal}"></span>
-								</p>
+								<!--搜索结果表-->
+								<table class="table table-bordered table-hover table-striped b1">
+									<thead>
+									<tr>
+										<th>论文题目</th>
+										<th>作者</th>
+										<th>领域</th>
+										<th>发表时间</th>
+										<th>数据库</th>
+										<th>操作</th>
 
-								<p class="article_show">
-									<b>下载链接：</b>
-									<a th:href="${article.link}" th:text="${article.link}"></a>
-								</p>
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="result:${results.list}">
+										<td><a th:text="${result.articlename}" th:href="@{'/search/article/'+${result.doi}}">基于DEA-Tobit模型的实证分析</a></td>
+										<td th:text="${#strings.length(result.author)}>60?@{${#strings.abbreviate(result.author,60)}+'...'}:${result.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
+										<td th:text="${result.field}">华北金融</td>
+										<td th:text="${result.time}">2021-01-06 15:06</td>
+										<td>期刊</td>
+										<td>
+											<span>
+												<a th:href="${result.link}">下载</a>/
+												<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(result.doi,':','_'),'.','_')}}">引用</a>
+											</span>
+											<form th:action="@{/search/bookmark(doi=${result.doi})}" method="post">
+												<button type="submit" class="btn btn-success btn-sm" name="bmk_button" >书签</button>
+											</form>
+										</td>
+										<!--引用模块框-->
+										<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(result.doi,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+											<div class="modal-dialog modal-lg" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+														<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
+													</div>
+													<div class="modal-body">
+														<span th:text="@{${result.articlename}+', '+${result.author}+', '+${result.field}+', '+${#dates.format(result.time, 'yyyy')}+'.'}"></span>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+														<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+													</div>
+												</div>
+											</div>
+										</th:div>
+									</tr>
+									<tr></tr>
+									<tr></tr>
+									</tbody>
+								</table>
 
-								<p class="article_show">
-									<b>发布时间：</b>
-									<span th:text="${article.time}"></span>
-								</p>
+								<!--分页-->
+								<nav aria-label="Page navigation">
+									<ul class="pagination">
+										<li th:class="${results.hasPreviousPage}?'':'disabled'">
+											<a th:href="${results.hasPreviousPage}?@{'/search/field/'+${field}(pageIndex=${results.prePage}, keywords=${keywords})}:'#'" aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
 
-								<p class="article_show">
-									<b>所属领域：</b>
-									<span><a th:text="${article.field}" th:href="@{'/search/field/'+${article.field}}"></a></span>
-								</p>
+										<th:block th:each="nav : ${results.navigatepageNums}">
+											<li th:class="${nav==results.pageNum}?'active':''">
+												<a th:href="@{'/search/field/'+${field}(pageIndex=${nav}, keywords=${keywords})}" th:text="${nav}"></a>
+											</li>
+										</th:block>
+
+										<li th:class="${results.hasNextPage}?'':'disabled'">
+											<a th:href="${results.hasNextPage}?@{'/search/field/'+${field}(pageIndex=${results.nextPage}, keywords=${keywords})}:'#'" aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
+
+								<!-- 登出模块框 -->
+								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
+									<div class="modal-dialog modal-sm" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<h4 class="modal-title" id="myModalLabel">登出确认</h4>
+											</div>
+											<div class="modal-body">
+												确定要退出登录吗？
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-primary" onclick="window.location.href='/search/logout'">确定</button>
+												<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+											</div>
+										</div>
+									</div>
+								</div>
 
 								<!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
+							</span><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div>
@@ -431,7 +472,7 @@
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-		<script src="/js/jquery-1.11.3.min.js"></script>
+<script src="/js/jquery-1.11.3.min.js"></script>
 <![endif]-->
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
