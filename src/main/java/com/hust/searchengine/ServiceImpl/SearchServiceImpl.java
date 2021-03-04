@@ -111,7 +111,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public PageInfo<Article> findArticleByJournal(Integer pageIndex, Integer pageSize, String journal) {
-        PageHelper.startPage(pageIndex, pageSize);
+        String orderByDate = "time"+" desc";
+        PageHelper.startPage(pageIndex, pageSize, orderByDate);
         List<Article> lists = searchMapper.findArticleByJournal(journal);
         PageInfo<Article> info = new PageInfo<>(lists);
         return info;
@@ -119,8 +120,18 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public PageInfo<Article> findArticleByField(Integer pageIndex, Integer pageSize,String field) {
-        PageHelper.startPage(pageIndex, pageSize);
+        String orderByDate = "time"+" desc";
+        PageHelper.startPage(pageIndex, pageSize, orderByDate);
         List<Article> lists = searchMapper.findArticleByField(field);
+        PageInfo<Article> info = new PageInfo<>(lists);
+        return info;
+    }
+
+    @Override
+    public PageInfo<Article> findArticleByAuthor(Integer pageIndex, Integer pageSize,String author) {
+        String orderByDate = "time"+" desc";
+        PageHelper.startPage(pageIndex, pageSize, orderByDate);
+        List<Article> lists = searchMapper.findArticleByAuthor(author);
         PageInfo<Article> info = new PageInfo<>(lists);
         return info;
     }
@@ -128,6 +139,21 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Integer insertField(String username, String field) {
         return searchMapper.insertField(username, field);
+    }
+
+    @Override
+    public Integer insertAuthor(String username, String author) {
+        return searchMapper.insertAuthor(username, author);
+    }
+
+    @Override
+    public Integer deleteField(String username, String field) {
+        return searchMapper.deleteField(username, field);
+    }
+
+    @Override
+    public Integer deleteAuthor(String username, String author) {
+        return searchMapper.deleteAuthor(username, author);
     }
 
     @Override

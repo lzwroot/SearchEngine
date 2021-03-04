@@ -36,7 +36,15 @@ public interface SearchService {
 
     PageInfo<Article> findArticleByField(Integer pageIndex, Integer pageSize, String field);
 
+    PageInfo<Article> findArticleByAuthor(Integer pageIndex, Integer pageSize, String author);
+
     Integer insertField(String username, String field);
+
+    Integer insertAuthor(String username, String author);
+
+    Integer deleteField(String username, String field);
+
+    Integer deleteAuthor(String username, String author);
 
     Article findArticleByDoi(String doi);
 
