@@ -63,20 +63,22 @@ public class SearchController {
 
 
     @RequestMapping("advancedsearch_result")
-    public String AdvancedSearchResultPage(@RequestParam(value = "type1", defaultValue = "") String type1,
+    public String AdvancedSearchResultPage(@RequestParam(value = "type1", defaultValue = "articlename") String type1,
                                            @RequestParam(value = "keyword1", defaultValue = "") String keyword1,
-                                           @RequestParam(value = "selector1", defaultValue = "") String selector1,
-                                           @RequestParam(value = "type2", defaultValue = "") String type2,
+                                           @RequestParam(value = "selector1", defaultValue = "and") String selector1,
+                                           @RequestParam(value = "type2", defaultValue = "author") String type2,
                                            @RequestParam(value = "keyword2", defaultValue = "") String keyword2,
-                                           @RequestParam(value = "selector2", defaultValue = "") String selector2,
-                                           @RequestParam(value = "type3", defaultValue = "") String type3,
+                                           @RequestParam(value = "selector2", defaultValue = "and") String selector2,
+                                           @RequestParam(value = "type3", defaultValue = "journal") String type3,
                                            @RequestParam(value = "keyword3", defaultValue = "") String keyword3,
-                                           @RequestParam(value = "start_date", required = false) String start_date,
-                                           @RequestParam(value = "end_date", required = false) String end_date,
+                                           @RequestParam(value = "start_date", defaultValue = "") String start_date,
+                                           @RequestParam(value = "end_date", defaultValue = "") String end_date,
                                            @RequestParam(value = "file", required = false) MultipartFile file,
                                            @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
                                            @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
                                            HttpSession session, Model model){
+        if(keyword1.equals("")&&keyword2.equals("")&&keyword3.equals("")&&file==null)
+            return "redirect:/search/advancedsearch";
 
         PageInfo<Article> advancedList = searchService.advancedSearchByVariableConditions(type1,keyword1,
                 selector1,type2,keyword2,selector2,type3,keyword3,start_date,end_date, pageIndex, pageSize);
