@@ -249,7 +249,7 @@
 
 								<h4>
 									<span th:each="item,state : ${#strings.arraySplit(article.author, ',')}">
-										<a th:text="${item}" th:href="@{'/search/author/'+${item}}"></a><th:span>,</th:span>
+										<a th:text="${item}" th:href="@{'/search/author/'+${item}}"></a><th:span th:if="${!state.last}">,</th:span>
 									</span>
 								</h4>
 								<br>
@@ -260,7 +260,7 @@
 
 								<p class="article_show">
 									<b>所属期刊：</b>
-									<span th:text="${article.journal}"></span>
+									<a th:text="${article.journal}" th:href="@{/search/advancedsearch_result(keyword3=${article.journal})}"></a>
 								</p>
 
 								<p class="article_show">

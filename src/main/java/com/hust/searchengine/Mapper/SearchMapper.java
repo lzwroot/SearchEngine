@@ -77,11 +77,11 @@ public interface SearchMapper {
     List<Journal> findAllSubJournalsByUsername(String username);
 
     //根据期刊找该期刊下的文章
-    @Select("select * from article where journal=#{journal}")
+    @Select("select * from article where journal like '%${journal}%'")
     List<Article> findArticleByJournal(String journal);
 
     //根据领域找到该领域下的文章
-    @Select("select * from article where field=#{field}")
+    @Select("select * from article where field like '%${field}%'")
     List<Article> findArticleByField(String field);
 
     //根据作者找到该作者下的文章
