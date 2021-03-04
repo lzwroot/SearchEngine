@@ -416,7 +416,7 @@
 											</thead>
 											<tbody>
 											<tr th:each="journal:${journals.list}">
-												<td><a th:text="${journal.journal}" th:href="@{/search/advancedsearch_result(type1='journal', keyword1=${journal.journal})}"></a></td>
+												<td><a th:text="${journal.journal}" th:href="@{/search/advancedsearch_result(keyword3=${journal.journal})}"></a></td>
 											</tr>
 											<tr></tr>
 											<tr></tr>

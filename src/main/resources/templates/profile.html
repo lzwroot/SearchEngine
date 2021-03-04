@@ -351,16 +351,6 @@
 									</div>
 
 									<div class="profile-info-row">
-										<div class="profile-info-name"> <b>地点</b> </div>
-
-										<div class="profile-info-value">
-											<i class="fa fa-map-marker light-orange bigger-110"></i>
-											<span  id="country">Wuhan</span>
-											<span  id="city">China</span>
-										</div>
-									</div>
-
-									<div class="profile-info-row">
 										<div class="profile-info-name"> <b>性别</b> </div>
 
 										<div class="profile-info-value">
@@ -381,6 +371,24 @@
 
 										<div class="profile-info-value">
 											<span  th:text="${user.email}" id="email">1234@qq.com</span>
+										</div>
+									</div>
+
+
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>定位</b> </div>
+
+										<div class="profile-info-value" >
+											<i class="fa fa-map-marker light-orange bigger-110"></i>
+											<span id="baidu_geo"></span>
+											<div id="baidu_geo_detail"></div>
+										</div>
+									</div>
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>地图</b> </div>
+
+										<div class="profile-info-value">
+											<div id="map_embedded"></div>
 										</div>
 									</div>
 
@@ -475,7 +483,65 @@
 		<script src="/js/spin.js"></script>
 
 		<!-- inline scripts related to this page -->
+		<script>
+			window.onload = getLocation;
+
+			function getLocation(){
+				if (navigator.geolocation){
+					navigator.geolocation.getCurrentPosition(showPosition,showError);
+				}else{
+					alert("浏览器不支持地理定位。");
+				}
+
+			}
+			function showError(error){
+				switch(error.code) {
+					case error.PERMISSION_DENIED:
+						alert("定位失败,用户拒绝请求地理定位");
+						break;
+					case error.POSITION_UNAVAILABLE:
+						alert("定位失败,位置信息是不可用");
+						break;
+					case error.TIMEOUT:
+						alert("定位失败,请求获取用户位置超时");
+						break;
+					default:
+						alert("定位失败,定位系统失效");
+						break;
+				}
+			}
+
+			function showPosition(position){
+				let latlon = position.coords.latitude+','+position.coords.longitude;
+				let latitude = position.coords.latitude-0.00209;
+				let longitude = position.coords.longitude+0.0057;
+				let myMap = "<iframe width=\"700\" height=\"400\" frameborder=\"0\" src=\"https://cn.bing.com/maps/embed?h=400&w=700&cp="+latitude.toString()+"~"+longitude.toString()+"&lvl=16&typ=d&sty=r&src=SHELL&FORM=MBEDV8\" scrolling=\"no\">\n" +
+						"</iframe>";
+				document.getElementById("map_embedded").innerHTML = myMap;
+				//baidu
+				let url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location="+latlon+"&output=json&pois=0";
+						$.ajax({
+							type: "GET",
+							dataType: "jsonp",
+							url: url,
+							beforeSend: function(){
+								$("#baidu_geo").html('正在定位...');
+							},
+							success: function (json) {
+								if(json.status===0){
+									$("#baidu_geo").html(json.result["addressComponent"]["country"]+json.result["formatted_address"]);
+									$("#baidu_geo_detail").html(json.result["sematic_description"]);
+								}
+							},
+							error: function (XMLHttpRequest, textStatus, errorThrown) {
+								$("#baidu_geo").html(latlon+"地址位置获取失败");
+							}
+						});
+			}
+
+		</script>
 		<script type="text/javascript">
+
 			jQuery(function($) {
 				/**
 				 $('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {

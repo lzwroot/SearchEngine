@@ -33,6 +33,13 @@
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
+		<style>
+			a:focus{text-decoration:none; color:lightblue;}
+			a:link{text-decoration:none;} /*指正常的未被访问过的链接*/
+			a:visited{text-decoration:none;} /*指已经访问过的链接*/
+			a:hover{text-decoration:none;} /*指鼠标在链接*/
+			a:active{text-decoration:none;} /*指正在点的链接*/
+		</style>
 
 		<!-- ace settings handler -->
 		<script src="/js/ace-extra.min.js"></script>
@@ -372,9 +379,9 @@
 													</label>
 												</td>
 
-												<td th:text="${bookmark.articlename}">京津冀绿色金融发展综合评价及影响因素研究——基于DEA-Tobit模型的实证分析</td>
+												<td><a th:text="${bookmark.articlename}" th:href="@{'/search/article/'+${bookmark.doi}}">京津冀绿色金融发展综合评价及影响因素研究——基于DEA-Tobit模型的实证分析</a></td>
 												<td th:text="${#strings.length(bookmark.author)}>60?@{${#strings.abbreviate(bookmark.author,60)}+'...'}:${bookmark.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
-												<td th:text="${bookmark.field}">华北金融</td>
+												<td><a th:text="${bookmark.field}" th:href="@{'/search/field/'+${bookmark.field}}">华北金融</a></td>
 												<td th:text="${bookmark.time}">2021-01-06 15:06</td>
 												<td>期刊</td>
 												<td>

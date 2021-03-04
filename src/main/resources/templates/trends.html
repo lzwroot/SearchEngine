@@ -5,7 +5,7 @@
 		<meta charset="utf-8" />
 		<title>热门排行榜 - Loogle 学术搜索</title>
 
-		<meta name="description" content="" />
+		<meta name="description" content="the trend list" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		
 		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
@@ -343,13 +343,12 @@
 												<td align="center" style="font-weight: 700" th:text="${trend.rank}">1<</td>
 												<td><a th:href="@{/search/search(keywords=${trend.keyword})}" th:text="${trend.keyword}">COVID-19</a></td>
 												<td th:text="${trend.volume}*1000">100</td>
-												<td th:text="${trend.field}">医学</td>
+												<td><a th:text="${trend.field}" th:href="@{'/search/field/'+${trend.field}}">医学</a></td>
 											</tr>
 											</tbody>
 										</table>
-
-
 									</div>
+								</div>
 
 								<!-- 登出模块框 -->
 								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
