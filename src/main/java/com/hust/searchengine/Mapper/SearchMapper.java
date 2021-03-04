@@ -60,6 +60,18 @@ public interface SearchMapper {
     @Insert("insert into subscribefield(username, field) select #{username}, #{field} from dual where not exists (select username,field from subscribefield where username=#{username} and field=#{field})")
     Integer insertField(@Param("username")String username, @Param("field")String field);
 
+    //删除相应的领域
+    @Delete("delete from subscribefield where field=#{field} and username=#{username}")
+    Integer deleteField(String username, String field);
+
+    //插入订阅的作者
+    @Insert("insert into subscribeauthor(username, author) select #{username}, #{author} from dual where not exists (select username,author from subscribeauthor where username=#{username} and author=#{author})")
+    Integer insertAuthor(@Param("username")String username, @Param("author")String author);
+
+    //删除相应的作者
+    @Delete("delete from subscribeauthor where author=#{author} and username=#{username}")
+    Integer deleteAuthor(String username, String author);
+
     //得到订阅期刊表
     @Select("select journal from subscribejournal where username=#{username}")
     List<Journal> findAllSubJournalsByUsername(String username);
@@ -71,6 +83,10 @@ public interface SearchMapper {
     //根据领域找到该领域下的文章
     @Select("select * from article where field=#{field}")
     List<Article> findArticleByField(String field);
+
+    //根据作者找到该作者下的文章
+    @Select("select * from article where author like '%${author}%'")
+    List<Article> findArticleByAuthor(String author);
 
     //根据doi找到文章
     @Select("select * from article where doi=#{doi}")

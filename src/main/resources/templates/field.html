@@ -183,7 +183,7 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="active">
+					<li class="">
 						<a href="/search/mine">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> 我的 </span>
@@ -326,9 +326,19 @@
 								<!-- PAGE CONTENT BEGINS -->
 
 								<h2 class="header smaller lighter blue" th:text="@{${field}+' 领域下的所有文章'}"></h2>
-								<form method="post" th:action="@{'/search/field/'+${field}}">
-									<button class="btn btn-pink btn-lg" type="submit">订阅该领域</button>
-								</form>
+								<div class="row">
+									<div class="col-md-2">
+										<form method="post" th:action="@{'/search/field/'+${field}}">
+											<button class="btn btn-success btn-lg" type="submit">订阅该领域</button>
+										</form>
+									</div>
+									<div class="col-md-8"></div>
+									<div class="col-md-2">
+										<form method="post" th:action="@{'/search/delete/field/'+${field}}">
+											<button class="btn btn-danger btn-lg align-right" type="submit">取消订阅该领域</button>
+										</form>
+									</div>
+								</div>
 								<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>
 
 								<!--搜索结果表-->
@@ -427,7 +437,7 @@
 								</div>
 
 								<!-- PAGE CONTENT ENDS -->
-							</span><!-- /.col -->
+							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div>

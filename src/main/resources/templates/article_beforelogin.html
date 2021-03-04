@@ -248,7 +248,9 @@
 								<!-- PAGE CONTENT BEGINS -->
 
 								<h4>
-									<span th:text="${article.author}"></span>
+									<span th:each="item,state : ${#strings.arraySplit(article.author, ',')}">
+										<a th:text="${item}" th:href="@{'/search/author/'+${item}}"></a><th:span>,</th:span>
+									</span>
 								</h4>
 								<br>
 								<p class="article_show">
@@ -273,7 +275,7 @@
 
 								<p class="article_show">
 									<b>所属领域：</b>
-									<span th:text="${article.field}"></span>
+									<span><a th:text="${article.field}" th:href="@{'/search/field/'+${article.field}}"></a></span>
 								</p>
 
 								<!-- 登出模块框 -->
