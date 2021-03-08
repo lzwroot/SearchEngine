@@ -131,11 +131,9 @@ public class SearchController {
         User user = (User)session.getAttribute("user");
         if(user!=null){
             List<Article> bookmarks = searchService.findAllBookmarks(user.getUsername());
-            String message = "";
-            String color = "red";
             model.addAttribute("bookmarks", bookmarks);
-            model.addAttribute("msg", message);
-            model.addAttribute("color", color);
+            model.addAttribute("msg", "");
+            model.addAttribute("color", "red");
             return "bookmark";
         }
         else

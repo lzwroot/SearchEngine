@@ -1,6 +1,7 @@
 package com.hust.searchengine.Controller;
 
 import com.github.pagehelper.PageInfo;
+import com.hust.searchengine.Entity.Article;
 import com.hust.searchengine.Entity.Manager;
 import com.hust.searchengine.Entity.User;
 import com.hust.searchengine.Service.ManagerService;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("manager")
@@ -79,14 +81,12 @@ public class ManagerController {
 
     //管理用户
     @RequestMapping("manage_user")
-    public String UserManagementPage(@RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
-                                     @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-                                     HttpSession session, Model model){
+    public String UserManagementPage(HttpSession session, Model model){
         Manager manager = (Manager)session.getAttribute("manager");
         String message = "";
         String color = "green";
         if(manager!=null) {
-            PageInfo<User> users = managerService.findAllUsers(pageIndex, pageSize);
+            List<User> users = managerService.findAllUsers();
             model.addAttribute("users", users);
             model.addAttribute("msg", message);
             model.addAttribute("color", color);

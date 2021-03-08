@@ -13,6 +13,7 @@ public interface ManagerService {
     Integer totalNumberOfArticles();
     Integer totalNumberOfUsers();
     PageInfo<User> findAllUsers(Integer pageIndex, Integer pageSize);
+    List<User> findAllUsers();
     Integer deleteUserByUsername(String username);
     Integer addNewUser(User user);
 }

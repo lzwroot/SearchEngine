@@ -43,6 +43,11 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
+    public List<User> findAllUsers() {
+        return managerMapper.findAllUsers();
+    }
+
+    @Override
     public Integer deleteUserByUsername(String username) {
         return managerMapper.deleteUserByUsername(username);
     }
