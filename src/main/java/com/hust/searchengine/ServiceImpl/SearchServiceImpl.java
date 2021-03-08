@@ -20,8 +20,8 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -203,18 +203,7 @@ public class SearchServiceImpl implements SearchService {
 
         //Json接收数据模式
         //接收关键词给后台search.py
-        String command = "cd search/search\npython test.py";
-        Process pythonProcess = Runtime.getRuntime().exec(command);
-        ProcessIOTransport piot1 = new ProcessIOTransport(command,200,keywords);
-        //将后台返回的json数据转化成list
-        String jsonString = "[{\"name\":\"zhangsan\",\"password\":\"zhangsan123\",\"email\":\"10371443@qq.com\"}"
-             + ",{\"name\":\"lisi\",\"password\":\"lisi123\",\"email\":\"1435123@qq.com\"}]";
-        JSONArray jsonArray = JSONArray.fromObject(jsonString);
-        List<Article> list = JSONObject.parseArray(jsonString, Article.class);
-        //JSONObject json = JSONObject.fromObject(str);
-
-        //开启python后台进程
-        //List<Article> lists = BKGroundThread.GetArticleByPythonScriptThread(keywords);
+        
 
         //List<Article> lists = senate(keywords);
         List<Article> lists = searchMapper.findArticleByKeywords(keywords);
@@ -222,203 +211,43 @@ public class SearchServiceImpl implements SearchService {
         return new PageInfo<>(lists);
     }
 
-//    public List<Article> senate(String data) {
-//        String ip = "localhost";
-//        int port = 9999;
-//        Socket socket = null;
-//        try {
-//            socket = new Socket(ip, port);
-//            InputStream in = socket.getInputStream();
-//            OutputStream out = socket.getOutputStream();
-//            BufferedReader inRead = new BufferedReader(new InputStreamReader(in));
-//
-//            out.write(data.getBytes(StandardCharsets.UTF_8));
-//
-//            String result = inRead.readLine();
-//            for(String i:result.split("\\!",-1)){
-//                for(String j : i.split("\\|",-1)){
-//                    System.out.println(j);
-//                }
-//            }
-//            return result;
-//        }
-//        catch(IOException e) {
-//            e.printStackTrace();
-//        }
-//        return "defeat";
-//    }
-}
+    //title+'|'+author+'|'+abstract+'|'+str(time)+'|'+field+'|'+link+'|'+journal
 
-
-
-@Async
-class BKGroundThread{
-    @PostConstruct
-    public static List<Article> GetArticleByPythonScriptThread(String keywords){
-        PyList articleList = new PyList();
-        PythonInterpreter interpreter = new PythonInterpreter();
-        interpreter.execfile("src\\main\\java\\myDemo\\1.py");
-        PyFunction pyFunction = interpreter.get("mine", PyFunction.class);
-        PyObject pyobj = pyFunction.__call__(new PyInteger(1), new PyInteger(2));
-        boolean isPyList = pyobj instanceof PyList;
-        if(isPyList) {
-            articleList = (PyList)pyobj;
-            boolean isSubPyList = true;
-            for (Object o : articleList) {
-                PyList articleInfo = (PyList) o;
-                for (int j = 0; j < articleInfo.size(); j++) {
-
-                }
-            }
-        }
-        return articleList;
-    }
-}
-
-
-class StreamThreadRead extends Thread{
-    //存储读取的字符串
-    private final StringBuffer sBuffer;
-    //对应的输入流
-    private final InputStream iStream;
-    public StreamThreadRead(InputStream iStream){
-        super();
-        sBuffer = new StringBuffer();
-        this.iStream = iStream;
-    }
-    @Override
-    public void run() {
-        BufferedReader bReader = new BufferedReader(new InputStreamReader(iStream));
-        String str;
+    public List<Article> senate(String data) {
+        String ip = "localhost";
+        int port = 9999;
+        Socket socket = null;
         try {
-            while ((str = bReader.readLine()) != null) {
-                sBuffer.append(str).append("\n");
+            socket = new Socket(ip, port);
+            InputStream in = socket.getInputStream();
+            OutputStream out = socket.getOutputStream();
+            BufferedReader inRead = new BufferedReader(new InputStreamReader(in));
+
+            out.write(data.getBytes(StandardCharsets.UTF_8));
+
+            String result = inRead.readLine();
+            List<Article> articles = new ArrayList<>();
+            for(String i:result.split("\\!",-1)){
+                String []articleArray = i.split("\\|",-1);
+                Article article = new Article();
+
+                //title+'|'+author+'|'+abstract+'|'+str(time)+'|'+field+'|'+link+'|'+journal
+                article.setArticlename(articleArray[0]);
+                article.setAuthor(articleArray[1]);
+                article.setArticle_abstract(articleArray[2]);
+                try{
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    article.setTime(sdf.parse(articleArray[3]));
+                }catch (Exception ignored){}
+                article.setField(articleArray[4]);
+                article.setLink(articleArray[5]);
+                article.setJournal(articleArray[6]);
             }
-        } catch (IOException e) {
+            return articles;
+        }
+        catch(IOException e) {
             e.printStackTrace();
         }
-    }
-    public StringBuffer getsBuffer() {
-        return sBuffer;
-    }
-    public InputStream getiStream() {
-        return iStream;
-    }
-}
-
-/**
- * 进程数据传输对象
- */
-class ProcessIOTransport {
-    private final BufferedWriter stout;
-    private final StreamThreadRead stin;
-    private final StreamThreadRead errin;
-    private final Process process;
-
-    /**
-     * 构造一个ProcessIOTransport
-     * @param command
-     * @throws IOException
-     */
-    public ProcessIOTransport(String command) throws IOException{
-        process = Runtime.getRuntime().exec(command);
-        stout = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-        stin = new StreamThreadRead(process.getInputStream());
-        errin = new StreamThreadRead(process.getErrorStream());
-        //设为后台线程
-        stin.setDaemon(true);
-        errin.setDaemon(true);
-        //启动线程
-        stin.start();
-        errin.start();
-        //监控进程
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-                while(stin.isAlive()||errin.isAlive()){
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                process.destroy();
-            }
-        });
-    }
-    /**
-     * 构造一个ProcessIOTransport,其中向进程中输入参数args
-     * @param command
-     * @param args
-     * @throws IOException
-     */
-    public ProcessIOTransport(String command,String...args) throws IOException{
-        this(command);
-        write(args);
-    }
-    /**
-     * 构造一个ProcessIOTransport,当前java线程等待进程运行结束
-     * @param command
-     * @param timeOut 最迟等待时间(ms)
-     * @throws IOException
-     */
-    public ProcessIOTransport(String command,long timeOut) throws IOException{
-        this(command,timeOut,new String[]{null});
-    }
-    /**
-     * 构造一个ProcessIOTransport,当前java线程等待进程运行结束
-     * @param command
-     * @param timeOut 最迟等待时间(ms)
-     * @param args 向进程中传入的参数
-     * @throws IOException
-     */
-    public ProcessIOTransport(String command,long timeOut,String...args) throws IOException{
-        this(command,args);
-        long start = System.currentTimeMillis();
-        long now = System.currentTimeMillis();
-        while(now-start<timeOut&&(stin.isAlive()||errin.isAlive())){
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            now = System.currentTimeMillis();
-        }
-    }
-
-    /**
-     * 向process写数据
-     * @param args
-     * @throws IOException
-     */
-    public void write(String...args) throws IOException {
-        for(int i = 0;i<args.length;i++){
-            if(args[i]!=null){
-                stout.write(args[i]);
-                stout.flush();
-            }
-        }
-    }
-    /**
-     * 读取process的标准输出
-     * @return
-     */
-    public String readStandard(){
-        if(stin.isAlive()){
-            return null;
-        }else{
-            return stin.getsBuffer().toString();
-        }
-    }
-    /**
-     * 读取process的错误输出
-     * @return
-     */
-    public String readError(){
-        if(stin.isAlive()){
-            return null;
-        }else{
-            return stin.getsBuffer().toString();
-        }
+        return new ArrayList<>();
     }
 }
