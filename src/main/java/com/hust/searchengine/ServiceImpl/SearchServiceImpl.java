@@ -80,7 +80,8 @@ public class SearchServiceImpl implements SearchService {
         String orderByDate = "time"+" desc"; //按照数据库的time字段排序，desc代表倒序
 
         PageHelper.startPage(pageIndex, pageSize, orderByDate);
-        List<Article> lists = searchMapper.findArticleByKeywords(keywords);
+        //List<Article> lists = searchMapper.findArticleByKeywords(keywords);
+        List<Article> lists = senate(keywords);
         PageInfo<Article> info = new PageInfo<>(lists);
         return info;
     }
@@ -203,15 +204,13 @@ public class SearchServiceImpl implements SearchService {
 
         //Json接收数据模式
         //接收关键词给后台search.py
-        
+
 
         //List<Article> lists = senate(keywords);
         List<Article> lists = searchMapper.findArticleByKeywords(keywords);
 
         return new PageInfo<>(lists);
     }
-
-    //title+'|'+author+'|'+abstract+'|'+str(time)+'|'+field+'|'+link+'|'+journal
 
     public List<Article> senate(String data) {
         String ip = "localhost";
@@ -228,6 +227,7 @@ public class SearchServiceImpl implements SearchService {
             String result = inRead.readLine();
             List<Article> articles = new ArrayList<>();
             for(String i:result.split("\\!",-1)){
+
                 String []articleArray = i.split("\\|",-1);
                 Article article = new Article();
 
@@ -242,6 +242,7 @@ public class SearchServiceImpl implements SearchService {
                 article.setField(articleArray[4]);
                 article.setLink(articleArray[5]);
                 article.setJournal(articleArray[6]);
+                articles.add(article);
             }
             return articles;
         }
