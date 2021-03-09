@@ -77,7 +77,7 @@
 					<ul class="nav ace-nav">
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" id="user-photo" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
+								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="manager's photo" style="width:40px;height:40px;" />
 								<span class="user-info">
 									<small>您好,管理员</small>
 									<div th:text="${session['manager'].managerid}"></div>
