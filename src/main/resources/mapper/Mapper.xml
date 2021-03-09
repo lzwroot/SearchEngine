@@ -14,9 +14,13 @@
     </select>
 
     <select id="advancedSearchByVariableConditions" resultType="com.hust.searchengine.Entity.Article">
-        select * from article where (${type1} like '%${keyword1}%'
-        ${selector1} ${type2} like '%${keyword2}%'
-        ${selector2} ${type3} like '%${keyword3}%')
+        select * from article where ${type1} like '%${keyword1}%'
+        <if test="keyword2 != null and keyword2 != ''">
+            ${selector1} ${type2} like '%${keyword2}%'
+        </if>
+        <if test="keyword3 != null and keyword3 != ''">
+            ${selector2} ${type3} like '%${keyword3}%'
+        </if>
         <if test="start_date != null and start_date != ''">
             AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{start_date},'%Y-%m-%d')
         </if>

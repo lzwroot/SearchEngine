@@ -1,20 +1,12 @@
 package com.hust.searchengine.Entity;
 
 public class User {
-//    private Integer userid;
     private String username;
     private String password;
     private boolean sex;
     private String institution;
     private String email;
-
-//    public Integer getUserid() {
-//        return userid;
-//    }
-//
-//    public void setUserid(Integer userid) {
-//        this.userid = userid;
-//    }
+    private String image_url;
 
     public User(String username, String password, String email) {
         this.username = username;
@@ -60,5 +52,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }
