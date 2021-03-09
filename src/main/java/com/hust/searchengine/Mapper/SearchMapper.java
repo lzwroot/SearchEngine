@@ -23,13 +23,14 @@ public interface SearchMapper {
     User findUserByUsername(String username);
 
     //根据用户名更新相应的用户
-    @Select("update user set username=#{username}, password=#{password}, sex=#{sex}, institution=#{institution}, email=#{email} where username=#{oldusername}")
+    @Select("update user set username=#{username}, image_url=#{image_url}, password=#{password}, sex=#{sex}, institution=#{institution}, email=#{email} where username=#{oldusername}")
     Integer updateUserByUsername(@Param("oldusername")String oldusername,
                                  @Param("username") String newusername,
                                  @Param("password") String newpassword,
                                  @Param("sex")boolean newsex,
                                  @Param("institution")String newinstitution,
-                                 @Param("email")String newemail);
+                                 @Param("email")String newemail,
+                                 @Param("image_url") String image_url);
 
     @Select("select username from user where username=#{newusername}")
     String FindIfUsernameAlreadyExists(@Param("newusername")String username);

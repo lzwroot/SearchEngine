@@ -160,8 +160,9 @@ public class ManagerController {
                 boolean newSex = userUpdated.isSex();
                 String newInstitution = userUpdated.getInstitution();
                 String newEmail = userUpdated.getEmail();
+                String newImage_url = userUpdated.getImage_url();
                 // 保存到数据库里
-                searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail);
+                searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail, newImage_url);
                 model.addAttribute("msg", message);
                 return "redirect:/manager/detail/" + newUsername;
             }
@@ -242,4 +243,14 @@ public class ManagerController {
         }else
             return "redirect:/manager/login";
     }
+
+    //中国地图嵌入式页面
+    @RequestMapping("china")
+    public String China_map(HttpSession session){
+        Manager manager = (Manager) session.getAttribute("manager");
+        if(manager!=null){
+            return "china_map";
+        }return "redirect:/manager/login";
+    }
+
 }

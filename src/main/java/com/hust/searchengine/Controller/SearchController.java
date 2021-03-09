@@ -80,27 +80,35 @@ public class SearchController {
         if(keyword1.equals("")&&keyword2.equals("")&&keyword3.equals("")&&file==null)
             return "redirect:/search/advancedsearch";
 
-        PageInfo<Article> advancedList = searchService.advancedSearchByVariableConditions(type1,keyword1,
-                selector1,type2,keyword2,selector2,type3,keyword3,start_date,end_date, pageIndex, pageSize);
+        if(file.isEmpty()){
+            PageInfo<Article> advancedList = searchService.advancedSearchByVariableConditions(type1,keyword1,
+                    selector1,type2,keyword2,selector2,type3,keyword3,start_date,end_date, pageIndex, pageSize);
 
-        model.addAttribute("results", advancedList);
+            model.addAttribute("results", advancedList);
 
-        Map<String, String> attrs = Map.of("type1",type1,"keyword1",keyword1,"selector1",selector1,"type2",type2,"keyword2", keyword2, "selector2", selector2, "type3", type3, "keyword3", keyword3, "start_date", start_date, "end_date", end_date);
-        model.addAllAttributes(attrs);
+            Map<String, String> attrs = Map.of("type1",type1,"keyword1",keyword1,"selector1",selector1,"type2",type2,"keyword2", keyword2, "selector2", selector2, "type3", type3, "keyword3", keyword3, "start_date", start_date, "end_date", end_date);
+            model.addAllAttributes(attrs);
+        }
 
         User user = (User)session.getAttribute("user");
         if(user!=null) {
-            if(file != null && !file.isEmpty()){// 1.保存文件到硬盘上
+            if(!file.isEmpty()){// 1.保存文件到硬盘上
                 String fileName = file.getOriginalFilename();
-                String filePath = FileUtil.getUpLoadFilePath();
-                fileName = System.currentTimeMillis() + fileName; //文件名为fileName
+                String filePath;
+                if(fileName!=null&&!fileName.isEmpty()){
+                    if(FileUtil.isPicture(fileName))
+                        filePath = FileUtil.getUpLoadPicPath();
+                    else
+                        filePath = FileUtil.getUpLoadFilePath();
 
-                try {
-                    FileUtil.uploadFile(file.getBytes(), filePath, fileName);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    fileName = System.currentTimeMillis() + fileName; //文件名为fileName
+
+                    try {
+                        FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-
                 // 2.根据文件名找到相应文件
                 // 然后使用python脚本对文件进行分析操作
             }
@@ -115,14 +123,15 @@ public class SearchController {
     public String ArticlePage(@PathVariable("doi") String doi,
                               HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        Article article = searchService.findArticleByDoi(doi);
-        model.addAttribute("article", article);
-        if(user!=null){
-            return "article";
-        }else{
-            return "article_beforelogin";
-        }
-
+        if (doi!=null && !doi.equals("null") && !doi.equals("")) {
+            Article article = searchService.findArticleByDoi(doi);
+            model.addAttribute("article", article);
+            if(user!=null){
+                return "article";
+            }else{
+                return "article_beforelogin";
+            }
+        }else return "redirect:/search/Article_404_not_found";
     }
 
     //书签
@@ -416,41 +425,6 @@ public class SearchController {
         }
     }
 
-    @RequestMapping("search2")
-    public String DeepSearchPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-                                 @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
-                                 @RequestParam(value = "keywords",defaultValue = "") String keywords,
-                                 HttpSession session, Model model){
-        User user = (User)session.getAttribute("user");
-
-        if(!keywords.isEmpty()) {
-
-            //接收关键词给后台search.py
-            //将后台返回的json数据转化成list，进而转化成pageinfo
-            try {
-                PageInfo<Article> results = searchService.deepSearchByKeywords(pageIndex, pageSize, keywords);
-            }catch(Exception e){
-                System.out.println(e);
-            }
-            String message = "";
-            String color = "red";
-
-            //model.addAttribute("results", results);
-            model.addAttribute("keywords", keywords);
-            model.addAttribute("msg", message);
-            model.addAttribute("color", color);
-
-            if(user!=null) {
-                return "search";
-            }else{
-                return "search_beforelogin";
-            }
-        }else{
-            return "redirect:/search/main";
-        }
-    }
-    
-
     //修改用户信息页面
     @GetMapping("settings")
     public String SettingsPage(HttpSession session, Model model){
@@ -469,6 +443,7 @@ public class SearchController {
     @PostMapping("settings")
     public String updateUserinfo(HttpSession session,
                                  @RequestParam("passwordconfirmed") String password,
+                                 @RequestParam("filepic") MultipartFile file,
                                  User userupdated, Model model){
 
         User user = (User)session.getAttribute("user");
@@ -476,11 +451,36 @@ public class SearchController {
             //判断输入的密码是否正确
             if(user.getPassword().equals(password)){
                 String oldusername = user.getUsername();
+                String old_url = user.getImage_url();
                 String newu = userupdated.getUsername();
                 String newp = userupdated.getPassword();
                 boolean news = userupdated.isSex();
                 String newi = userupdated.getInstitution();
                 String newe = userupdated.getEmail();
+                String new_url = null;
+                if(!file.isEmpty()){// 1.保存文件到硬盘上
+                    String fileName = file.getOriginalFilename();
+                    String filePath;
+                    if(fileName!=null&&!fileName.isEmpty()){
+                        if(FileUtil.isPicture(fileName))
+                            filePath = FileUtil.getUpLoadPicPath();
+                        else
+                            filePath = FileUtil.getUpLoadFilePath();
+
+                        fileName = System.currentTimeMillis() + fileName; //文件名为fileName
+
+                        try {
+                            FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        new_url = fileName;
+                    }
+                }else{
+                    new_url = old_url;
+                }
+                userupdated.setImage_url(new_url);
+
                 String message = "";
                 //判断数据库内是否已存在相应用户名
                 if(!oldusername.equals(newu)&&newu.equals(searchService.FindIfUsernameAlreadyExists(newu))){
@@ -489,7 +489,7 @@ public class SearchController {
                     return "settings";
                 }
                 // 保存到数据库里
-                searchService.updateUserByUsername(oldusername, newu, newp, news, newi, newe);
+                searchService.updateUserByUsername(oldusername, newu, newp, news, newi, newe, new_url);
                 //重新设置用户session，以新修改的username显示在右上角
                 session.removeAttribute("user");
                 session.setAttribute("user", userupdated);
@@ -611,8 +611,6 @@ public class SearchController {
                     message = "用户名已存在，请返回登录界面登录！";//注册失败
                 }else{
                      //新用户信息写入数据库
-                    message = "注册成功！";
-                    color = "green";
                     session.setAttribute("user", newuser);
                     return "redirect:/search/main";//离开本页面
                 }
@@ -651,14 +649,6 @@ public class SearchController {
 //        model.addAttribute("clsid", clsid);
 //        model.addAttribute("stu_name", stu_name);
 //        return "system";
-//    }
-//
-//    // 添加学生信息页面
-//    @GetMapping("add")
-//    public String addStudentInfo(Model model){
-//        List<ClassInfo> classes = managerService.findAllClassInfo();
-//        model.addAttribute("cls", classes);
-//        return "addinfo"; // addinfo.html
 //    }
 //
 //    // 添加学生信息提交
@@ -708,18 +698,6 @@ public class SearchController {
 //        // 2.保存文件名到数据库里
 //        student.setStu_image_url(fileName);
 //        searchService.updateStudentByID(student);
-//        return "redirect:/stu/list";
-//    }
-
-//    // 删除学生信息
-//    @GetMapping("list/delete/{id}")
-//    public String deleteStudent(@PathVariable("id") Integer stuid,
-//                                @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-//                                @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-//                                Model model){
-//        searchService.deleteStudentByID(stuid);
-//        PageInfo<Student> stuLists = searchService.findAllStudent(pageIndex, pageSize);
-//        model.addAttribute("stus",stuLists);
 //        return "redirect:/stu/list";
 //    }
 }

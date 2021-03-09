@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>China map</title>
+    <style>
+        .state{
+            fill: none;
+            stroke: #a9a9a9;
+            stroke-width: 1;
+        }
+        .state:hover{
+            fill-opacity:0.5;
+        }
+        #tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 20px;
+            margin: 10px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 1px;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+        #tooltip h4{
+            margin:0;
+            font-size:14px;
+        }
+        #tooltip{
+            background:rgba(0,0,0,0.9);
+            border:1px solid grey;
+            border-radius:5px;
+            font-size:12px;
+            width:auto;
+            padding:4px;
+            color:white;
+            opacity:0;
+        }
+        #tooltip table{
+            table-layout:fixed;
+        }
+        #tooltip tr td{
+            padding:0;
+            margin:0;
+        }
+        #tooltip tr td:nth-child(1){
+            width:50px;
+        }
+        #tooltip tr td:nth-child(2){
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <div id="tooltip"></div><!-- div to hold tooltip. -->
+    <svg style="width:min(560px,100%);" height="470" id="statesvg" class="center-block"></svg> <!-- svg to hold the map. -->
+</body>
+</html>
+<script src="/js/d3.v5.min.js"></script>
+<script src="/js/china-zh2.js"></script>
+<script>
+    function tooltipHtml(n, d){	/* 动态创建div模块. */
+        return "<h4>"+n+"</h4><table>"+
+            "<tr><td>最低</td><td>"+parseInt(d.low)+"</td></tr>"+
+            "<tr><td>平均</td><td>"+parseInt(d.avg)+"</td></tr>"+
+            "<tr><td>最高</td><td>"+parseInt(d.high)+"</td></tr>"+
+            "</table>";
+    }
+    let sampleData ={};	/* 随机样本数据. */
+    ['JXI', 'LIA', 'TIB', 'NMG', 'SHH', 'CHQ', 'XIN', 'SHD', 'HEN', 'GUD',
+        'GUI', 'BEJ', 'MAC', 'TAJ', 'HLJ', 'HEB', 'ZHJ', 'ANH', 'GXI', 'HAI',
+        'JIL', 'SHX', 'HUN', 'YUN', 'FUJ', 'HUB', 'SHA', 'HKG', 'QIH', 'GAN',
+        'JSU', 'SCH', 'NXA', 'TAI']
+        .forEach(function(d){
+            let low=Math.round(100*Math.random()),
+                mid=Math.round(100*Math.random()),
+                high=Math.round(100*Math.random());
+            let avg=(low+mid+high)/3;
+            //根据地理位置不同区别颜色密度
+            if(d==='TAI'||d==='HKG'||d==='MAC'){
+                sampleData[d]={low:d3.min([0]),high:d3.max([0]),
+                    avg:Math.round(0), color:d3.interpolate("#ffffff", "#afafaf")(0.5)};
+            }else if(d==='XIN'||d==='QIH'||d==='TIB'||d==='NMG'||d==='NXA'||d==='GAN'){
+                sampleData[d]={low:d3.min([low,mid,high])/5, high:d3.max([low,mid,high])/5,
+                    avg:Math.round(avg)/5, color:d3.interpolate("#ccd3ff", "#174cec")(low/500)};
+            }else if(d==='GUI'||d==='GXI'||d==='YUN'||d==='SCH'||d==='SHX'||d==='SHA'||d==='HLJ'){
+                sampleData[d]={low:d3.min([low,mid,high])/3+20, high:d3.max([low,mid,high])/3+20,
+                    avg:Math.round(avg)/3+20, color:d3.interpolate("#ccd3ff", "#174cec")((low/3+20)/100)};
+            }else if(d==='BEJ'||d==='TAJ'||d==='SHH'||d==='GUD'){
+                sampleData[d]={low:d3.min([low,mid,high])/4+75, high:d3.max([low,mid,high])/4+75,
+                    avg:Math.round(avg)/4+75, color:d3.interpolate("#ccd3ff", "#174cec")((low/4+75)/100)};
+            }else{
+                sampleData[d]={low:d3.min([low,mid,high])/2+30, high:d3.max([low,mid,high])/2+30,
+                    avg:Math.round(avg)/2+30, color:d3.interpolate("#ccd3ff", "#174cec")((low/2+30)/100)};
+            }
+        });
+    /* 用 id #statesvg 绘制省份图 */
+    uStates.draw("#statesvg", sampleData, tooltipHtml);
+</script>

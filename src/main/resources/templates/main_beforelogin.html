@@ -302,7 +302,7 @@
 					<div class="footer-content">
 						<div class="text-left">
 							<i class="ace-icon fa fa-map-marker red bigger-110"></i>
-							<span id="baidu_geo"></span>
+							<span id="baidu_geo">定位中……</span>
 						</div>
 						<script>
 							window.onload = getLocation;
@@ -315,20 +315,23 @@
 
 							}
 							function showError(error){
+								let message = "";
 								switch(error.code) {
 									case error.PERMISSION_DENIED:
-										alert("定位失败,用户拒绝请求地理定位");
+										message = "定位失败,用户拒绝请求地理定位";
 										break;
 									case error.POSITION_UNAVAILABLE:
-										alert("定位失败,位置信息是不可用");
+										message = "定位失败,位置信息是不可用";
 										break;
 									case error.TIMEOUT:
-										alert("定位失败,请求获取用户位置超时");
+										message = "定位失败,请求获取用户位置超时";
 										break;
 									default:
-										alert("定位失败,定位系统失效");
+										message = "定位失败,定位系统失效";
 										break;
 								}
+								alert(message);
+								document.getElementById("baidu_geo").innerText=message;
 							}
 							function showPosition(position){
 								let latlon = position.coords.latitude+','+position.coords.longitude;

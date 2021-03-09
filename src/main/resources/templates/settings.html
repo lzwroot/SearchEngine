@@ -74,9 +74,9 @@
 
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
+								<img class="nav-user-photo" id="user-photo" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
 								<span class="user-info">
-									<small>Welcome,</small>
+									<small>欢迎,</small>
 									<div th:text="${session['user'].username}"></div>
 								</span>
 
@@ -339,7 +339,20 @@
 									<div class="container-fluid">
 										<div class="row">
 											<div class="col-md-8">
-
+												<div class="form-group">
+													<img id="imgshow" class="img-thumbnail img-responsive col-sm-offset-3" alt="未上传头像"
+														 th:src="${user.image_url!=null}?@{'/pics/upload/'+${user.image_url}}:'/images/avatars/user.jpg'" width="150px" height="150px"/>
+												</div>
+												<div class="form-group">
+													<span class="col-sm-offset-3" style="color: blue; font-weight: bold; font-size: medium;">图片像素建议150x150px以上，宽高比1:1</span>
+												</div>
+												<div class="space-6"></div>
+												<div class="form-group">
+													<label for="upfile" class="col-sm-3 control-label align-bottom">修改头像</label>
+													<div class="col-sm-9">
+														<input class="form-control" type="file" name="filepic" id="upfile" accept="image/*">
+													</div>
+												</div>
 												<div class="form-group">
 													<label for="inputUsername" class="col-sm-3 control-label">用户名</label>
 													<div class="col-sm-9">
@@ -479,5 +492,30 @@
 		<script src="/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
+		<script language="JavaScript">
+			$('#upfile').change(function(){
+				let file = $('#upfile').get(0).files[0];
+				let reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload=function (e){
+					console.log(e);
+					$('#imgshow').get(0).src = e.target.result;
+				}
+			})
+		</script>
+		<script>
+			let url = document.getElementById("user-photo").attributes["src"].nodeValue;
+			$.ajax({
+				url: url,
+				type: "GET",
+				dataType:"jsonp",
+				error:function (XMLHttpRequest, textStatus, errorThrown) {
+					if(XMLHttpRequest.status === 200)
+						$("#user-photo").attr({src:url});
+					else
+						$("#user-photo").attr({src:"/images/avatars/user.jpg"});
+				}
+			})
+		</script>
 	</body>
 </html>

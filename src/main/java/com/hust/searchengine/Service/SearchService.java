@@ -16,7 +16,7 @@ public interface SearchService {
 
     User findUserByUsername(String username);
 
-    Integer updateUserByUsername(String oldusername, String newusername, String newpassword, boolean newsex, String newinstitution, String newemail);
+    Integer updateUserByUsername(String oldusername, String newusername, String newpassword, boolean newsex, String newinstitution, String newemail, String image_url);
 
     String FindIfUsernameAlreadyExists(@Param("newusername")String username);
 
@@ -59,6 +59,4 @@ public interface SearchService {
     Integer deleteBookMark(String username, String doi);
 
     PageInfo<Article> advancedSearchByVariableConditions(String type1, String keyword1, String selector1, String type2, String keyword2, String selector2, String type3, String keyword3, String start_date, String end_date, Integer pageIndex, Integer pageSize);
-
-    PageInfo<Article> deepSearchByKeywords(Integer pageIndex, Integer pageSize, String keywords) throws IOException;
 }

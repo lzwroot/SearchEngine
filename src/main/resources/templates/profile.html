@@ -73,9 +73,9 @@
 
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
+								<img class="nav-user-photo" id="user-photo" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
 								<span class="user-info">
-									<small>Welcome,</small>
+									<small>欢迎,</small>
 									<div th:text="${session['user'].username}"></div>
 								</span>
 
@@ -342,6 +342,13 @@
 
 								<!--个人信息展示-->
 								<div class="profile-user-info profile-user-info-striped" style="font-size: large">
+									<div class="profile-info-row">
+										<div class="profile-info-name"> <b>头像</b> </div>
+
+										<div class="profile-info-value">
+											<img id="imgshow" class="img-thumbnail img-responsive" alt="未上传头像" th:src="${user.image_url!=null}?@{'/pics/upload/'+${user.image_url}}:'/images/avatars/user.jpg'" width="150px" height="150px" style="max-height: 200px; max-width: 200px;"/>
+										</div>
+									</div>
 									<div class="profile-info-row">
 										<div class="profile-info-name"> <b>用户名</b> </div>
 
@@ -828,6 +835,20 @@
 				});
 
 			});
+		</script>
+		<script>
+			let url = document.getElementById("user-photo").attributes["src"].nodeValue;
+			$.ajax({
+				url: url,
+				type: "GET",
+				dataType:"jsonp",
+				error:function (XMLHttpRequest, textStatus, errorThrown) {
+					if(XMLHttpRequest.status === 200)
+						$("#user-photo").attr({src:url});
+					else
+						$("#user-photo").attr({src:"/images/avatars/user.jpg"});
+				}
+			})
 		</script>
 	</body>
 </html>
