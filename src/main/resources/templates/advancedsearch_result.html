@@ -446,7 +446,7 @@
 									</thead>
 									<tbody>
 									<tr th:each="result:${results.list}">
-										<td><a th:text="${result.articlename}" th:href="@{'/search/article/'+${result.doi}}">基于DEA-Tobit模型的实证分析</a></td>
+										<td><a th:text="${result.articlename}" th:href="@{'/search/article/'+${#strings.replace(result.doi,'/','_')}}">基于DEA-Tobit模型的实证分析</a></td>
 										<td th:text="${#strings.length(result.author)}>60?@{${#strings.abbreviate(result.author,60)}+'...'}:${result.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
 										<td><a th:text="${result.field}" th:href="@{'/search/field/'+${result.field}}">华北金融</a></td>
 										<td th:text="${result.time}">2021-01-06 15:06</td>

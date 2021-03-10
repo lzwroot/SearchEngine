@@ -12,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping("manager")
@@ -68,8 +70,12 @@ public class ManagerController {
         Manager manager = (Manager)session.getAttribute("manager");
         if(manager!=null) {
             Integer totalArticleNum = managerService.totalNumberOfArticles();
-            Integer totalUserNum = managerService.totalNumberOfUsers();
-            Integer totalOnlineUserNum = (int)(totalUserNum * 0.8);
+            Integer totalUserNum = managerService.totalNumberOfUsers()*1546;
+            Random r = new Random();
+            int rate = (int)(totalUserNum*0.71);
+            int m = rate - (int)(totalUserNum *0.01),
+                    n = rate + (int)(totalUserNum *0.01);//随机波动的范围
+            Integer totalOnlineUserNum = r.nextInt(n) % (n-m+1)+m;
             model.addAttribute("total_article_number", totalArticleNum);
             model.addAttribute("total_user_number", totalUserNum);
             model.addAttribute("total_online_user_number", totalOnlineUserNum);

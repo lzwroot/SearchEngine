@@ -257,7 +257,7 @@
 									</thead>
 									<tbody>
 									<tr th:each="result:${results.list}">
-										<td><a th:text="${result.articlename}" th:href="@{'/search/article/'+${result.doi}}">基于DEA-Tobit模型的实证分析</a></td>
+										<td><a th:text="${result.articlename}" th:href="@{'/search/article/'+${#strings.replace(result.doi,'/','_')}}">基于DEA-Tobit模型的实证分析</a></td>
 										<td th:text="${#strings.length(result.author)}>60?@{${#strings.abbreviate(result.author,60)}+'...'}:${result.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
 										<td><a th:text="${result.field}" th:href="@{'/search/field/'+${result.field}}">华北金融</a></td>
 										<td th:text="${result.time}">2021-01-06 15:06</td>
@@ -265,11 +265,11 @@
 										<td>
 											<span>
 												<a th:href="${result.link}">下载</a>/
-												<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(result.doi,':','_'),'.','_')}}">引用</a>
+												<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'-','_'),'/','_'),':','_'),'.','_')}}">引用</a>
 											</span>
 										</td>
 										<!--引用模块框-->
-										<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(result.doi,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+										<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'-','_'),'/','_'),':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
 											<div class="modal-dialog modal-lg" role="document">
 												<div class="modal-content">
 													<div class="modal-header">

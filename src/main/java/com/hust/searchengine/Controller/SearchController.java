@@ -8,8 +8,10 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -123,6 +125,7 @@ public class SearchController {
     @RequestMapping("article/{doi}")
     public String ArticlePage(@PathVariable("doi") String doi,
                               HttpSession session, Model model){
+        doi = doi.replace('_','/');
         User user = (User)session.getAttribute("user");
         if (doi!=null && !doi.equals("null") && !doi.equals("")) {
             Article article = searchService.findArticleByDoi(doi);
@@ -184,7 +187,8 @@ public class SearchController {
     //删除书签
     @GetMapping("bookmark/delete/{doi}")
     public String DeleteBookmark(@PathVariable("doi")String doi,
-                                 HttpSession session, Model model){
+                                 HttpSession session){
+        doi = doi.replace('_','/');
         User user = (User)session.getAttribute("user");
         if(user!=null){
             String username = user.getUsername();
