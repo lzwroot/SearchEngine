@@ -139,38 +139,39 @@ public class ManagerController {
     //修改用户信息提交
     @PostMapping("update/{former_username}")
     public String UpdatePost(@PathVariable("former_username") String oldUsername,
-                             @RequestParam("confirming_password") String cPassword,
+                             //@RequestParam("confirming_password") String cPassword,
                              User userUpdated,
                              HttpSession session, Model model){
         Manager manager = (Manager)session.getAttribute("manager");
         if(manager!=null) {
             User oldUser = searchService.findUserByUsername(oldUsername);
             //检查密码对不对
-            if(cPassword.equals(oldUser.getPassword())) {
-                String newUsername = userUpdated.getUsername();
-                String message = "";
-                //判断数据库内是否已存在相应用户名
-                if (!oldUsername.equals(newUsername) && newUsername.equals(searchService.FindIfUsernameAlreadyExists(newUsername))) {
-                    message = "修改用户名失败，已存在此用户名！";
-                    model.addAttribute("msg", message);
-                    return "manage_user_update";
-                }
-                //修改除了用户名以外的其他数据
-                String newPassword = userUpdated.getPassword();
-                boolean newSex = userUpdated.isSex();
-                String newInstitution = userUpdated.getInstitution();
-                String newEmail = userUpdated.getEmail();
-                String newImage_url = userUpdated.getImage_url();
-                // 保存到数据库里
-                searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail, newImage_url);
-                model.addAttribute("msg", message);
-                return "redirect:/manager/detail/" + newUsername;
-            }
-            else{
-                String message = "密码错误，请重新输入！";
+            //if(cPassword.equals(oldUser.getPassword())) {
+            String newUsername = userUpdated.getUsername();
+            String message = "";
+            //判断数据库内是否已存在相应用户名
+            if (!oldUsername.equals(newUsername) && newUsername.equals(searchService.FindIfUsernameAlreadyExists(newUsername))) {
+                message = "修改用户名失败，已存在此用户名！";
                 model.addAttribute("msg", message);
                 return "manage_user_update";
             }
+            //修改除了用户名以外的其他数据
+            String newPassword = userUpdated.getPassword();
+            boolean newSex = userUpdated.isSex();
+            String newInstitution = userUpdated.getInstitution();
+            String newEmail = userUpdated.getEmail();
+            String newImage_url = userUpdated.getImage_url();
+            // 保存到数据库里
+            searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail, newImage_url);
+            model.addAttribute("msg", message);
+            return "redirect:/manager/detail/" + newUsername;
+            //}
+
+//            else{
+//                String message = "密码错误，请重新输入！";
+//                model.addAttribute("msg", message);
+//                return "manage_user_update";
+//            }
         }
         else
             return "redirect:/manager/login";
