@@ -379,7 +379,7 @@
 													</label>
 												</td>
 
-												<td><a th:text="${bookmark.articlename}" th:href="@{'/search/article/'+${bookmark.doi}}">京津冀绿色金融发展综合评价及影响因素研究——基于DEA-Tobit模型的实证分析</a></td>
+												<td><a th:text="${bookmark.articlename}" th:href="@{'/search/article/'+${#strings.replace(bookmark.doi,'/','_')}}">京津冀绿色金融发展综合评价及影响因素研究——基于DEA-Tobit模型的实证分析</a></td>
 												<td th:text="${#strings.length(bookmark.author)}>60?@{${#strings.abbreviate(bookmark.author,60)}+'...'}:${bookmark.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
 												<td><a th:text="${bookmark.field}" th:href="@{'/search/field/'+${bookmark.field}}">华北金融</a></td>
 												<td th:text="${bookmark.time}">2021-01-06 15:06</td>
@@ -423,7 +423,7 @@
 																<span>确认要删除该书签吗？</span>
 															</div>
 															<div class="modal-footer">
-																<button type="button" class="btn btn-primary" th:onclick="@{'window.location.href=\'bookmark/delete/\'+\''+${bookmark.doi}+'\''}">确定</button>
+																<button type="button" class="btn btn-primary" th:onclick="@{'window.location.href=\'bookmark/delete/\'+\''+${#strings.replace(bookmark.doi,'/','_')}+'\''}">确定</button>
 																<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 															</div>
 														</div>
