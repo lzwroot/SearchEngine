@@ -347,27 +347,11 @@
 											</tr>
 											</tbody>
 										</table>
+
+										<div id="baidu_trend"></div>
 									</div>
 								</div>
 
-								<!-- 登出模块框 -->
-								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
-									<div class="modal-dialog modal-sm" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-												<h4 class="modal-title" id="myModalLabel">登出确认</h4>
-											</div>
-											<div class="modal-body">
-												确定要退出登录吗？
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-primary" onclick="window.location.href='logout'">确定</button>
-												<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-											</div>
-										</div>
-									</div>
-								</div>
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
@@ -375,6 +359,25 @@
 					</div><!-- /.page-content -->
 				</div>
 			</div><!-- /.main-content -->
+
+			<!-- 登出模块框 -->
+			<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
+				<div class="modal-dialog modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">登出确认</h4>
+						</div>
+						<div class="modal-body">
+							确定要退出登录吗？
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" onclick="window.location.href='logout'">确定</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
 			<div class="footer">
 				<div class="footer-inner">
@@ -429,6 +432,26 @@
 		<script src="/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
+		<script>
+			window.onload = getBaiduTrends;
+			function getBaiduTrends(){
+				let url = "https://www.baidu.com";
+				let myHtml = $.getScript(url, function(html){
+					return(html);
+				});
+				myHtml = $.ajax({
+					type: "GET",
+					url : url,
+					dataType: "script",
+					success: function(html){
+						return (html);
+					},
+					error: function(e){
+
+					}
+				});
+			}
+		</script>
 	</body>
 </html>
 
@@ -696,13 +719,13 @@
 			
 			})
 		</script>
-<script>
-	let url = document.getElementById("user-photo").attributes["src"].nodeValue;
-	$.ajax({
-		url: url,
-		dataType:"jsonp",
-		error:function (e) {
-			$("#user-photo").attr({src:"/images/avatars/user.jpg"});
-		}
-	})
-</script>
+		<script>
+			let url = document.getElementById("user-photo").attributes["src"].nodeValue;
+			$.ajax({
+				url: url,
+				dataType:"jsonp",
+				error:function (e) {
+					$("#user-photo").attr({src:"/images/avatars/user.jpg"});
+				}
+			})
+		</script>

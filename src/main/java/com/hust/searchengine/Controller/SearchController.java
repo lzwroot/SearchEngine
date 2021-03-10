@@ -17,6 +17,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("search")
+@CrossOrigin
 public class SearchController {
 // http://localhost:8080/search
     @Autowired

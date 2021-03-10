@@ -388,13 +388,13 @@
 													<p>
 													<span>
 														<a th:href="${bookmark.link}">查看</a>/
-														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}">引用</a>/
-														<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}">删除</a>
+														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_'),'/','_'),'-','_')}}">引用</a>/
+														<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_'),'/','_'),'-','_')}}">删除</a>
 													</span>
 													</p>
 												</td>
 												<!--引用模块框-->
-												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_'),'/','_'),'-','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
 													<div class="modal-dialog modal-lg" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
@@ -412,7 +412,7 @@
 													</div>
 												</th:div>
 												<!--删除模块框-->
-												<th:div class="modal fade bs-example-modal-sm" tabindex="-1" th:id="@{'delete_'+${#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+												<th:div class="modal fade bs-example-modal-sm" tabindex="-1" th:id="@{'delete_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(bookmark.doi,':','_'),'.','_'),'/','_'),'-','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
 													<div class="modal-dialog modal-sm" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
