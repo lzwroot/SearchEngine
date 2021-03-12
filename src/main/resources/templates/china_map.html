@@ -59,7 +59,68 @@
 </html>
 <script src="/js/d3.v5.min.js"></script>
 <script src="/js/china-zh2.js"></script>
+<script src="/js/vue.min.js"></script>
 <script>
+    window.onload = getLocation;
+    function getLocation(){
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(showPosition,showError);
+        }else{
+            alert("浏览器不支持地理定位。");
+        }
+
+    }
+    function showError(error){
+        let message = "";
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                message = "定位失败,用户拒绝请求地理定位";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                message = "定位失败,位置信息是不可用";
+                break;
+            case error.TIMEOUT:
+                message = "定位失败,请求获取用户位置超时";
+                break;
+            default:
+                message = "定位失败,定位系统失效";
+                break;
+        }
+        alert(message);
+        document.getElementById("baidu_geo").innerText=message;
+    }
+    function showPosition(position){
+        let latlon = position.coords.latitude+','+position.coords.longitude;
+        //baidu
+        let url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location="+latlon+"&output=json&pois=0";
+        let province = $.ajax({
+            type: "GET",
+            dataType: "jsonp",
+            url: url,
+            beforeSend: function(){
+                $("#baidu_geo").html('正在定位...');
+            },
+            success: function (json) {
+                if(json.status===0){
+                    $("#baidu_geo").html(json.result["addressComponent"]["country"]+json.result["formatted_address"]);
+                    $("#baidu_geo_detail").html(json.result["sematic_description"]);
+                    return json.result["addressComponent"]["province"];
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $("#baidu_geo").html(latlon+"地址位置获取失败");
+            }
+        });
+        return province;
+    }
+
+    let app = new Vue({
+        el:"#tooltip",
+        data:{
+            users:[]
+        }
+    });
+    app.users.push("");
     function tooltipHtml(n, d){	/* 动态创建div模块. */
         return "<h4>"+n+"</h4><table>"+
             "<tr><td>最低</td><td>"+parseInt(d.low)+"</td></tr>"+
@@ -67,6 +128,7 @@
             "<tr><td>最高</td><td>"+parseInt(d.high)+"</td></tr>"+
             "</table>";
     }
+
     let sampleData ={};	/* 随机样本数据. */
     ['JXI', 'LIA', 'TIB', 'NMG', 'SHH', 'CHQ', 'XIN', 'SHD', 'HEN', 'GUD',
         'GUI', 'BEJ', 'MAC', 'TAJ', 'HLJ', 'HEB', 'ZHJ', 'ANH', 'GXI', 'HAI',
@@ -77,22 +139,34 @@
                 mid=Math.round(100*Math.random()),
                 high=Math.round(100*Math.random());
             let avg=(low+mid+high)/3;
-            //根据地理位置不同区别颜色密度
+
+            // //根据地理位置不同区别颜色密度
+            // if(d==='TAI'||d==='HKG'||d==='MAC'){
+            //     sampleData[d]={low:d3.min([0]),high:d3.max([0]),
+            //         avg:Math.round(0), color:d3.interpolate("#ffffff", "#afafaf")(0.5)};
+            // }else if(d==='XIN'||d==='QIH'||d==='TIB'||d==='NMG'||d==='NXA'||d==='GAN'){
+            //     sampleData[d]={low:d3.min([low,mid,high])/5, high:d3.max([low,mid,high])/5,
+            //         avg:Math.round(avg)/5, color:d3.interpolate("#ccd3ff", "#174cec")(low/500)};
+            // }else if(d==='GUI'||d==='GXI'||d==='YUN'||d==='SCH'||d==='SHX'||d==='SHA'||d==='HLJ'){
+            //     sampleData[d]={low:d3.min([low,mid,high])/3+20, high:d3.max([low,mid,high])/3+20,
+            //         avg:Math.round(avg)/3+20, color:d3.interpolate("#ccd3ff", "#174cec")((low/3+20)/100)};
+            // }else if(d==='BEJ'||d==='TAJ'||d==='SHH'||d==='GUD'){
+            //     sampleData[d]={low:d3.min([low,mid,high])/4+75, high:d3.max([low,mid,high])/4+75,
+            //         avg:Math.round(avg)/4+75, color:d3.interpolate("#ccd3ff", "#174cec")((low/4+75)/100)};
+            // }else{
+            //     sampleData[d]={low:d3.min([low,mid,high])/2+30, high:d3.max([low,mid,high])/2+30,
+            //         avg:Math.round(avg)/2+30, color:d3.interpolate("#ccd3ff", "#174cec")((low/2+30)/100)};
+            // }
+
             if(d==='TAI'||d==='HKG'||d==='MAC'){
                 sampleData[d]={low:d3.min([0]),high:d3.max([0]),
-                    avg:Math.round(0), color:d3.interpolate("#ffffff", "#afafaf")(0.5)};
-            }else if(d==='XIN'||d==='QIH'||d==='TIB'||d==='NMG'||d==='NXA'||d==='GAN'){
-                sampleData[d]={low:d3.min([low,mid,high])/5, high:d3.max([low,mid,high])/5,
-                    avg:Math.round(avg)/5, color:d3.interpolate("#ccd3ff", "#174cec")(low/500)};
-            }else if(d==='GUI'||d==='GXI'||d==='YUN'||d==='SCH'||d==='SHX'||d==='SHA'||d==='HLJ'){
-                sampleData[d]={low:d3.min([low,mid,high])/3+20, high:d3.max([low,mid,high])/3+20,
-                    avg:Math.round(avg)/3+20, color:d3.interpolate("#ccd3ff", "#174cec")((low/3+20)/100)};
-            }else if(d==='BEJ'||d==='TAJ'||d==='SHH'||d==='GUD'){
-                sampleData[d]={low:d3.min([low,mid,high])/4+75, high:d3.max([low,mid,high])/4+75,
-                    avg:Math.round(avg)/4+75, color:d3.interpolate("#ccd3ff", "#174cec")((low/4+75)/100)};
+                    avg:Math.round(0), color:d3.interpolate("#ccd3ff", "#174CEC")(0)};
+            }else if(d==='HUB'){
+                sampleData[d]={low:d3.min([0,1,1]), high:d3.max([0,1,1]),
+                    avg:Math.round(0), color:d3.interpolate("#ccd3ff", "#174cec")((0/4+75)/100)};
             }else{
-                sampleData[d]={low:d3.min([low,mid,high])/2+30, high:d3.max([low,mid,high])/2+30,
-                    avg:Math.round(avg)/2+30, color:d3.interpolate("#ccd3ff", "#174cec")((low/2+30)/100)};
+                sampleData[d]={low:d3.min([0]), high:d3.max([0]),
+                    avg:Math.round(0), color:d3.interpolate("#ccd3ff", "#174cec")(0)};
             }
         });
     /* 用 id #statesvg 绘制省份图 */

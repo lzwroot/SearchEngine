@@ -6,32 +6,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Article {
-    @JsonProperty("doi")
     private String doi;
-
-    @JsonProperty("articlename")
     private String articlename;
-
-    @JsonProperty("author")
     private String author;
-
-    @JsonProperty("article_abstract")
     private String article_abstract;
-
-    @JsonProperty("journal")
     private String journal;
-
-    @JsonProperty("link")
     private String link;
-
-    @JsonProperty("time")
     private Date time;
-
-    @JsonProperty("field")
     private String field;
-
-    @JsonProperty("username")
     private String username;
+    private Date access_time;
+
+    public String getAccess_time() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(access_time);
+    }
+
+    public void setAccess_time(Date access_time) {
+        this.access_time = access_time;
+    }
 
     public String getField() {
         return field;
