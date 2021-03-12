@@ -3,17 +3,17 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title th:text="@{${field}+' - Loogle 学术搜索'}"></title>
+		<title>发送反馈 - Loogle 学术搜索</title>
 
-		<meta name="description" content="" />
+		<meta name="description" content="feedback" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
+		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
 
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/font-awesome/4.5.0/css/font-awesome.min.css" />
-		
-		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
-		
+
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
@@ -33,13 +33,6 @@
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
-		<style>
-			a:focus{text-decoration:none; color:lightblue;}
-			a:link{text-decoration:none;} /*指正常的未被访问过的链接*/
-			a:visited{text-decoration:none;} /*指已经访问过的链接*/
-			a:hover{text-decoration:none;} /*指鼠标在链接*/
-			a:active{text-decoration:none;} /*指正在点的链接*/
-		</style>
 
 		<!-- ace settings handler -->
 		<script src="/js/ace-extra.min.js"></script>
@@ -66,7 +59,7 @@
 				</button>
 
 				<div class="navbar-header pull-left">
-					<a href="/search/main" class="navbar-brand">
+					<a href="main" class="navbar-brand">
 						<small>
 							<i class="fa fa-leaf"></i>
 							<b class="text-primary">L</b><b class="red">o</b><b class="orange">o</b><b class="text-primary">g</b><b class="green">l</b><b class="red">e</b>
@@ -77,7 +70,6 @@
 
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 					<ul class="nav ace-nav">
-
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<img class="nav-user-photo" id="user-photo" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
@@ -91,14 +83,14 @@
 
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
-									<a href="/search/settings">
+									<a href="settings">
 										<i class="ace-icon fa fa-cog"></i>
 										设置
 									</a>
 								</li>
 
 								<li>
-									<a href="/search/profile">
+									<a href="profile">
 										<i class="ace-icon fa fa-user"></i>
 										个人资料
 									</a>
@@ -124,7 +116,7 @@
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
 
-			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+			<div id="sidebar" class="sidebar responsive ace-save-state">
 				<script type="text/javascript">
 					try{ace.settings.loadState('sidebar')}catch(e){}
 				</script>
@@ -132,41 +124,41 @@
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<!-- 查看热搜 -->
-						<button class="btn btn-success" onclick="window.location.href='/search/history'">
+						<button class="btn btn-success" onclick="window.location.href='history'">
 							<i class="ace-icon glyphicon glyphicon-time"></i>
 						</button>
 
 						<!-- 订阅 -->
-						<button class="btn btn-info" onclick="window.location.href='/search/subscription'">
+						<button class="btn btn-info" onclick="window.location.href='subscription'">
 							<i class="ace-icon fa fa-bell"></i>
 						</button>
 
 						<!-- 书签 -->
-						<button class="btn btn-warning" onclick="window.location.href='/search/bookmark'">
+						<button class="btn btn-warning" onclick="window.location.href='bookmark'">
 							<i class="ace-icon glyphicon glyphicon-tags"></i>
 						</button>
 
 						<!-- 设置 -->
-						<button class="btn btn-danger" onclick="window.location.href='/search/settings'">
+						<button class="btn btn-danger" onclick="window.location.href='settings'">
 							<i class="ace-icon fa fa-cogs"></i>
 						</button>
 					</div>
 
 					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success" onclick="window.location.href='/search/history'"></span>
+						<span class="btn btn-success" onclick="window.location.href='history'"></span>
 
-						<span class="btn btn-info" onclick="window.location.href='/search/subscription'"></span>
+						<span class="btn btn-info" onclick="window.location.href='subscription'"></span>
 
-						<span class="btn btn-warning" onclick="window.location.href='/search/bookmark'"></span>
+						<span class="btn btn-warning" onclick="window.location.href='bookmark'"></span>
 
-						<span class="btn btn-danger" onclick="window.location.href='/search/settings'"></span>
+						<span class="btn btn-danger" onclick="window.location.href='settings'"></span>
 					</div>
 				</div><!-- /.sidebar-shortcuts -->
 
 				<ul class="nav nav-list">
 					
 					<li class="">
-						<a href="/search/subscription">
+						<a href="subscription">
 							<i class="menu-icon fa fa-bell"></i>
 							<span class="menu-text"> 订阅 </span>
 						</a>
@@ -175,7 +167,7 @@
 					</li>
 
 					<li class="">
-						<a href="/search/bookmark">
+						<a href="bookmark">
 							<i class="menu-icon fa fa-bookmark"></i>
 							<span class="menu-text"> 书签 </span>
 						</a>
@@ -184,7 +176,7 @@
 					</li>
 
 					<li class="">
-						<a href="/search/mine">
+						<a href="mine">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> 我的 </span>
 						</a>
@@ -194,7 +186,6 @@
 
 					<li class="">
 						<a href="#" class="dropdown-toggle">
-							<!-- <i class="menu-icon fa fa-tag"></i> -->
 							<i class="menu-icon glyphicon glyphicon-cog"></i>
 							<span class="menu-text"> 设置 </span>
 
@@ -209,7 +200,7 @@
 							</li>
 
 							<li class="">
-								<a href="/search/profile">
+								<a href="profile">
 									<i class="menu-icon fa fa-caret-right"></i>
 									个人信息
 								</a>
@@ -226,12 +217,13 @@
 								<b class="arrow"></b>
 							</li>
 
+
 								<b class="arrow"></b>
 							</li>
 						</ul>
 					</li>
 
-					<li class="">
+					<li class="active open">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon glyphicon glyphicon-pencil"></i>
 							<span class="menu-text"> 反馈 </span>
@@ -246,7 +238,7 @@
 							<b class="arrow"></b>
 							</li>
 
-							<li class="">
+							<li class="active">
 								<a href="/search/feedback">
 									<i class="menu-icon fa fa-caret-right"></i>
 									提交反馈
@@ -283,10 +275,12 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="/search/main">主页</a>
+								<a href="main">主页</a>
 							</li>
 
-							<li class="active" th:text="@{${field}+'领域下的文章'}"></li>
+							<li class="active">
+								提交反馈
+							</li>
 						</ul><!-- /.breadcrumb -->
 
 
@@ -362,109 +356,33 @@
 
 						<div class="row">
 							<div class="col-xs-12">
+								<div class="page-header">
+									<h1>
+										我的个人反馈
+										<small>
+											<i class="ace-icon fa fa-angle-double-right"></i>
+											提交反馈、查看历史反馈
+										</small>
+										<button onclick="window.location.href='/search/feedback_history'" class="btn btn-default">查看反馈历史</button>
+									</h1>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+							</div><!-- /.col -->
+							<div class="col-md-8">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<h2 class="header smaller lighter blue" th:text="@{${field}+' 领域下的所有文章'}"></h2>
-								<div class="row">
-									<div class="col-md-2">
-										<form method="post" th:action="@{'/search/field/'+${field}}">
-											<button class="btn btn-success btn-lg" type="submit">订阅该领域</button>
-										</form>
+								<form id="myForm" class="form-horizontal" action="/search/feedback" method="post">
+									<div class="form-group">
+										<textarea type="text" class="form-control" rows="4" placeholder="请输入您的反馈意见……" name="feedback"></textarea>
 									</div>
-									<div class="col-md-8"></div>
-									<div class="col-md-2">
-										<form method="post" th:action="@{'/search/delete/field/'+${field}}">
-											<button class="btn btn-danger btn-lg align-right" type="submit">取消订阅该领域</button>
-										</form>
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary">提交反馈</button>
 									</div>
-								</div>
-								<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>
-
-								<!--搜索结果表-->
-								<table class="table table-bordered table-hover table-striped b1">
-									<thead>
-									<tr>
-										<th>论文题目</th>
-										<th>作者</th>
-										<th>领域</th>
-										<th>发表时间</th>
-										<th>数据库</th>
-										<th>操作</th>
-
-									</tr>
-									</thead>
-									<tbody>
-									<tr th:each="result:${results.list}">
-										<td><a th:text="${result.articlename}" th:href="@{'/search/article/'+${#strings.replace(result.doi,'/','_')}}">基于DEA-Tobit模型的实证分析</a></td>
-										<td th:text="${#strings.length(result.author)}>60?@{${#strings.abbreviate(result.author,60)}+'...'}:${result.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
-										<td th:text="${result.field}">华北金融</td>
-										<td th:text="${result.time}">2021-01-06 15:06</td>
-										<td>期刊</td>
-										<td>
-											<span>
-												<a th:href="${result.link}">下载</a>/
-												<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'-','_'),'/','_'),':','_'),'.','_')}}">引用</a>
-											</span>
-											<form th:action="@{/search/bookmark(doi=${result.doi})}" method="post">
-												<button type="submit" class="btn btn-success btn-sm" name="bmk_button" >书签</button>
-											</form>
-										</td>
-										<!--引用模块框-->
-										<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'-','_'),'/','_'),':','_'),'.','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
-											<div class="modal-dialog modal-lg" role="document">
-												<div class="modal-content">
-													<div class="modal-header">
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-														<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
-													</div>
-													<div class="modal-body">
-														<textarea style="width: 100%" th:id="@{'reference_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'/','_'),'-','_'),':','_'),'.','_')}}"  th:text="@{${result.articlename}+', '+${result.author}+', '+${result.field}+', '+${#dates.format(result.time, 'yyyy')}+'.'}"></textarea>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-primary" th:onclick="@{'copy(\'reference_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'/','_'),'-','_'),':','_'),'.','_')}+'\')'}">复制</button>
-														<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-													</div>
-												</div>
-											</div>
-										</th:div>
-									</tr>
-									<tr></tr>
-									<tr></tr>
-									</tbody>
-								</table>
-
-								<script>
-									/*复制引用*/
-									function copy(ref_id) {
-										let ref = document.getElementById(ref_id);  //input 的ID
-										ref.select(); //选择对象
-										document.execCommand("Copy"); //执行浏览器复制命令
-										alert("复制成功！");
-									}
-								</script>
-
-								<!--分页-->
-								<nav aria-label="Page navigation">
-									<ul class="pagination">
-										<li th:class="${results.hasPreviousPage}?'':'disabled'">
-											<a th:href="${results.hasPreviousPage}?@{'/search/field/'+${field}(pageIndex=${results.prePage}, keywords=${keywords})}:'#'" aria-label="Previous">
-												<span aria-hidden="true">&laquo;</span>
-											</a>
-										</li>
-
-										<th:block th:each="nav : ${results.navigatepageNums}">
-											<li th:class="${nav==results.pageNum}?'active':''">
-												<a th:href="@{'/search/field/'+${field}(pageIndex=${nav}, keywords=${keywords})}" th:text="${nav}"></a>
-											</li>
-										</th:block>
-
-										<li th:class="${results.hasNextPage}?'':'disabled'">
-											<a th:href="${results.hasNextPage}?@{'/search/field/'+${field}(pageIndex=${results.nextPage}, keywords=${keywords})}:'#'" aria-label="Next">
-												<span aria-hidden="true">&raquo;</span>
-											</a>
-										</li>
-									</ul>
-								</nav>
+								</form>
 
 								<!-- 登出模块框 -->
 								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -478,7 +396,7 @@
 												确定要退出登录吗？
 											</div>
 											<div class="modal-footer">
-												<button type="button" class="btn btn-primary" onclick="window.location.href='/search/logout'">确定</button>
+												<button type="button" class="btn btn-primary" onclick="window.location.href='logout'">确定</button>
 												<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 											</div>
 										</div>
@@ -487,6 +405,8 @@
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
+							<div class="col-md-2">
+							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div>
@@ -494,6 +414,7 @@
 
 			<div class="footer">
 				<div class="footer-inner">
+
 					<div class="footer-content">
 						<span class="bigger-120">
 							<span class="blue bolder">Scholar</span>
@@ -531,7 +452,7 @@
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-<script src="/js/jquery-1.11.3.min.js"></script>
+		<script src="/js/jquery-1.11.3.min.js"></script>
 <![endif]-->
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
@@ -539,6 +460,7 @@
 		<script src="/js/bootstrap.min.js"></script>
 
 		<!-- page specific plugin scripts -->
+
 
 		<!-- ace scripts -->
 		<script src="/js/ace-elements.min.js"></script>
@@ -559,5 +481,6 @@
 				}
 			})
 		</script>
+
 	</body>
 </html>

@@ -277,10 +277,10 @@
 														<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
 													</div>
 													<div class="modal-body">
-														<span th:text="@{${result.articlename}+', '+${result.author}+', '+${result.field}+', '+${#dates.format(result.time, 'yyyy')}+'.'}"></span>
+														<textarea style="width: 100%" th:id="@{'reference_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'/','_'),'-','_'),':','_'),'.','_')}}"  th:text="@{${result.articlename}+', '+${result.author}+', '+${result.field}+', '+${#dates.format(result.time, 'yyyy')}+'.'}"></textarea>
 													</div>
 													<div class="modal-footer">
-														<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+														<button type="button" class="btn btn-primary" th:onclick="@{'copy(\'reference_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(result.doi,'/','_'),'-','_'),':','_'),'.','_')}+'\')'}">复制</button>
 														<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 													</div>
 												</div>
@@ -291,6 +291,16 @@
 									<tr></tr>
 									</tbody>
 								</table>
+
+								<script>
+									/*复制引用*/
+									function copy(ref_id) {
+										let ref = document.getElementById(ref_id);  //input 的ID
+										ref.select(); //选择对象
+										document.execCommand("Copy"); //执行浏览器复制命令
+										alert("复制成功！");
+									}
+								</script>
 
 								<!--分页-->
 								<nav aria-label="Page navigation">

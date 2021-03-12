@@ -20,7 +20,6 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private SearchMapper searchMapper;
 
-
     @Override
     public User UserLogin(String username, String password) {
         return searchMapper.UserLogin(username,password);
@@ -58,11 +57,6 @@ public class SearchServiceImpl implements SearchService {
         boolean isInserted = searchMapper.newUserSignup(email, username, password) != 0;
         if(isInserted)return new User(username, password, email);
         return null;
-    }
-
-    @Override
-    public List<Trends> getAllTrends() {
-        return searchMapper.getAllTrends();
     }
 
     @Override
@@ -196,6 +190,27 @@ public class SearchServiceImpl implements SearchService {
         return searchMapper.updateHistoryRecord(username, his_doi, access_time);
     }
 
+    @Override
+    public Integer deleteHistory(String username, String his_doi){
+        return searchMapper.deleteHistory(username, his_doi);
+    }
+
+    @Override
+    public Integer postFeedback(String username, String feedback) {
+        Date feedback_time = new Date();
+        return searchMapper.postFeedback(username, feedback, feedback_time);
+    }
+
+    @Override
+    public List<Feedback> getFeedbackHistory(String username) {
+        return searchMapper.getFeedbackHistory(username);
+    }
+
+    @Override
+    public Integer deleteFeedbackRecord(Integer feedback_id) {
+        return searchMapper.deleteFeedbackRecord(feedback_id);
+    }
+
     public List<Article> senate(String data) {
         String ip = "localhost";
         int port = 9999;
@@ -227,6 +242,7 @@ public class SearchServiceImpl implements SearchService {
                 article.setField(articleArray[4]);
                 article.setLink(articleArray[5]);
                 article.setJournal(articleArray[6]);
+                article.setDoi(articleArray[7]);
                 articles.add(article);
             }
             return articles;

@@ -2,6 +2,7 @@ package com.hust.searchengine.Controller;
 
 import com.github.pagehelper.PageInfo;
 import com.hust.searchengine.Entity.Article;
+import com.hust.searchengine.Entity.Feedback;
 import com.hust.searchengine.Entity.Manager;
 import com.hust.searchengine.Entity.User;
 import com.hust.searchengine.Service.ManagerService;
@@ -12,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -243,6 +247,55 @@ public class ManagerController {
         Manager manager = (Manager) session.getAttribute("manager");
         if(manager!=null){
             return "manager_404_page";
+        }else
+            return "redirect:/manager/login";
+    }
+
+    @RequestMapping("manager_feedback")
+    public String FeedbackPage(HttpSession session, Model model){
+        Manager manager = (Manager) session.getAttribute("manager");
+        if(manager!=null){
+            List<User> users = managerService.findAllUsers();
+            model.addAttribute("users", users);
+            //得到所有用户反馈
+            List<Feedback> feedbacks = managerService.getAllFeedbacks();
+            Comparator<Feedback> fbkComparator = (f1, f2) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    return sdf.parse(f2.getFeedback_time()).compareTo(sdf.parse(f1.getFeedback_time()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }return 1;
+            };
+            model.addAttribute("comparator", fbkComparator);
+            model.addAttribute("feedbacks", feedbacks);
+            return "manager_feedback";
+        }else
+            return "redirect:/manager/login";
+    }
+
+    @PostMapping("feedback")
+    public String ResponseToFeedback(@RequestParam(value = "result",defaultValue = "")String result,
+                                     @RequestParam(value = "feedback_id",defaultValue = "")Integer feedback_id,
+                                     HttpSession session){
+        Manager manager = (Manager) session.getAttribute("manager");
+        if (manager!=null){
+            if(result==null || result.equals("")) {
+                return "redirect:/manager/manager_feedback";
+            }
+            managerService.sendResponses(manager.getManagerid(), result, feedback_id);
+            return "redirect:/manager/manager_feedback";
+        }else
+            return "redirect:/manager/login";
+    }
+
+    @RequestMapping("delete_feedback")
+    public String deleteFeedback(@RequestParam(value = "feedback_id", defaultValue = "")Integer feedback_id,
+                                 HttpSession session){
+        Manager manager = (Manager) session.getAttribute("manager");
+        if(manager!=null){
+            searchService.deleteFeedbackRecord(feedback_id);
+            return "redirect:/manager/manager_feedback";
         }else
             return "redirect:/manager/login";
     }
