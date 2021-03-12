@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>热门排行榜 - Loogle 学术搜索</title>
+		<title>历史记录 - Loogle 学术搜索</title>
 
-		<meta name="description" content="the trend list" />
+		<meta name="description" content="the history list" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		
 		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
@@ -33,6 +33,13 @@
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
+		<style>
+			a:focus{text-decoration:none; color:lightblue;}
+			a:link{text-decoration:none;} /*指正常的未被访问过的链接*/
+			a:visited{text-decoration:none;} /*指已经访问过的链接*/
+			a:hover{text-decoration:none;} /*指鼠标在链接*/
+			a:active{text-decoration:none;} /*指正在点的链接*/
+		</style>
 
 		<!-- ace settings handler -->
 		<script src="/js/ace-extra.min.js"></script>
@@ -125,8 +132,8 @@
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<!-- 查看热搜 -->
-						<button class="btn btn-success" onclick="window.location.href='trends'">
-							<i class="ace-icon fa fa-signal"></i>
+						<button class="btn btn-success" onclick="window.location.href='history'">
+							<i class="ace-icon glyphicon glyphicon-time"></i>
 						</button>
 
 						<!-- 订阅 -->
@@ -146,7 +153,7 @@
 					</div>
 
 					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success" onclick="window.location.href='trends'"></span>
+						<span class="btn btn-success" onclick="window.location.href='history'"></span>
 
 						<span class="btn btn-info" onclick="window.location.href='subscription'"></span>
 
@@ -245,7 +252,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="main">主页</a>
 							</li>
-							<li class="active">热门排行榜</li>
+							<li class="active">历史记录</li>
 						</ul><!-- /.breadcrumb -->
 
 
@@ -325,30 +332,96 @@
 
 								<div class="row">
 									<div class="col-xs-12">
-										<h2 class="header smaller lighter blue">热门学术关键词</h2>
+										<h2 class="header smaller lighter blue">文章浏览历史记录</h2>
+										<!-- div.dataTables_borderWrap -->
+										<div>
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+												<thead>
+												<tr>
+													<th class="center">
+														<label class="pos-rel">
+															<input type="checkbox" class="ace" />
+															<span class="lbl"></span>
+														</label>
+													</th>
+													<th>论文题目</th>
+													<th>作者</th>
+													<th>领域</th>
+													<th>
+														<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+														浏览时间
+													</th>
+													<th>
+														<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+														发表时间
+													</th>
+													<th>操作</th>
+												</tr>
+												</thead>
 
-										<!-- div.table-responsive -->
-										<table class="table table-bordered b1">
-											<thead>
-											<tr style="font-size: large">
-												<th style="text-align:center;">排名</th>
-												<th>热门词汇</th>
-												<th>搜索量</th>
-												<th>领域</th>
+												<tbody>
+												<tr th:each="his:${histories}">
+													<td class="center">
+														<label class="pos-rel">
+															<input type="checkbox" class="ace" />
+															<span class="lbl"></span>
+														</label>
+													</td>
 
-											</tr>
-											</thead>
-											<tbody>
-											<tr style="font-size: large" th:each="trend:${trends}">
-												<td align="center" style="font-weight: 700" th:text="${trend.rank}">1<</td>
-												<td><a th:href="@{/search/search(keywords=${trend.keyword})}" th:text="${trend.keyword}">COVID-19</a></td>
-												<td th:text="${trend.volume}*1000">100</td>
-												<td><a th:text="${trend.field}" th:href="@{'/search/field/'+${trend.field}}">医学</a></td>
-											</tr>
-											</tbody>
-										</table>
-
-										<div id="baidu_trend"></div>
+													<td><a th:text="${his.articlename}" th:href="@{'/search/article/'+${#strings.replace(his.doi,'/','_')}}">京津冀绿色金融发展综合评价及影响因素研究——基于DEA-Tobit模型的实证分析</a></td>
+													<td th:text="${#strings.length(his.author)}>60?@{${#strings.abbreviate(his.author,60)}+'...'}:${his.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
+													<td><a th:text="${his.field}" th:href="@{'/search/field/'+${his.field}}">华北金融</a></td>
+													<td th:text="${his.access_time}">2021-01-06 15:06</td>
+													<td th:text="${his.time}">2020-01-06</td>
+													<td>
+														<p>
+													<span>
+														<a th:href="${his.link}">查看</a>/
+														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(his.doi,':','_'),'.','_'),'/','_'),'-','_')}}">引用</a>/
+														<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(his.doi,':','_'),'.','_'),'/','_'),'-','_')}}">删除</a>
+													</span>
+														</p>
+													</td>
+													<!--引用模块框-->
+													<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(his.doi,':','_'),'.','_'),'/','_'),'-','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+														<div class="modal-dialog modal-lg" role="document">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																	<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
+																</div>
+																<div class="modal-body">
+																	<span th:text="@{${his.articlename}+', '+${his.author}+', '+${his.field}+', '+${#dates.format(his.time, 'yyyy')}+'.'}"></span>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+																	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+																</div>
+															</div>
+														</div>
+													</th:div>
+													<!--删除模块框-->
+													<th:div class="modal fade bs-example-modal-sm" tabindex="-1" th:id="@{'delete_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(his.doi,':','_'),'.','_'),'/','_'),'-','_')}}" role="dialog" aria-labelledby="mySmallModalLabel">
+														<div class="modal-dialog modal-sm" role="document">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																	<h4 class="modal-title" id="myModalLabel3">删除确认</h4>
+																</div>
+																<div class="modal-body">
+																	<span>确认要删除该书签吗？</span>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-primary" th:onclick="@{'window.location.href=\'his/delete/\'+\''+${#strings.replace(his.doi,'/','_')}+'\''}">确定</button>
+																	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+																</div>
+															</div>
+														</div>
+													</th:div>
+												</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</div>
 
@@ -432,26 +505,7 @@
 		<script src="/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
-		<script>
-			window.onload = getBaiduTrends;
-			function getBaiduTrends(){
-				let url = "https://www.baidu.com";
-				let myHtml = $.getScript(url, function(html){
-					return(html);
-				});
-				myHtml = $.ajax({
-					type: "GET",
-					url : url,
-					dataType: "script",
-					success: function(html){
-						return (html);
-					},
-					error: function(e){
-
-					}
-				});
-			}
-		</script>
+		<script src="/js/vue.min.js"></script>
 	</body>
 </html>
 
@@ -723,9 +777,13 @@
 			let url = document.getElementById("user-photo").attributes["src"].nodeValue;
 			$.ajax({
 				url: url,
+				type: "GET",
 				dataType:"jsonp",
-				error:function (e) {
-					$("#user-photo").attr({src:"/images/avatars/user.jpg"});
+				error:function (XMLHttpRequest, textStatus, errorThrown) {
+					if(XMLHttpRequest.status === 200)
+						$("#user-photo").attr({src:url});
+					else
+						$("#user-photo").attr({src:"/images/avatars/user.jpg"});
 				}
 			})
 		</script>

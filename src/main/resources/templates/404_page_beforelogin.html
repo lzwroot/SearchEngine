@@ -87,8 +87,8 @@
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<!-- 查看热搜 -->
-						<button class="btn btn-success" onclick="window.location.href='trends'">
-							<i class="ace-icon fa fa-signal"></i>
+						<button class="btn btn-success" onclick="window.location.href='history'">
+							<i class="ace-icon glyphicon glyphicon-time"></i>
 						</button>
 
 						<!-- 订阅 -->
@@ -108,7 +108,7 @@
 					</div>
 
 					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success" onclick="window.location.href='trends'"></span>
+						<span class="btn btn-success" onclick="window.location.href='history'"></span>
 
 						<span class="btn btn-info" onclick="window.location.href='subscription'"></span>
 
@@ -236,14 +236,16 @@
 									<div class="col-sm-5">
 										<div class="space-8"></div>
 										<div class="nav flex-column justify-content-center bg-light">
-											<img src="/images/404.png" height="500px" class="width-auto" />
+											<img src="/images/404.png" height="500px" class="img-responsive" style="max-height: 80%;" />
 										</div>
 									</div>
 
 									<div class="col-sm-7">
 										<div class="space-32"></div>
 										<div class="nav flex-column justify-content-center bg-light">
-											<h1 class="red">你似乎走错地方了....</h1>
+											<div class="red" style="font-size: 100px; font-weight: bolder;">404</div>
+											<h3 class="red">你似乎走错地方了....</h3>
+											<div class="space-10"></div>
 											<a href="/search/main" class="btn btn-danger btn-lg">返回主页</a>
 										</div>
 									</div>

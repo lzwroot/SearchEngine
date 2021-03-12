@@ -120,4 +120,15 @@ public interface SearchMapper {
                                                      @Param("start_date") String start_date,
                                                      @Param("end_date") String end_date);
 
+    //得到历史记录
+    @Select("select art.*, his.username,his.access_time from article art join history his on art.doi = his.his_doi where username=#{username}")
+    List<Article> getAllHistory(String username);
+
+    //添加历史记录
+    @Insert("insert into history(username, his_doi, access_time) select #{username}, #{his_doi}, #{access_time} from dual where not exists (select username,his_doi from history where username=#{username} and his_doi=#{his_doi})")
+    Integer addHistory(String username, String his_doi, Date access_time);
+
+    //更新历史记录
+    @Update("update history set username=#{username}, his_doi=#{his_doi}, access_time=#{access_time} where username=#{username} and his_doi=#{his_doi}")
+    Integer updateHistoryRecord(String username, String his_doi, Date access_time);
 }

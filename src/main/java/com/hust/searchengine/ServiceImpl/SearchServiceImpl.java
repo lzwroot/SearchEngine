@@ -162,6 +162,12 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public Integer addHistory(String username, String doi) {
+        Date access_time = new Date();
+        return searchMapper.addHistory(username, doi, access_time);
+    }
+
+    @Override
     public Bookmark findBookmark() {
         return searchMapper.findBookmark();
     }
@@ -179,6 +185,17 @@ public class SearchServiceImpl implements SearchService {
         return new PageInfo<>(lists);
     }
 
+    @Override
+    public List<Article> getAllHistory(String username) {
+        return searchMapper.getAllHistory(username);
+    }
+
+    @Override
+    public Integer updateHistoryRecord(String username, String his_doi) {
+        Date access_time = new Date();
+        return searchMapper.updateHistoryRecord(username, his_doi, access_time);
+    }
+
     public List<Article> senate(String data) {
         String ip = "localhost";
         int port = 9999;
@@ -193,6 +210,7 @@ public class SearchServiceImpl implements SearchService {
 
             String result = inRead.readLine();
             List<Article> articles = new ArrayList<>();
+            //List<Article> articles = null;
             for(String i:result.split("\\!",-1)){
                 if(i.equals(""))continue;
                 String []articleArray = i.split("\\|",-1);

@@ -53,6 +53,30 @@ public class SearchController {
         }
     }
 
+    //401页面
+    @RequestMapping("401_page")
+    public String Page_401(HttpSession session){
+        User user = (User)session.getAttribute("user");
+        if(user!=null) {
+            return "401_page";
+        }
+        else {
+            return "login";
+        }
+    }
+
+    //403页面
+    @RequestMapping("403_page")
+    public String Page_403(HttpSession session){
+        User user = (User)session.getAttribute("user");
+        if(user!=null) {
+            return "403_page";
+        }
+        else {
+            return "login";
+        }
+    }
+
     //高级搜索
     @GetMapping("advancedsearch")
     public String AdvancedSearchPage(HttpSession session){
@@ -131,6 +155,9 @@ public class SearchController {
             Article article = searchService.findArticleByDoi(doi);
             model.addAttribute("article", article);
             if(user!=null){
+                String username = user.getUsername();
+                if(searchService.addHistory(username, doi)==0)
+                    searchService.updateHistoryRecord(username, doi);
                 return "article";
             }else{
                 return "article_beforelogin";
@@ -536,13 +563,14 @@ public class SearchController {
     }
 
     //热搜
-    @GetMapping("trends")
-    public String TrendsPage(HttpSession session, Model model){
+    @GetMapping("history")
+    public String HistoryPage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
         if(user!=null) {
-            List<Trends> trends = searchService.getAllTrends();
-            model.addAttribute("trends", trends);
-            return "trends";
+            String username = user.getUsername();
+            List<Article> histories = searchService.getAllHistory(username);
+            model.addAttribute("histories", histories);
+            return "history";
         }
         else
             return "redirect:/search/login";

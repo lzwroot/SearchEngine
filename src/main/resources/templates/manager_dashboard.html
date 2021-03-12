@@ -301,7 +301,7 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number" th:text="${total_online_user_number}">7</span>
+											<span id="online_user_number" class="infobox-data-number" th:text="${total_online_user_number}">7</span>
 											<div class="infobox-content">在线用户数</div>
 										</div>
 									</div>
@@ -378,6 +378,15 @@
 		<script src="/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
+		<script src="/js/vue.min.js"></script>
+		<script>
+			let app = new Vue({
+				el: "#online_user_number",
+				data :{
+
+				}
+			});
+		</script>
 
 	</body>
 </html>
