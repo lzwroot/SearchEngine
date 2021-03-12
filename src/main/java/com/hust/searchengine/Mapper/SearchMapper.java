@@ -41,9 +41,6 @@ public interface SearchMapper {
                           @Param("username")String username,
                           @Param("password")String password);
 
-    //得到热搜榜
-    @Select("select * from trends")
-    List<Trends> getAllTrends();
 
     //根据关键词在论文数据库中查找相应的文章，并显示在搜索结果页面
     @Select("select * from article where articlename like '%${keywords}%' or field like '%${keywords}%' or journal like '%${keywords}%' or author like '%${keywords}%'")
@@ -131,4 +128,20 @@ public interface SearchMapper {
     //更新历史记录
     @Update("update history set username=#{username}, his_doi=#{his_doi}, access_time=#{access_time} where username=#{username} and his_doi=#{his_doi}")
     Integer updateHistoryRecord(String username, String his_doi, Date access_time);
+
+    //删除历史记录
+    @Delete("delete from history where username=#{username} and his_doi=#{his_doi}")
+    Integer deleteHistory(String username, String his_doi);
+
+    //添加反馈
+    @Insert("insert into feedback(username, feedback, feedback_time) values (#{username}, #{feedback}, #{feedback_time})")
+    Integer postFeedback(String username, String feedback, Date feedback_time);
+
+    //删除反馈
+    @Delete("delete from feedback where feedback_id=#{feedback_id}")
+    Integer deleteFeedbackRecord(Integer feedback_id);
+
+    //得到用户反馈历史
+    @Select("select * from feedback where username=#{username}")
+    List<Feedback> getFeedbackHistory(String username);
 }

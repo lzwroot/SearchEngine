@@ -22,8 +22,6 @@ public interface SearchService {
 
     User newUserSignup(String email, String username, String password);
 
-    List<Trends> getAllTrends();
-
     PageInfo<Article> findArticleByKeywords(Integer pageIndex, Integer pageSize, String keywords);
 
     PageInfo<Author> findAllSubAuthorsByUsername(Integer pageIndex, Integer pageSize, String username);
@@ -65,4 +63,12 @@ public interface SearchService {
     Integer addHistory(String username, String doi);
 
     Integer updateHistoryRecord(String username, String his_doi);
+
+    Integer deleteHistory(String username, String his_doi);
+
+    Integer postFeedback(String username, String feedback);
+
+    List<Feedback> getFeedbackHistory(String username);
+
+    Integer deleteFeedbackRecord(Integer feedback_id);
 }

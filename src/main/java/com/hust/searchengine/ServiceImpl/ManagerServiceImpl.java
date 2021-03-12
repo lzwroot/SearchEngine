@@ -2,15 +2,13 @@ package com.hust.searchengine.ServiceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.hust.searchengine.Entity.Article;
-import com.hust.searchengine.Entity.ClassInfo;
-import com.hust.searchengine.Entity.Manager;
-import com.hust.searchengine.Entity.User;
+import com.hust.searchengine.Entity.*;
 import com.hust.searchengine.Mapper.ManagerMapper;
 import com.hust.searchengine.Service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -55,5 +53,16 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Integer addNewUser(User user) {
         return managerMapper.addNewUser(user);
+    }
+
+    @Override
+    public List<Feedback> getAllFeedbacks() {
+        return managerMapper.getAllFeedbacks();
+    }
+
+    @Override
+    public Integer sendResponses(Integer managerid, String result, Integer feedback_id) {
+        Date result_time = new Date();
+        return managerMapper.sendResponses(managerid, result, feedback_id, result_time);
     }
 }

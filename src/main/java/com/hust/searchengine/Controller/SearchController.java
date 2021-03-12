@@ -5,16 +5,17 @@ import com.hust.searchengine.Service.ManagerService;
 import com.hust.searchengine.Service.SearchService;
 import com.hust.searchengine.Utils.FileUtil;
 import com.github.pagehelper.PageInfo;
+import org.python.antlr.op.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -61,7 +62,7 @@ public class SearchController {
             return "401_page";
         }
         else {
-            return "login";
+            return "redirect:/search/login";
         }
     }
 
@@ -73,15 +74,74 @@ public class SearchController {
             return "403_page";
         }
         else {
-            return "login";
+            return "redirect:/search/login";
         }
+    }
+
+    //个人反馈页
+    @GetMapping("feedback")
+    public String FeedbackPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            return "feedback";
+        }
+        return "redirect:/search/login";
+    }
+
+    //提交个人反馈
+    @PostMapping("feedback")
+    public String FeedbackPost(@RequestParam(value = "feedback",defaultValue = "")String feedback,
+                               HttpSession session){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            if(feedback==null || feedback.equals("")) {
+               return "redirect:/search/feedback";
+            }
+            String username = user.getUsername();
+            searchService.postFeedback(username, feedback);
+            return "redirect:/search/feedback_history";
+        }
+        return "redirect:/search/login";
+    }
+
+    //查看个人反馈历史
+    @RequestMapping("feedback_history")
+    public String FeedbackHistoryPage(HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            String username = user.getUsername();
+            List<Feedback> feedbacks = searchService.getFeedbackHistory(username);
+            Comparator<Feedback> feedbackComparator = (f1, f2) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    return sdf.parse(f2.getFeedback_time()).compareTo(sdf.parse(f1.getFeedback_time()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 1;
+            };
+            model.addAttribute("comparator", feedbackComparator);
+            model.addAttribute("feedbacks", feedbacks);
+            return "feedback_history";
+        }
+        return "redirect:/search/login";
+    }
+
+    @RequestMapping("delete_feedback")
+    public String DeleteFeedbackRecord(@RequestParam("feedback_id") Integer feedback_id,
+                                       HttpSession session){
+        User user = (User) session.getAttribute("user");
+        if(user!=null){
+            searchService.deleteFeedbackRecord(feedback_id);
+            return "redirect:/search/feedback_history";
+        }
+        return "redirect:/search/login";
     }
 
     //高级搜索
     @GetMapping("advancedsearch")
     public String AdvancedSearchPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-
         if(user!=null)
             return "advancedsearch";
         else
@@ -107,7 +167,7 @@ public class SearchController {
         if(keyword1.equals("")&&keyword2.equals("")&&keyword3.equals("")&&file==null)
             return "redirect:/search/advancedsearch";
 
-        if(file.isEmpty()){
+        if(file==null || file.isEmpty()){
             PageInfo<Article> advancedList = searchService.advancedSearchByVariableConditions(type1,keyword1,
                     selector1,type2,keyword2,selector2,type3,keyword3,start_date,end_date, pageIndex, pageSize);
 
@@ -574,6 +634,20 @@ public class SearchController {
         }
         else
             return "redirect:/search/login";
+    }
+
+    //热搜
+    @GetMapping("history/delete/{doi}")
+    public String DeleteHistory(@PathVariable("doi")String doi,
+                                HttpSession session){
+        User user = (User)session.getAttribute("user");
+        doi = doi.replace('_','/');
+        if(user!=null){
+            String username = user.getUsername();
+            searchService.deleteHistory(username, doi);
+            return "redirect:/search/history";
+        }
+        return "redirect:/search/login";
     }
 
     //登录界面

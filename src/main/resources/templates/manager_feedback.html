@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>404 页面 - Loogle 学术搜索管理端</title>
+		<title>用户反馈 - Loogle 学术搜索管理端</title>
 
-		<meta name="description" content="404 page in manager" />
+		<meta name="description" content="feedback in manager" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<!-- <meta content="/images/Google-one-01.png" itemprop="image" /> -->
 		<link rel="icon" type="image/x-icon" href="/images/Google-one-01.png" />
@@ -105,7 +105,7 @@
 
 				<ul class="nav nav-list">
 					
-					<li class="active">
+					<li class="">
 						<a href="/manager/manager_dashboard">
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text"> Dashboard </span>
@@ -123,7 +123,7 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="">
+					<li class="active">
 						<a href="/manager/manager_feedback">
 							<i class="menu-icon glyphicon glyphicon-envelope"></i>
 							<span class="menu-text"> 用户反馈 </span>
@@ -254,22 +254,83 @@
 							<div class="col-xs-8">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<div class="row">
-									<div class="col-sm-5">
-										<div class="space-8"></div>
-										<div class="nav flex-column justify-content-center bg-light">
-											<img src="/images/404.png" height="500px" class="width-auto" />
-										</div>
+								<!-- 反馈框 -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title lighter smaller">
+											<i class="ace-icon glyphicon glyphicon-envelope blue"></i>
+											用户反馈记录
+										</h4>
 									</div>
 
-									<div class="col-sm-7">
-										<div class="space-32"></div>
-										<div class="nav flex-column justify-content-center bg-light">
-											<h1 class="red">你似乎走错地方了....</h1>
-											<a href="/manager/manager_dashboard" class="btn btn-danger btn-lg">返回Dashboard</a>
-										</div>
-									</div>
-								</div>
+									<div class="widget-body">
+										<div class="widget-main no-padding">
+
+											<div class="dialogs" th:each="feedback:${#lists.sort(feedbacks, comparator)}">
+												<th:div class="itemdiv dialogdiv">
+													<div class="user">
+															<img th:each="user:${users}" th:if="${user.username==feedback.username}"
+																 th:src="${user.image_url!=null}?@{'/pics/upload/'+${user.image_url}}:'/images/avatars/user.jpg'"
+																 alt="avatar" style="width:40px;height:40px;"/>
+													</div>
+
+													<div class="body">
+														<div class="time">
+															<i class="ace-icon fa fa-clock-o"></i>
+															<span class="green" th:text="${feedback.feedback_time}">4 sec</span>
+														</div>
+
+														<div class="name">
+															<a th:href="@{'/manager/detail/'+${feedback.username}}" th:text="${feedback.username}">Alexa</a>
+														</div>
+														<div class="text" th:text="${feedback.feedback}">无反馈历史</div>
+
+														<form method="post" action="/manager/feedback" th:if="${feedback.managerid==null}">
+															<div class="form-actions">
+																<div class="input-group">
+																	<input type="hidden" th:value="${feedback.feedback_id}" name="feedback_id">
+																	<input placeholder="处理反馈..." type="text" class="form-control" name="result" />
+																	<span class="input-group-btn">
+																		<button class="btn btn-sm btn-info no-radius" type="submit">
+																			<i class="ace-icon fa fa-share"></i>
+																			回复
+																		</button>
+																	</span>
+																</div>
+															</div>
+														</form>
+														<div class="dialogs" th:unless="${feedback.managerid==null}">
+															<th:div class="itemdiv dialogdiv">
+																<div class="user">
+																	<img src="/images/avatars/user.jpg"/>
+																</div>
+
+																<div class="body">
+																	<div class="time">
+																		<i class="ace-icon fa fa-clock-o"></i>
+																		<span class="green" th:text="${feedback.result_time}">4 sec</span>
+																	</div>
+
+																	<div class="name">
+																		<a href="#" th:text="${feedback.managerid}">Alexa</a>
+																	</div>
+																	<div class="text" th:text="${feedback.result}">无反馈历史</div>
+																</div>
+															</th:div>
+														</div>
+
+														<div class="space-5" th:unless="${feedback.managerid==null}"></div>
+														<div class="tools">
+															<a th:href="@{/manager/delete_feedback(feedback_id=${feedback.feedback_id})}" class="btn btn-minier btn-info">
+																<i class="icon-only ace-icon glyphicon glyphicon-trash"></i>
+															</a>
+														</div>
+													</div>
+												</th:div>
+											</div>
+										</div><!-- /.widget-main -->
+									</div><!-- /.widget-body -->
+								</div><!-- /.widget-box -->
 
 								<!-- PAGE CONTENT ENDS -->
 							</div>
