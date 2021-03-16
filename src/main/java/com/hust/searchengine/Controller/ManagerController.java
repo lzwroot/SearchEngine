@@ -1,10 +1,6 @@
 package com.hust.searchengine.Controller;
 
-import com.github.pagehelper.PageInfo;
-import com.hust.searchengine.Entity.Article;
-import com.hust.searchengine.Entity.Feedback;
-import com.hust.searchengine.Entity.Manager;
-import com.hust.searchengine.Entity.User;
+import com.hust.searchengine.Entity.*;
 import com.hust.searchengine.Service.ManagerService;
 import com.hust.searchengine.Service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 @RequestMapping("manager")
@@ -77,10 +69,14 @@ public class ManagerController {
             Integer totalUserNum = managerService.totalNumberOfUsers();
             Integer totalOnlineUserNum = 0;
             Integer totalFeedbackNum = managerService.totalNumberOfFeedbacks();
+            List<JournalCount> journalCount = managerService.getTopJournals();
+            List<FieldCount> fieldCount = managerService.getTopFields();
             model.addAttribute("total_article_number", totalArticleNum);
             model.addAttribute("total_user_number", totalUserNum);
             model.addAttribute("total_online_user_number", totalOnlineUserNum);
             model.addAttribute("total_feedback_number", totalFeedbackNum);
+            model.addAttribute("journal_count", journalCount);
+            model.addAttribute("field_count", fieldCount);
             return "manager_dashboard";
         }
         else

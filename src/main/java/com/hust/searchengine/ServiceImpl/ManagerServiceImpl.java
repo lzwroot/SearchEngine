@@ -70,4 +70,14 @@ public class ManagerServiceImpl implements ManagerService {
         Date result_time = new Date();
         return managerMapper.sendResponses(managerid, result, feedback_id, result_time);
     }
+
+    @Override
+    public List<JournalCount> getTopJournals() {
+        return managerMapper.getTopJournals();
+    }
+
+    @Override
+    public List<FieldCount> getTopFields() {
+        return managerMapper.getTopFields();
+    }
 }

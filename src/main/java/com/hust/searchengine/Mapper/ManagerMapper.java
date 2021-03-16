@@ -1,9 +1,6 @@
 package com.hust.searchengine.Mapper;
 
-import com.hust.searchengine.Entity.ClassInfo;
-import com.hust.searchengine.Entity.Feedback;
-import com.hust.searchengine.Entity.Manager;
-import com.hust.searchengine.Entity.User;
+import com.hust.searchengine.Entity.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
@@ -47,4 +44,9 @@ public interface ManagerMapper {
     @Update("update feedback set managerid=#{managerid}, result=#{result}, result_time=#{result_time} where feedback_id=#{feedback_id}")
     Integer sendResponses(Integer managerid, String result, Integer feedback_id, Date result_time);
 
+    @Select("SELECT journal, COUNT(journal) as count FROM article GROUP BY journal")
+    List<JournalCount> getTopJournals();
+
+    @Select("SELECT field, COUNT(field) as count FROM article GROUP BY field order by COUNT(field) desc limit 6")
+    List<FieldCount> getTopFields();
 }

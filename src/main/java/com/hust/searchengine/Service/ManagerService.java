@@ -2,12 +2,8 @@ package com.hust.searchengine.Service;
 
 
 import com.github.pagehelper.PageInfo;
-import com.hust.searchengine.Entity.ClassInfo;
-import com.hust.searchengine.Entity.Feedback;
-import com.hust.searchengine.Entity.Manager;
-import com.hust.searchengine.Entity.User;
+import com.hust.searchengine.Entity.*;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ManagerService {
@@ -21,4 +17,6 @@ public interface ManagerService {
     Integer addNewUser(User user);
     List<Feedback> getAllFeedbacks();
     Integer sendResponses(Integer managerid, String result, Integer feedback_id);
+    List<JournalCount> getTopJournals();
+    List<FieldCount> getTopFields();
 }
