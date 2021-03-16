@@ -71,4 +71,6 @@ public interface SearchService {
     List<Feedback> getFeedbackHistory(String username);
 
     Integer deleteFeedbackRecord(Integer feedback_id);
+
+    PageInfo<Article> searchByPDF(Integer pageIndex, Integer pageSize, String fileName);
 }

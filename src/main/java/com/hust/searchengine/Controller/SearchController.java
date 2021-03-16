@@ -1,8 +1,10 @@
 package com.hust.searchengine.Controller;
 
 import com.hust.searchengine.Entity.*;
+import com.hust.searchengine.Service.IVerifyCodeGen;
 import com.hust.searchengine.Service.ManagerService;
 import com.hust.searchengine.Service.SearchService;
+import com.hust.searchengine.ServiceImpl.SimpleCharVerifyCodeGenImpl;
 import com.hust.searchengine.Utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import org.python.antlr.op.Mod;
@@ -11,9 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.wordnik.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -28,6 +35,10 @@ public class SearchController {
 
     @Autowired
     private ManagerService managerService;
+
+    private String myCode = "";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleCharVerifyCodeGenImpl.class);
 
     //主页
     @RequestMapping("main")
@@ -192,12 +203,12 @@ public class SearchController {
 
                     try {
                         FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+                        PageInfo<Article> advancedList = searchService.searchByPDF(pageIndex,pageSize,fileName);
+                        model.addAttribute("results", advancedList);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                // 2.根据文件名找到相应文件
-                // 然后使用python脚本对文件进行分析操作
             }
 
             return "advancedsearch_result";
@@ -454,30 +465,6 @@ public class SearchController {
         return "redirect:/search/main";
     }
 
-    //我的(包括订阅的作者、领域、期刊)
-    @RequestMapping("mine")
-    public String MinePage(@RequestParam(value = "pageIndex1",defaultValue = "1") Integer pageIndex1,
-                           @RequestParam(value = "pageSize1",defaultValue = "5") Integer pageSize1,
-                           @RequestParam(value = "pageIndex2",defaultValue = "1") Integer pageIndex2,
-                           @RequestParam(value = "pageSize2",defaultValue = "5") Integer pageSize2,
-                           @RequestParam(value = "pageIndex3",defaultValue = "1") Integer pageIndex3,
-                           @RequestParam(value = "pageSize3",defaultValue = "5") Integer pageSize3,
-                           HttpSession session, Model model){
-        User user = (User)session.getAttribute("user");
-        if(user!=null) {
-            String username = user.getUsername();
-            PageInfo<Author> authorPageInfo = searchService.findAllSubAuthorsByUsername(pageIndex1,pageSize1,username);
-            PageInfo<Field> fieldPageInfo = searchService.findAllSubFieldsByUsername(pageIndex2,pageSize2,username);
-            PageInfo<Journal> journalPageInfo = searchService.findAllSubJournalsByUsername(pageIndex3,pageSize3,username);
-            model.addAttribute("authors",authorPageInfo);
-            model.addAttribute("fields",fieldPageInfo);
-            model.addAttribute("journals",journalPageInfo);
-            return "mine";
-        }
-        else
-            return "redirect:/search/login";
-    }
-
     //个人主页
     @RequestMapping("profile")
     public String ProfilePage(HttpSession session, Model model){
@@ -540,89 +527,87 @@ public class SearchController {
 
         User user = (User)session.getAttribute("user");
         if(user!=null) {
-            //判断输入的密码是否正确
-            if(user.getPassword().equals(password)){
-                String oldusername = user.getUsername();
-                String old_url = user.getImage_url();
-                String newu = userupdated.getUsername();
-                String newp = userupdated.getPassword();
-                boolean news = userupdated.isSex();
-                String newi = userupdated.getInstitution();
-                String newe = userupdated.getEmail();
-                String new_url = null;
-                if(!file.isEmpty()){// 1.保存文件到硬盘上
-                    String fileName = file.getOriginalFilename();
-                    String filePath;
-                    if(fileName!=null&&!fileName.isEmpty()){
-                        if(FileUtil.isPicture(fileName))
-                            filePath = FileUtil.getUpLoadPicPath();
-                        else
-                            filePath = FileUtil.getUpLoadFilePath();
+            if(userupdated.getUsername()==null||userupdated.getUsername().equals("")){
+                model.addAttribute("msg","用户名不可为空！");
+            }else {//判断输入的密码是否正确
+                if (user.getPassword().equals(password)) {
+                    String oldusername = user.getUsername();
+                    String old_url = user.getImage_url();
+                    String newu = userupdated.getUsername();
+                    String newp = userupdated.getPassword();
+                    boolean news = userupdated.isSex();
+                    String newi = userupdated.getInstitution();
+                    String newe = userupdated.getEmail();
+                    String new_url = null;
+                    if (!file.isEmpty()) {// 1.保存文件到硬盘上
+                        String fileName = file.getOriginalFilename();
+                        String filePath;
+                        if (fileName != null && !fileName.isEmpty()) {
+                            if (FileUtil.isPicture(fileName))
+                                filePath = FileUtil.getUpLoadPicPath();
+                            else
+                                filePath = FileUtil.getUpLoadFilePath();
 
-                        fileName = System.currentTimeMillis() + fileName; //文件名为fileName
+                            fileName = System.currentTimeMillis() + fileName; //文件名为fileName
 
-                        try {
-                            FileUtil.uploadFile(file.getBytes(), filePath, fileName);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            try {
+                                FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            new_url = fileName;
                         }
-                        new_url = fileName;
+                    } else {
+                        new_url = old_url;
                     }
-                }else{
-                    new_url = old_url;
-                }
-                userupdated.setImage_url(new_url);
+                    userupdated.setImage_url(new_url);
 
-                String message = "";
-                //判断数据库内是否已存在相应用户名
-                if(!oldusername.equals(newu)&&newu.equals(searchService.FindIfUsernameAlreadyExists(newu))){
-                    message = "修改用户名失败，已存在此用户名！";
+                    String message = "";
+                    //判断数据库内是否已存在相应用户名
+                    if (!oldusername.equals(newu) && newu.equals(searchService.FindIfUsernameAlreadyExists(newu))) {
+                        message = "修改用户名失败，已存在此用户名！";
+                        model.addAttribute("msg", message);
+                        return "settings";
+                    }
+                    // 保存到数据库里
+                    searchService.updateUserByUsername(oldusername, newu, newp, news, newi, newe, new_url);
+                    //重新设置用户session，以新修改的username显示在右上角
+                    session.removeAttribute("user");
+                    session.setAttribute("user", userupdated);
+
+                    model.addAttribute("msg", message);
+                    return "redirect:/search/profile";
+                } else {
+                    String message = "密码错误，请重新输入！";
                     model.addAttribute("msg", message);
                     return "settings";
                 }
-                // 保存到数据库里
-                searchService.updateUserByUsername(oldusername, newu, newp, news, newi, newe, new_url);
-                //重新设置用户session，以新修改的username显示在右上角
-                session.removeAttribute("user");
-                session.setAttribute("user", userupdated);
-
-                model.addAttribute("msg", message);
-                return "redirect:/search/profile";
-            }else{
-                String message = "密码错误，请重新输入！";
-                model.addAttribute("msg", message);
-                return "settings";
-            }
+            }return "settings";
         }
         return "redirect:/search/login";
     }
 
     //订阅
     @RequestMapping("subscription")
-    public String SubscriptionPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-                                   @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                                   @RequestParam(value = "activejournal", defaultValue = "Nature") String activeJournal,
+    public String SubscriptionPage(@RequestParam(value = "pageIndex1",defaultValue = "1") Integer pageIndex1,
+                                   @RequestParam(value = "pageSize1",defaultValue = "5") Integer pageSize1,
+                                   @RequestParam(value = "pageIndex2",defaultValue = "1") Integer pageIndex2,
+                                   @RequestParam(value = "pageSize2",defaultValue = "5") Integer pageSize2,
                                    HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
         if(user!=null) {
             String username = user.getUsername();
-            List<Journal> subs = searchService.findAllSubJournalsByUsernameNotPaged(username);
-            Map<Journal, PageInfo<Article>> subs_arts = new HashMap<>();
-            for (Journal sub : subs) {
-                String journal = sub.getJournal();
-                PageInfo<Article> articlesOnSub = searchService.findArticleByJournal(pageIndex, pageSize, journal);
-                subs_arts.put(sub, articlesOnSub);
-            }
-            model.addAttribute("subs", subs);
-            model.addAttribute("activejournal", activeJournal);
-            model.addAttribute("subs_arts", subs_arts);
+            PageInfo<Author> authorPageInfo = searchService.findAllSubAuthorsByUsername(pageIndex1,pageSize1,username);
+            PageInfo<Field> fieldPageInfo = searchService.findAllSubFieldsByUsername(pageIndex2,pageSize2,username);
+            model.addAttribute("authors",authorPageInfo);
+            model.addAttribute("fields",fieldPageInfo);
             return "subscription";
         }
         else
             return "redirect:/search/login";
     }
 
-    //热搜
+    //历史记录
     @GetMapping("history")
     public String HistoryPage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
@@ -664,23 +649,39 @@ public class SearchController {
 
     //登录界面提交
     @PostMapping("login")
-    public String loginInfo(@RequestParam("username") String uName,
+    public String loginInfo(@RequestParam(value = "username", defaultValue = "") String uName,
                             @RequestParam("password") String password,
+                            @RequestParam("code") String code,
+                            HttpServletRequest request,
                             HttpSession session, Model model){
         User user = searchService.UserLogin(uName, password);
         session.setMaxInactiveInterval(3600); //括号内数字单位是秒，表示登录的持续时间
-        if(user!=null){
-            session.setAttribute("user", user);
-            return "redirect:/search/main";
-        }else{
-            String message = "用户名或者密码错误！";
-            model.addAttribute("msg", message);
-            return "login";
+        String message = "";
+        if(this.myCode.equals(""))
+            message = "验证码图片加载失败，请稍后再试！";
+        else{
+            if(uName.equals(""))
+                message = "用户名不能为空！";
+            else{
+                String lowerCode = this.myCode.toLowerCase();
+                if (lowerCode.equals(code.toLowerCase())) {
+                    if (user != null) {
+                        session.setAttribute("user", user);
+                        return "redirect:/search/main";
+                    } else {
+                        message = "用户名或者密码错误！";
+                    }
+                } else {
+                    message = "验证码输入错误！";
+                }
+            }
         }
+        model.addAttribute("msg", message);
+        return "login";
     }
 
     //注册界面
-    @RequestMapping("signup")
+    @GetMapping("signup")
     public String signupPage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
         if(user!=null) {
@@ -703,23 +704,26 @@ public class SearchController {
             return "redirect:/search/main";
         }else{
             String color = "red";
-            String message = "";
-            //判断两次密码是否相同
-            if(!password.equals(password2)){
-                //密码不相同
-                message = "两次密码不匹配！";//注册失败
-            }
-            else{
-                //密码相同
-                User newuser = searchService.newUserSignup(email, uName, password);
-                boolean userExists = newuser == null;
-                //判断用户名是否存在
-                if(userExists){
-                    message = "用户名已存在，请返回登录界面登录！";//注册失败
-                }else{
-                     //新用户信息写入数据库
-                    session.setAttribute("user", newuser);
-                    return "redirect:/search/main";//离开本页面
+            String message;
+            if(uName==null||uName.equals("")){
+                message = "用户名不能为空！";//注册失败
+            }else {
+                //判断两次密码是否相同
+                if (!password.equals(password2)) {
+                    //密码不相同
+                    message = "两次密码不匹配！";//注册失败
+                } else {
+                    //密码相同
+                    User newuser = searchService.newUserSignup(email, uName, password);
+                    boolean userExists = newuser == null;
+                    //判断用户名是否存在
+                    if (userExists) {
+                        message = "用户名已存在，请返回登录界面登录！";//注册失败
+                    } else {
+                        //新用户信息写入数据库
+                        session.setAttribute("user", newuser);
+                        return "redirect:/search/main";//离开本页面
+                    }
                 }
             }
             model.addAttribute("msg", message);
@@ -728,83 +732,33 @@ public class SearchController {
         }
     }
 
-    // 学生管理系统
-//    @RequestMapping("list")
-//    public String getStudentByIDStuid(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-//                                      @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-//                                      @RequestParam(value="clsid", defaultValue = "0") Integer clsid,
-//                                      @RequestParam(value="stu_name", defaultValue = "") String stu_name,
-//                                      Model model){
-//        List<Student> studentList = null;
-//        PageInfo<Student> studentPageInfo = null;
-//
-//        if(clsid == 0 && stu_name.isEmpty()){
-//            studentPageInfo = searchService.findAllStudent(pageIndex, pageSize);
-//        }
-//        else if(clsid == 0 && !stu_name.isEmpty()){
-//            studentPageInfo = searchService.findStudentByStuName(pageIndex, pageSize, stu_name);
-//        }
-//        else{
-//            studentPageInfo = searchService.findStudentByClsIDStuName(pageIndex, pageSize, clsid, stu_name);
-//        }
-//
-//        List<ClassInfo> classes = managerService.findAllClassInfo();
-//
-//        model.addAttribute("cls", classes);
-//        model.addAttribute("stus", studentPageInfo);
-//
-//        model.addAttribute("clsid", clsid);
-//        model.addAttribute("stu_name", stu_name);
-//        return "system";
-//    }
-//
-//    // 添加学生信息提交
-//    @PostMapping("add")
-//    public String addStudentInfo(Student student, @RequestParam("filepic") MultipartFile file){
-//        // 1.保存文件到硬盘上
-//        String fileName = file.getOriginalFilename();
-//        String filePath = FileUtil.getUpLoadFilePath();
-//        fileName = System.currentTimeMillis()+fileName;
-//
-//        try {
-//            FileUtil.uploadFile(file.getBytes(),filePath,fileName);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        // 2.保存文件名到数据库里
-//        student.setStu_image_url(fileName);
-//        searchService.addStudentInfo(student);
-//        return "redirect:/stu/list";
-//    }
+    @ApiOperation(value = "验证码")
+    @GetMapping("/verifyCode")
+    public void verifyCode(HttpServletRequest request, HttpServletResponse response) {
+        IVerifyCodeGen iVerifyCodeGen = new SimpleCharVerifyCodeGenImpl();
 
-//    // 修改学生信息页面
-//    @GetMapping("update/{id}")
-//    public String updateStudent(@PathVariable("id") Integer stuid, Model model){
-//        Student student = searchService.findStudentByID(stuid);
-//        List<ClassInfo> classes = classInfoService.findAllClassInfo();
-//        model.addAttribute("cls", classes);
-//        model.addAttribute("stu",student);
-//        return "updateinfo";
-//    }
-
-//    // 修改学生信息提交
-//    @PostMapping("update")
-//    public String updateStudent(Student student, @RequestParam("filepic") MultipartFile file){
-//        // 1.保存文件到硬盘上
-//        String fileName = file.getOriginalFilename();
-//        String filePath = FileUtil.getUpLoadFilePath();
-//        fileName = System.currentTimeMillis()+fileName;
-//
-//        try {
-//            FileUtil.uploadFile(file.getBytes(),filePath,fileName);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        // 2.保存文件名到数据库里
-//        student.setStu_image_url(fileName);
-//        searchService.updateStudentByID(student);
-//        return "redirect:/stu/list";
-//    }
+        try {
+            //设置长宽
+            VerifyCode verifyCode = iVerifyCodeGen.generate(80, 28);
+            String code = verifyCode.getCode();
+            LOGGER.info(code);
+            this.myCode = code;
+            //将VerifyCode绑定session
+            request.getSession().setAttribute("VerifyCode", code);
+            //设置响应头
+            response.setHeader("Pragma", "no-cache");
+            //设置响应头
+            response.setHeader("Cache-Control", "no-cache");
+            //在代理服务器端防止缓冲
+            response.setDateHeader("Expires", 0);
+            //设置响应内容类型
+            response.setContentType("image/jpeg");
+            response.getOutputStream().write(verifyCode.getImgBytes());
+            response.getOutputStream().flush();
+        }
+        catch (IOException e) {
+            LOGGER.info("", e);
+            this.myCode = "";
+        }
+    }
 }

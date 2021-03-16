@@ -23,6 +23,10 @@ public interface ManagerMapper {
     @Select("select count(*) from user")
     Integer totalNumberOfUsers();
 
+    //查询总反馈数
+    @Select("select count(*) from feedback")
+    Integer totalNumberOfFeedbacks();
+
     //查询所有用户
     @Select("select * from user")
     List<User> findAllUsers();

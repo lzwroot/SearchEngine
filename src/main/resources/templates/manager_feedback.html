@@ -250,8 +250,8 @@
 
 						<div class="row">
 							<!-- /.col -->
-							<div class="col-xs-2"></div>
-							<div class="col-xs-8">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-8">
 								<!-- PAGE CONTENT BEGINS -->
 
 								<!-- 反馈框 -->
@@ -267,12 +267,16 @@
 										<div class="widget-main no-padding">
 
 											<div class="dialogs" th:each="feedback:${#lists.sort(feedbacks, comparator)}">
-												<th:div class="itemdiv dialogdiv">
+												<div class="itemdiv dialogdiv">
+
 													<div class="user">
+														<a th:href="@{'/manager/detail/'+${feedback.username}}">
 															<img th:each="user:${users}" th:if="${user.username==feedback.username}"
 																 th:src="${user.image_url!=null}?@{'/pics/upload/'+${user.image_url}}:'/images/avatars/user.jpg'"
 																 alt="avatar" style="width:40px;height:40px;"/>
+														</a>
 													</div>
+
 
 													<div class="body">
 														<div class="time">
@@ -318,15 +322,13 @@
 																</div>
 															</th:div>
 														</div>
-
-														<div class="space-5" th:unless="${feedback.managerid==null}"></div>
 														<div class="tools">
 															<a th:href="@{/manager/delete_feedback(feedback_id=${feedback.feedback_id})}" class="btn btn-minier btn-info">
 																<i class="icon-only ace-icon glyphicon glyphicon-trash"></i>
 															</a>
 														</div>
 													</div>
-												</th:div>
+												</div>
 											</div>
 										</div><!-- /.widget-main -->
 									</div><!-- /.widget-body -->
@@ -334,7 +336,7 @@
 
 								<!-- PAGE CONTENT ENDS -->
 							</div>
-							<div class="col-xs-2"></div><!-- /.col -->
+							<div class="col-sm-2"></div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div>

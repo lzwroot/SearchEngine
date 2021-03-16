@@ -14,6 +14,7 @@ public interface ManagerService {
     Manager managerLogin(Integer managerid, String password);
     Integer totalNumberOfArticles();
     Integer totalNumberOfUsers();
+    Integer totalNumberOfFeedbacks();
     PageInfo<User> findAllUsers(Integer pageIndex, Integer pageSize);
     List<User> findAllUsers();
     Integer deleteUserByUsername(String username);

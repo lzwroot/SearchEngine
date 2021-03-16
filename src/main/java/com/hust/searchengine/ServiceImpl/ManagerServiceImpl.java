@@ -33,6 +33,11 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
+    public Integer totalNumberOfFeedbacks() {
+        return managerMapper.totalNumberOfFeedbacks();
+    }
+
+    @Override
     public PageInfo<User> findAllUsers(Integer pageIndex, Integer pageSize) {
         PageHelper.startPage(pageIndex, pageSize);
         List<User> lists = managerMapper.findAllUsers();
