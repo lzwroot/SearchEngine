@@ -190,7 +190,7 @@ public class SearchController {
 
         User user = (User)session.getAttribute("user");
         if(user!=null) {
-            if(!file.isEmpty()){// 1.保存文件到硬盘上
+            if(file!=null||!file.isEmpty()){// 1.保存文件到硬盘上
                 String fileName = file.getOriginalFilename();
                 String filePath;
                 if(fileName!=null&&!fileName.isEmpty()){
@@ -203,7 +203,7 @@ public class SearchController {
 
                     try {
                         FileUtil.uploadFile(file.getBytes(), filePath, fileName);
-                        PageInfo<Article> advancedList = searchService.searchByPDF(pageIndex,pageSize,fileName);
+                        PageInfo<Article> advancedList = searchService.searchByPDF(pageIndex,pageSize,filePath+"/"+fileName);
                         model.addAttribute("results", advancedList);
                     } catch (Exception e) {
                         e.printStackTrace();

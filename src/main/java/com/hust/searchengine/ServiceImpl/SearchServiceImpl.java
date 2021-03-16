@@ -244,6 +244,7 @@ public class SearchServiceImpl implements SearchService {
         PDFTextStripper stripper = new PDFTextStripper();
         stripper.writeText(pdfDocument, writer);
         String contents = writer.getBuffer().toString();
+        pdfDocument.close();
 //        PDDocumentInformation documentInformation = pdfDocument.getDocumentInformation();
         return contents;
     }
@@ -258,7 +259,7 @@ public class SearchServiceImpl implements SearchService {
             OutputStream out = socket.getOutputStream();
             BufferedReader inRead = new BufferedReader(new InputStreamReader(in));
 
-            out.write(data.getBytes(StandardCharsets.UTF_8));
+            out.write(data.getBytes(StandardCharsets.UTF_8),0,data.length());
 
             LOGGER.info("搜索服务器连接成功！");
 
