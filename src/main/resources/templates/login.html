@@ -91,6 +91,37 @@
 														</span>
 													</label>
 
+													<label>
+														<span class="block input-icon input-icon-right">
+															<input id="code" placeholder="验证码" type="text" name="code"
+																   style="width:170px">
+															<!-- 验证码 显示 -->
+															<img οnclick="javascript:getvCode()" id="verifyimg" style="margin-left: 20px;"/>
+														</span>
+													</label>
+
+													<!--验证码脚本-->
+													<script type="text/javascript">
+														getvCode();
+														/**
+														 * 获取验证码
+														 * 将验证码写到login.html页面的id = verifyimg 的地方
+														 */
+														function getvCode() {
+															document.getElementById("verifyimg").src = timestamp("/search/verifyCode");
+														}
+														//为url添加时间戳
+														function timestamp(url) {
+															let getTimestamp = new Date().getTime();
+															if (url.indexOf("?") > -1) {
+																url = url + "&timestamp=" + getTimestamp
+															} else {
+																url = url + "?timestamp=" + getTimestamp
+															}
+															return url;
+														}
+													</script>
+
 													<div class="space"></div>
 
 													<a href="/manager/login">管理员登录>></a>
@@ -351,5 +382,6 @@
 			 
 			});
 		</script>
+
 	</body>
 </html>

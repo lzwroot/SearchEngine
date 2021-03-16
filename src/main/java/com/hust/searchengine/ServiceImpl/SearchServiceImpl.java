@@ -5,8 +5,12 @@ import com.hust.searchengine.Mapper.SearchMapper;
 import com.hust.searchengine.Service.SearchService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,6 +23,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private SearchMapper searchMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleCharVerifyCodeGenImpl.class);
 
     @Override
     public User UserLogin(String username, String password) {
@@ -211,6 +217,37 @@ public class SearchServiceImpl implements SearchService {
         return searchMapper.deleteFeedbackRecord(feedback_id);
     }
 
+    @Override
+    public PageInfo<Article> searchByPDF(Integer pageIndex, Integer pageSize, String fileName) {
+        //按照时间排序，最新的文章出现在最前面
+        String orderByDate = "time"+" desc"; //按照数据库的time字段排序，desc代表倒序
+
+        PageHelper.startPage(pageIndex, pageSize, orderByDate);
+
+        File file = new File(fileName);
+        String content = "";
+        try {
+            content = "!" + pdf2String(file);
+        }catch (IOException e){
+            e.printStackTrace();
+            content = "!";
+        }
+
+        List<Article> lists = senate(content);
+        return new PageInfo<>(lists);
+    }
+
+    public static String pdf2String(File file) throws IOException {
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        PDDocument pdfDocument = PDDocument.load(inputStream);
+        StringWriter writer = new StringWriter();
+        PDFTextStripper stripper = new PDFTextStripper();
+        stripper.writeText(pdfDocument, writer);
+        String contents = writer.getBuffer().toString();
+//        PDDocumentInformation documentInformation = pdfDocument.getDocumentInformation();
+        return contents;
+    }
+
     public List<Article> senate(String data) {
         String ip = "localhost";
         int port = 9999;
@@ -222,6 +259,8 @@ public class SearchServiceImpl implements SearchService {
             BufferedReader inRead = new BufferedReader(new InputStreamReader(in));
 
             out.write(data.getBytes(StandardCharsets.UTF_8));
+
+            LOGGER.info("搜索服务器连接成功！");
 
             String result = inRead.readLine();
             List<Article> articles = new ArrayList<>();
@@ -248,7 +287,7 @@ public class SearchServiceImpl implements SearchService {
             return articles;
         }
         catch(Exception e) {
-            System.out.println("search.py可能未启动或者启动失败，将使用数据库搜索");
+            LOGGER.info("search.py可能未启动或者启动失败，将使用数据库搜索");
         }
         return searchMapper.findArticleByKeywords(data);
     }

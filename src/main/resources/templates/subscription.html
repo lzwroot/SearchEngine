@@ -99,7 +99,7 @@
 								</li>
 
 								<li>
-									<a href="profile">
+									<a href="/search/profile">
 										<i class="ace-icon fa fa-user"></i>
 										个人资料
 									</a>
@@ -167,9 +167,9 @@
 				<ul class="nav nav-list">
 					
 					<li class="active">
-						<a href="subscription">
-							<i class="menu-icon fa fa-bell"></i>
-							<span class="menu-text"> 订阅 </span>
+						<a href="/search/history">
+							<i class="menu-icon glyphicon glyphicon-time"></i>
+							<span class="menu-text"> 历史 </span>
 						</a>
 
 						<b class="arrow"></b>
@@ -185,7 +185,7 @@
 					</li>
 
 					<li class="">
-						<a href="mine">
+						<a href="/search/profile">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> 我的 </span>
 						</a>
@@ -210,9 +210,9 @@
 							</li>
 
 							<li class="">
-								<a href="profile">
+								<a href="/search/settings">
 									<i class="menu-icon fa fa-caret-right"></i>
-									个人信息
+									修改信息
 								</a>
 
 								<b class="arrow"></b>
@@ -379,98 +379,89 @@
 									</div>
 								</div>
 
-								<!--页面上方订阅期刊表-->
-								<div id="tabs">
-									<ul>
-										<li th:each="sub_art, index : ${subs_arts}">
-											<a th:href="@{'#'+${#strings.replace(sub_art.key.journal,' ','_')}}" style="font-size: medium" th:text="${#strings.replace(sub_art.key.journal,' ','_')}">Nature</a>
-										</li>
-									</ul>
-
-									<div th:each="sub_art, index : ${subs_arts}" th:id="${#strings.replace(sub_art.key.journal,' ','_')}">
-										<!--选中的期刊对应的文章表-->
-										<table class="table table-hover table-bordered b1">
+								<!--订阅-->
+								<div class="row">
+									<div class="col-md-1"></div>
+									<div class="col-md-5">
+										<table style="font-size: large" class="table table-bordered b1">
 											<thead>
-											<tr style="font-size: medium">
-												<th>论文题目</th>
-												<th>作者</th>
-												<th>发表时间</th>
-												<th>操作</th>
+											<tr>
+												<th>订阅的作者</th>
 											</tr>
 											</thead>
 											<tbody>
-											<tr style="font-size: medium" th:each="art:${sub_art.value.list}">
-												<td><a th:text="${art.articlename}" th:href="@{'/search/article/'+${art.doi}}">京津冀绿色金融发展综合评价及影响因素研究</a></td>
-												<td th:text="${art.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
-												<td th:text="${art.time}">2021-01-06 15:06</td>
-												<td>
-												<span>
-													<a th:href="${art.link}">下载</a>/
-													<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${art.doi}}">引用</a>/
-													<form th:action="@{/search/bookmark(doi=${art.doi})}" method="post">
-														<button type="submit" class="btn btn-pink btn-sm">书签</button>
-													</form>
-												</span>
-												</td>
-												<!--引用模块框-->
-												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${art.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
-													<div class="modal-dialog modal-lg" role="document">
-														<div class="modal-content">
-															<div class="modal-header">
-																<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-																<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
-															</div>
-															<div class="modal-body">
-																<textarea style="width: 100%" th:id="@{'reference_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(art.doi,'/','_'),'-','_'),':','_'),'.','_')}}"  th:text="@{${art.articlename}+', '+${art.author}+', '+${art.journal}+', '+${#dates.format(art.time, 'yyyy')}+'.'}"></textarea>
-															</div>
-															<div class="modal-footer">
-																<button type="button" class="btn btn-primary" th:onclick="@{'copy(\'reference_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(art.doi,'/','_'),'-','_'),':','_'),'.','_')}+'\')'}">复制</button>
-																<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-															</div>
-														</div>
-													</div>
-												</th:div>
+											<tr th:each="author:${authors.list}">
+												<td><a th:text="${author.author}" th:href="@{'/search/author/'+${author.author}}"></a></td>
 											</tr>
 											<tr></tr>
 											<tr></tr>
 											</tbody>
 										</table>
 
-										<script>
-											/*复制引用*/
-											function copy(ref_id) {
-												let ref = document.getElementById(ref_id);  //input 的ID
-												ref.select(); //选择对象
-												document.execCommand("Copy"); //执行浏览器复制命令
-												alert("复制成功！");
-											}
-										</script>
-
-										<!--分页-->
+										<!--作者分页-->
 										<nav aria-label="Page navigation">
-											<ul class="pagination">
-												<li th:class="${sub_art.value.hasPreviousPage}?'':'disabled'">
-													<a th:href="${sub_art.value.hasPreviousPage}?@{/search/subscription(pageIndex=${sub_art.value.prePage})}:'#'" aria-label="Previous">
+											<ul class="pagination" id="author">
+												<li th:class="${authors.hasPreviousPage}?'':'disabled'">
+													<a th:href="${authors.hasPreviousPage}?@{/search/subscription(pageIndex1=${authors.prePage})}:'#'" aria-label="Previous">
 														<span aria-hidden="true">&laquo;</span>
 													</a>
 												</li>
 
-												<th:block th:each="nav : ${sub_art.value.navigatepageNums}">
-													<li th:class="${nav==sub_art.value.pageNum}?'active':''">
-														<a th:href="@{/search/subscription(pageIndex=${nav})}" th:text="${nav}"></a>
+												<th:block th:each="nav1 : ${authors.navigatepageNums}">
+													<li th:class="${nav1==authors.pageNum}?'active':''">
+														<a th:href="@{/search/subscription(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav1}"></a>
 													</li>
 												</th:block>
 
-												<li th:class="${sub_art.value.hasNextPage}?'':'disabled'">
-													<a th:href="${sub_art.value.hasNextPage}?@{/search/subscription(pageIndex=${sub_art.value.nextPage})}:'#'" aria-label="Next">
+												<li th:class="${authors.hasNextPage}?'':'disabled'">
+													<a th:href="${authors.hasNextPage}?@{/search/subscription(pageIndex1=${authors.nextPage})}:'#'" aria-label="Next">
 														<span aria-hidden="true">&raquo;</span>
 													</a>
 												</li>
 											</ul>
 										</nav>
 									</div>
-								</div>
+									<div class="col-md-5">
+										<table style="font-size: large" class="table table-bordered b1">
+											<thead>
+											<tr>
+												<th>订阅的领域</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr th:each="field:${fields.list}">
+												<td><a th:text="${field.field}" th:href="@{'/search/field/'+${field.field}}"></a></td>
+											</tr>
+											<tr></tr>
+											<tr></tr>
+											</tbody>
+										</table>
 
+										<!--领域分页-->
+										<nav aria-label="Page navigation">
+											<ul class="pagination" id="field">
+												<li th:class="${fields.hasPreviousPage}?'':'disabled'">
+													<a th:href="${fields.hasPreviousPage}?@{/search/subscription(pageIndex2=${fields.prePage})}:'#'" aria-label="Previous">
+														<span aria-hidden="true">&laquo;</span>
+													</a>
+												</li>
+
+												<th:block th:each="nav2 : ${fields.navigatepageNums}">
+													<li th:class="${nav2==fields.pageNum}?'active':''">
+														<a th:href="@{/search/subscription(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav2}"></a>
+													</li>
+												</th:block>
+
+												<li th:class="${fields.hasNextPage}?'':'disabled'">
+													<a th:href="${fields.hasNextPage}?@{/search/subscription(pageIndex2=${fields.nextPage})}:'#'" aria-label="Next">
+														<span aria-hidden="true">&raquo;</span>
+													</a>
+												</li>
+											</ul>
+										</nav>
+									</div>
+									<div class="col-md-1"></div>
+								</div>
 
 								<!-- 登出模块框 -->
 								<div class="modal fade bs-example-modal-sm" tabindex="-1" id="logoutconfirmation" role="dialog" aria-labelledby="mySmallModalLabel">

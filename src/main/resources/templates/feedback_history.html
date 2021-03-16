@@ -90,7 +90,7 @@
 								</li>
 
 								<li>
-									<a href="profile">
+									<a href="/search/profile">
 										<i class="ace-icon fa fa-user"></i>
 										个人资料
 									</a>
@@ -158,9 +158,9 @@
 				<ul class="nav nav-list">
 					
 					<li class="">
-						<a href="subscription">
-							<i class="menu-icon fa fa-bell"></i>
-							<span class="menu-text"> 订阅 </span>
+						<a href="/search/history">
+							<i class="menu-icon glyphicon glyphicon-time"></i>
+							<span class="menu-text"> 历史 </span>
 						</a>
 
 						<b class="arrow"></b>
@@ -176,7 +176,7 @@
 					</li>
 
 					<li class="">
-						<a href="mine">
+						<a href="/search/profile">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> 我的 </span>
 						</a>
@@ -200,9 +200,9 @@
 							</li>
 
 							<li class="">
-								<a href="profile">
+								<a href="/search/settings">
 									<i class="menu-icon fa fa-caret-right"></i>
-									个人信息
+									修改信息
 								</a>
 
 								<b class="arrow"></b>
@@ -279,7 +279,7 @@
 							</li>
 
 							<li class="active">
-								提交反馈
+								历史反馈
 							</li>
 						</ul><!-- /.breadcrumb -->
 
@@ -369,9 +369,9 @@
 						</div>
 
 						<div class="row">
-							<div class="col-md-2">
+							<div class="col-sm-2">
 							</div><!-- /.col -->
-							<div class="col-md-8">
+							<div class="col-sm-8">
 								<!-- PAGE CONTENT BEGINS -->
 
 								<!-- 反馈框 -->
@@ -399,9 +399,11 @@
 												</div>
 											</form>
 											<div class="dialogs" th:each="feedback:${#lists.sort(feedbacks, comparator)}">
-												<th:div class="itemdiv dialogdiv">
+												<div class="itemdiv dialogdiv">
 													<div class="user">
-														<img alt="Alexa's Avatar" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
+														<a href="/search/profile">
+															<img alt="Alexa's Avatar" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
+														</a>
 													</div>
 
 													<div class="body">
@@ -444,7 +446,7 @@
 															</a>
 														</div>
 													</div>
-												</th:div>
+												</div>
 											</div>
 										</div><!-- /.widget-main -->
 									</div><!-- /.widget-body -->
@@ -471,7 +473,7 @@
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
-							<div class="col-md-2">
+							<div class="col-sm-2">
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->

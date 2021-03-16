@@ -76,9 +76,11 @@ public class ManagerController {
             Integer totalArticleNum = managerService.totalNumberOfArticles();
             Integer totalUserNum = managerService.totalNumberOfUsers();
             Integer totalOnlineUserNum = 0;
+            Integer totalFeedbackNum = managerService.totalNumberOfFeedbacks();
             model.addAttribute("total_article_number", totalArticleNum);
             model.addAttribute("total_user_number", totalUserNum);
             model.addAttribute("total_online_user_number", totalOnlineUserNum);
+            model.addAttribute("total_feedback_number", totalFeedbackNum);
             return "manager_dashboard";
         }
         else
@@ -151,8 +153,6 @@ public class ManagerController {
         Manager manager = (Manager)session.getAttribute("manager");
         if(manager!=null) {
             User oldUser = searchService.findUserByUsername(oldUsername);
-            //检查密码对不对
-            //if(cPassword.equals(oldUser.getPassword())) {
             String newUsername = userUpdated.getUsername();
             String message = "";
             //判断数据库内是否已存在相应用户名
@@ -167,17 +167,14 @@ public class ManagerController {
             String newInstitution = userUpdated.getInstitution();
             String newEmail = userUpdated.getEmail();
             String newImage_url = userUpdated.getImage_url();
-            // 保存到数据库里
-            searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail, newImage_url);
-            model.addAttribute("msg", message);
+            //判断用户名是否为空
+            if(userUpdated.getUsername()==null||userUpdated.getUsername().equals("")){
+                message = "用户名不可为空！";
+            }// 保存到数据库里
+            else {
+                searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail, newImage_url);
+            }model.addAttribute("msg", message);
             return "redirect:/manager/detail/" + newUsername;
-            //}
-
-//            else{
-//                String message = "密码错误，请重新输入！";
-//                model.addAttribute("msg", message);
-//                return "manage_user_update";
-//            }
         }
         else
             return "redirect:/manager/login";
@@ -216,7 +213,7 @@ public class ManagerController {
                     model.addAttribute("color", "red");
                 }
             }
-            PageInfo<User> users = managerService.findAllUsers(pageIndex, pageSize);
+            List<User> users = managerService.findAllUsers();
             model.addAttribute("users", users);
             return "manage_user";
         }else

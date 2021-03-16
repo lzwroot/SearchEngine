@@ -8,8 +8,9 @@ public class History {
     private String his_doi;
     private Date access_time;
 
-    public Date getAccess_time() {
-        return this.access_time;
+    public String getAccess_time() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(access_time);
     }
 
     public void setAccess_time(Date access_time) {
