@@ -2,6 +2,8 @@ package com.hust.searchengine.Utils;
 
 import java.awt.*;
 import java.util.Random;
+
+//随机生成验证码图片工具类
 public class RandomUtils extends org.apache.commons.lang3.RandomUtils {
     private static final char[] CODE_SEQ = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
             'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',

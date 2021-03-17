@@ -544,7 +544,7 @@ public class SearchController {
                         String filePath;
                         if (fileName != null && !fileName.isEmpty()) {
                             if (FileUtil.isPicture(fileName))
-                                filePath = FileUtil.getUpLoadPicPath();
+                                filePath = FileUtil.getUpLoadPicPath();//是图片则上传至图片的保存目录下
                             else
                                 filePath = FileUtil.getUpLoadFilePath();
 
@@ -555,9 +555,11 @@ public class SearchController {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            //头像图片名写入数据库
                             new_url = fileName;
                         }
                     } else {
+                        //没更换头像
                         new_url = old_url;
                     }
                     userupdated.setImage_url(new_url);
@@ -597,7 +599,9 @@ public class SearchController {
         User user = (User)session.getAttribute("user");
         if(user!=null) {
             String username = user.getUsername();
+            //得到该用户名下的订阅作者
             PageInfo<Author> authorPageInfo = searchService.findAllSubAuthorsByUsername(pageIndex1,pageSize1,username);
+            //得到该用户名下的订阅领域
             PageInfo<Field> fieldPageInfo = searchService.findAllSubFieldsByUsername(pageIndex2,pageSize2,username);
             model.addAttribute("authors",authorPageInfo);
             model.addAttribute("fields",fieldPageInfo);
@@ -657,12 +661,15 @@ public class SearchController {
         User user = searchService.UserLogin(uName, password);
         session.setMaxInactiveInterval(3600); //括号内数字单位是秒，表示登录的持续时间
         String message = "";
+        //判断验证码是否加载
         if(this.myCode.equals(""))
             message = "验证码图片加载失败，请稍后再试！";
         else{
+            //判断用户名是否为空
             if(uName.equals(""))
                 message = "用户名不能为空！";
             else{
+                //将验证码字符和输入的验证码都转化成小写后比较
                 String lowerCode = this.myCode.toLowerCase();
                 if (lowerCode.equals(code.toLowerCase())) {
                     if (user != null) {
@@ -705,6 +712,7 @@ public class SearchController {
         }else{
             String color = "red";
             String message;
+            //判断用户名是否为空
             if(uName==null||uName.equals("")){
                 message = "用户名不能为空！";//注册失败
             }else {

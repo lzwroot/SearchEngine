@@ -227,6 +227,7 @@ public class SearchServiceImpl implements SearchService {
         File file = new File(fileName);
         String content = "";
         try {
+            //字符串前加一个感叹号以示区别
             content = "!" + pdf2String(file);
         }catch (IOException e){
             e.printStackTrace();
@@ -237,6 +238,12 @@ public class SearchServiceImpl implements SearchService {
         return new PageInfo<>(lists);
     }
 
+    /**
+     * 将pdf中的内容转成字符串
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static String pdf2String(File file) throws IOException {
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         PDDocument pdfDocument = PDDocument.load(inputStream);
@@ -249,6 +256,11 @@ public class SearchServiceImpl implements SearchService {
         return contents;
     }
 
+    /**
+     * 将字符串转成字节流的形式传至服务器
+     * @param data
+     * @return
+     */
     public List<Article> senate(String data) {
         String ip = "localhost";
         int port = 9999;
@@ -271,7 +283,8 @@ public class SearchServiceImpl implements SearchService {
                 String []articleArray = i.split("\\|",-1);
                 Article article = new Article();
 
-                //title+'|'+author+'|'+abstract+'|'+str(time)+'|'+field+'|'+link+'|'+journal
+                //字符串分割格式
+                //title+'|'+author+'|'+abstract+'|'+str(time)+'|'+field+'|'+link+'|'+journal+'|'+doi
                 article.setArticlename(articleArray[0]);
                 article.setAuthor(articleArray[1]);
                 article.setArticle_abstract(articleArray[2]);
