@@ -2,11 +2,9 @@ package com.hust.searchengine.Mapper;
 
 import com.hust.searchengine.Entity.*;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface SearchMapper {

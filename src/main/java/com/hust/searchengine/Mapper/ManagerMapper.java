@@ -44,9 +44,11 @@ public interface ManagerMapper {
     @Update("update feedback set managerid=#{managerid}, result=#{result}, result_time=#{result_time} where feedback_id=#{feedback_id}")
     Integer sendResponses(Integer managerid, String result, Integer feedback_id, Date result_time);
 
+    //得到所有的期刊和每个期刊论文的数量
     @Select("SELECT journal, COUNT(journal) as count FROM article GROUP BY journal")
     List<JournalCount> getTopJournals();
 
+    //得到所有的领域和每个领域的数量
     @Select("SELECT field, COUNT(field) as count FROM article GROUP BY field order by COUNT(field) desc limit 6")
     List<FieldCount> getTopFields();
 }

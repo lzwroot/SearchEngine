@@ -65,6 +65,7 @@ public class ManagerController {
     public String DashboardPage(HttpSession session, Model model){
         Manager manager = (Manager)session.getAttribute("manager");
         if(manager!=null) {
+            //统计各种数据库里的信息
             Integer totalArticleNum = managerService.totalNumberOfArticles();
             Integer totalUserNum = managerService.totalNumberOfUsers();
             Integer totalOnlineUserNum = 0;
@@ -130,8 +131,7 @@ public class ManagerController {
             }
             User user = searchService.findUserByUsername(username);
             String message = "";
-            String former_username = username;
-            model.addAttribute("former_username", former_username);
+            model.addAttribute("former_username", username);
             model.addAttribute("user", user);
             model.addAttribute("msg", message);
             return "manage_user_update";
@@ -200,6 +200,7 @@ public class ManagerController {
                 model.addAttribute("color", "red");
             }
             else{
+                //判断是否插入新的用户
                 int added = managerService.addNewUser(newUser);
                 if (added == 1) {
                     model.addAttribute("msg", "成功插入新的用户！");

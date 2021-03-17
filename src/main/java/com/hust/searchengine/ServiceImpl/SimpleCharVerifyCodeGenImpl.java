@@ -19,7 +19,6 @@ public class SimpleCharVerifyCodeGenImpl implements IVerifyCodeGen {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCharVerifyCodeGenImpl.class);
     private static final String[] FONT_TYPES = { "u5b8bu4f53", "u65b0u5b8bu4f53", "u9ed1u4f53", "u6977u4f53", "u96b6u4e66" };
     private static final int VALICATE_CODE_LENGTH = 4;
-    private String randomString;
 
     /**
      * 设置背景颜色及大小，干扰线
@@ -64,7 +63,6 @@ public class SimpleCharVerifyCodeGenImpl implements IVerifyCodeGen {
         graphics.dispose();
         //设置JPEG格式
         ImageIO.write(image, "JPEG", os);
-        randomString = randomStr;
         return randomStr;
     }
     /**
